@@ -7,7 +7,7 @@ export {}
 
 declare module 'vue' {
   export interface GlobalComponents {
-    AppFooter: typeof import('./components/AppFooter.vue')['default']
+    AppFooter: typeof import('./components/navigation/AppFooter.vue')['default']
     BriefDialog: typeof import('./components/common/BriefDialog.vue')['default']
     CargoList: typeof import('./components/cargo/CargoList.vue')['default']
     CargoTemplates: typeof import('./components/templates/CargoTemplates.vue')['default']
