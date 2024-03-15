@@ -34,7 +34,7 @@
     <router-view />
   </v-main>
 
-  <AppFooter /> 
+  <AppFooter />
 
 </template>
 

@@ -2,7 +2,7 @@ const footerNavigation = [
     {
       text: 'Projects',
       key: 'footer.projects',
-      icon: 'fa-thin fa-sheet-plastic',
+      icon: 'fa-solid fa-sheet-plastic',
       to: '/',
       disabled: false
     },
@@ -23,7 +23,7 @@ const footerNavigation = [
   {
     text: 'Scene',
     key: 'footer.scene',
-    icon: 'fa-thin fa-calculator',
+    icon: 'fa-solid fa-calculator',
     to: '/scene',
     disabled: false
   }

@@ -1,12 +1,12 @@
 <template>
-  <v-bottom-navigation app inset color="primary" grow horizontal active-class>
-    <template v-for="(foot, index) in footer" :key=index>
+  <v-bottom-navigation color="primary" grow horizontal>
+    <template v-for="(foot, index) in footer" :key="index">
 
-      <v-btn :to="foot.to" :icon="mobile.value">
-        <span v-if="!mobile.value">{{ foot.key }}</span>
-        <v-icon :left="!mobile.value" :class="mobile.value && 'mr-0'">
+      <v-btn :to="foot.to">
+        <v-icon>
           {{ foot.icon }}
         </v-icon>
+        <span>{{ foot.key }}</span>
       </v-btn>
 
     </template>
@@ -20,4 +20,4 @@ import { useDisplay } from 'vuetify'
 
 const { mobile } = useDisplay()
 const footer = reactive(footerNavigation)
-</script>../../configs/footer.js
+</script>
