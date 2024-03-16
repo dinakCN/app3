@@ -1,8 +1,13 @@
 <template>
 
   <!-- Navigation -->
-  <v-navigation-drawer app temporary>
-    <main-menu />
+  <v-navigation-drawer
+    v-model="drawer"
+    temporary
+  >
+  
+    <!-- <main-menu /> -->
+
     <template slot="append">
       <!-- <toolbar-support></toolbar-support> -->
     </template>
@@ -13,7 +18,9 @@
 
     <!-- menu btn -->
     <template v-slot:prepend>
-      <v-app-bar-nav-icon>
+      <v-app-bar-nav-icon
+        @click.stop="drawer = !drawer"
+      >
       </v-app-bar-nav-icon>
     </template>
 
@@ -39,5 +46,8 @@
 </template>
 
 <script lang="ts" setup>
+import { ref } from "vue"
+
+const drawer = ref(false)
 
 </script>
