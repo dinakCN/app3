@@ -18,7 +18,7 @@
             <!-- nm -->
             <v-col
               cols="12"
-            >                    
+            >
               <v-text-field
                 v-model="nm"
                 :label="$t('item.nm.label')"
@@ -49,7 +49,7 @@
               <v-text-field
                 v-model="ln"
                 :label="$t('item.ln.label')"
-                :suffix="$t('units.size.' + un.size)"                
+                :suffix="$t('units.size.' + un.size)"
                 dense
                 counter
                 step="0.1"
@@ -261,7 +261,7 @@
                 <template v-slot:prepend>
                   <v-icon
                     :color="rt !== null ? 'primary' : 'secondary'"
-                    small                  
+                    small
                   >mdi-swap-horizontal</v-icon>
                 </template>
               </v-select>
@@ -273,7 +273,7 @@
               <v-select
                 v-model="ov"
                 :disabled="pg === 1"
-                dense                 
+                dense
                 :label="$t('item.ov.label')"
                 :items="overList"
                 :error-messages="ovErrors"
@@ -291,7 +291,7 @@
             <v-col
               v-if="ov === 1"
               cols="12"
-              class="red--text text--lighten-2 text-center text-caption"
+              class="red--text text-lighten-2 text-center text-caption"
             >
               Для грузов с типом упаковки <b>"Паллет"</b> изменение поле "Кантование" в значение <b>"Да"</b> будет пропущено
             </v-col>
@@ -300,20 +300,20 @@
               cols="6"
               class="pt-0"
             >
-              <div 
+              <div
                 class="pl-3 text-body-2"
-                :class="color !== colorDefault ? 'primary--text' : 'text--secondary'"
+                :class="color !== colorDefault ? 'primary--text' : 'text-secondary'"
               >
                 {{ $t('item.color') }} {{ colorText }}
               </div>
               <div>
-                <v-icon 
+                <v-icon
                   :color="color !== colorDefault ? 'primary' : 'secondary'"
                   small
                 >
                   mdi mdi-eyedropper-variant
                 </v-icon>
-                
+
                 <v-menu
                   v-model="colorMenu"
                   :close-on-content-click="false"
@@ -322,7 +322,7 @@
                   class="ml-1"
                 >
                   <template v-slot:activator="{ on, attrs }">
-                    <v-btn 
+                    <v-btn
                       icon
                       v-bind="attrs"
                       v-on="on"
@@ -332,15 +332,15 @@
                       </v-icon>
                     </v-btn>
                   </template>
-                  <v-card>       
+                  <v-card>
                     <v-color-picker
                       v-model="color"
                       dot-size="25"
                       mode="hexa"
-                    ></v-color-picker>  
+                    ></v-color-picker>
                   </v-card>
                 </v-menu>
-                
+
                 <v-btn
                   v-if="color !== colorDefault"
                   icon
@@ -425,7 +425,7 @@ export default {
   },
   validations() {
     return {
-      nm: { 
+      nm: {
         maxLength: maxLength(this.start.nm.max)
       },
       ln: {
@@ -576,20 +576,20 @@ export default {
     pgIcon () {
       return Object.freeze(getCargoIcon(this.pg))
     }
-    
+
   },
   methods: {
 
-    submit() {    
-      
+    submit() {
+
       /**
        * валидация
-       * 
+       *
        */
 
       this.$v.$touch()
 
-      if (this.$v.validationGroup.$error) return false 
+      if (this.$v.validationGroup.$error) return false
 
       const cr_validation = new RegExp(/^#([A-Fa-f0-9]{6}|[A-Fa-f0-9]{3})$/)
 
@@ -651,7 +651,7 @@ export default {
 
     countErrors(data, min, max) {
       const errors = []
-      
+
       if (!data.$dirty) return errors
       !data.integer  && errors.push(this.$t('common.validation.integer'))
       !data.minValue && errors.push(this.$t('common.validation.minValue') + ' ' + min)
@@ -665,7 +665,7 @@ export default {
 
       if (!data.$dirty) return errors
       !data.includes && errors.push(this.$t('common.validation.required'))
-      
+
       return errors
     },
 
@@ -703,7 +703,7 @@ export default {
       return Object.freeze(list.map((item) => item.value))
 
     }
- 
+
   }
 }
 </script>

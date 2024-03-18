@@ -6,12 +6,12 @@
       :to="menuItem.link"
       :exact="menuItem.exact"
       :disabled="menuItem.disabled"
-      active-class="primary--text"
+      active-class="text-primary"
       link
     >
 
       <template v-slot:prepend>
-        <v-icon :small="small" :class="{ 'grey--text': menuItem.disabled }">
+        <v-icon size="small" color="text-black" :class="{ 'text-grey': menuItem.disabled }">
           {{ menuItem.icon || 'mdi-circle-medium' }}
         </v-icon>
       </template>
@@ -27,13 +27,9 @@
 
 const props = defineProps({
   menuItem: {
-      type: Object,
-      default: () => {}
-    },
-    small: {
-      type: Boolean,
-      default: false
-    }
+    type: Object,
+    default: () => {}
+  },
 })
 
 </script>

@@ -54,15 +54,15 @@
                     <v-col cols="2" lg="1" class="px-2">{{ $t('item.ln.label') }}</v-col>
                     <v-col cols="2" lg="1" class="px-2">{{ $t('item.wd.label') }}</v-col>
                     <v-col cols="2" lg="1" class="px-2">{{ $t('item.hg.label') }}</v-col>
-                    <v-col cols="2" lg="1" class="px-2">{{ $t('item.wg.label') }}</v-col> 
+                    <v-col cols="2" lg="1" class="px-2">{{ $t('item.wg.label') }}</v-col>
                     <v-col cols="1" class="px-2">{{ $t('item.cn.label') }}</v-col>
                     <v-col v-show="!$vuetify.breakpoint.mobile" cols="1" class="px-2">{{ $t('item.pg.label') }}</v-col>
                     <v-col v-show="!$vuetify.breakpoint.mobile" cols="1" class="px-2">{{ $t('item.st.label') }}</v-col>
                     <v-col v-show="!$vuetify.breakpoint.mobile" cols="1" class="px-2">{{ $t('item.lm.label') }}</v-col>
-                    <v-col cols="1"></v-col>                 
+                    <v-col cols="1"></v-col>
                   </v-row>
                 </v-toolbar>
-              </th>           
+              </th>
             </tr>
           </thead>
           <tbody is="transition-group" name="scale-transition" hide-on-leave>
@@ -75,7 +75,7 @@
                 <v-lazy>
                   <v-row
                     dense
-                    align="center"    
+                    align="center"
                   >
                     <v-col v-show="!$vuetify.breakpoint.mobile" cols="1">{{ Number(index) + 1 }}</v-col>
                     <v-col cols="2">
@@ -156,7 +156,7 @@
                         @input="$v.items.$each.$iter[index].wg.$touch()"
                         @blur="$v.items.$each.$iter[index].wg.$touch()"
                       ></v-text-field>
-                    </v-col> 
+                    </v-col>
                     <v-col cols="1">
                       <v-text-field
                         v-model="item.$model.cn"
@@ -171,7 +171,7 @@
                         type="number"
                         @input="$v.items.$each.$iter[index].cn.$touch()"
                         @blur="$v.items.$each.$iter[index].cn.$touch()"
-                      ></v-text-field>  
+                      ></v-text-field>
                     </v-col>
                     <v-col v-show="!$vuetify.breakpoint.mobile" cols="1">
                       <v-select
@@ -220,8 +220,8 @@
                         @click="deleteRow(item.$model.id)"
                       >
                         <v-icon>bx-trash</v-icon>
-                      </v-btn>  
-                    </v-col>                 
+                      </v-btn>
+                    </v-col>
                   </v-row>
                 </v-lazy>
               </td>
@@ -230,15 +230,15 @@
 
           <v-divider></v-divider>
 
-        </template>        
-      </v-simple-table>      
+        </template>
+      </v-simple-table>
 
       <!-- BTN -->
       <div class="d-flex align-center">
         <v-btn
           rounded
           text
-          class="button grey--text text--darken-3"
+          class="button grey--text text-darken-3"
           @click="$emit('back')"
         >
           {{ $t('common.back') }}
@@ -296,7 +296,7 @@ export default {
           id: {
 
           },
-          nm: { 
+          nm: {
             required,
             maxLength: maxLength(this.start.nm.max)
           },
@@ -343,12 +343,12 @@ export default {
             required
           },
           rt: {
-            
+
           },
           ov: {
-            
+
           }
-        }        
+        }
       }
     }
   },
@@ -419,7 +419,7 @@ export default {
     lmErrors () {
       return Object.entries(this.$v.items.$each.$iter).reduce((n, i) => {
         n[i[0]] = Object.freeze(this.dataErrors(i[1].lm, this.lmValues['min'][this.un.wght], this.lmValues['max'][this.un.wght], this.$t('units.wght.' + this.un.wght)))
-      
+
         return n
       }, {})
     },
@@ -455,10 +455,10 @@ export default {
 
       if (!this.$v.items.$model.length) {
         this.showError(this.$t('import.data.empty'))
-        
+
         return this.$emit('back')
       }
- 
+
       this.$v.items.$touch()
 
       // error message
@@ -484,7 +484,7 @@ export default {
           ln: setSize(i.ln, this.un.size),
           wd: setSize(i.wd, this.un.size),
           hg: setSize(i.hg, this.un.size),
-          wg: setWght(i.wg, this.un.wght), 
+          wg: setWght(i.wg, this.un.wght),
           cn: i.cn,
           pg: i.pg !== null && this.packingListValues.includes(i.pg) ? i.pg : this.start.pg.val,
           st: i.st !== null && this.stuckListValues.includes(i.st) ? i.st : this.start.st.val,
@@ -510,8 +510,8 @@ export default {
     deleteRow(id) {
       const index = this.items.findIndex((i) => String(i.id) === String(id))
 
-      this.items.splice(index, 1) 
+      this.items.splice(index, 1)
     }
-  }   
+  }
 }
 </script>

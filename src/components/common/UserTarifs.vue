@@ -1,7 +1,7 @@
 <template>
   <div>
 
-    <div class="mt-1 text-center grey--text text--darken-1 text-subtitle-2 text-uppercase font-weight-regular">
+    <div class="mt-1 text-center grey--text text-darken-1 text-subtitle-2 text-uppercase font-weight-regular">
       <div>
         {{ $t('tarif.current') }}: {{ license }}
       </div>
@@ -24,24 +24,24 @@
           :dark="plan.highlight"
           :color="plan.highlight ? 'primary darken-3' : ''"
         >
-        
-          <v-card-text 
+
+          <v-card-text
             :class="plan.highlight ? 'white--text' : ''"
             class="mb-0 pt-4 text-center"
           >
-            <div 
+            <div
               class="text-h6 text-md-h5 text-xl-h4 font-weight-bold text-uppercase mb-1"
             >
               {{ plan.title }}
             </div>
-            <div 
-              :class="plan.highlight ? 'white--text' : 'grey--text text--darken-1'"
+            <div
+              :class="plan.highlight ? 'white--text' : 'grey--text text-darken-1'"
               class="overline"
             >
               {{ plan.subtitle }}
             </div>
           </v-card-text>
-          
+
           <v-divider></v-divider>
 
           <v-card-text
@@ -54,11 +54,11 @@
               <v-icon v-else color="error" class="mr-2">bx bx-x</v-icon>
 
               <span v-if="feat.value && feat.showvalue" class="font-weight-black mr-1">{{ feat.value }}</span>
-              <span class="font-weight-regular" :class="[!feat.status && 'grey--text text--darken-1']">{{ feat.label }}</span>
+              <span class="font-weight-regular" :class="[!feat.status && 'grey--text text-darken-1']">{{ feat.label }}</span>
 
-            </div>            
+            </div>
           </v-card-text>
-          <v-card-actions class="px-2 pb-2">  
+          <v-card-actions class="px-2 pb-2">
             <v-btn
               v-if="plan.highlight"
               x-large
@@ -196,7 +196,7 @@ export default {
       } else if (Number(this.user.tarif.type) === 1) {
         cr = 'success--text'
       } else {
-        cr = 'grey--text text--darken-3'
+        cr = 'grey--text text-darken-3'
       }
 
       return cr
@@ -206,7 +206,7 @@ export default {
         const date = new Date(this.user.tarif.expir)
 
         return `${date.getDate()}.${(date.getMonth() + 1)}.${date.getFullYear()}`
-      } 
+      }
 
       return ''
     }
@@ -223,7 +223,7 @@ export default {
             this.plans[tp].features[index].value = r[tp][i]
             this.plans[tp].features[index].status = Boolean(r[tp][i])
           })
-        }) 
+        })
       })
   },
   methods: {

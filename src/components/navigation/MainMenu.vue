@@ -1,5 +1,9 @@
 <template>
-  <v-list nav dense>
+  <v-list
+    nav
+    lines="one"
+    density="comfortable"
+  >
     <span v-for="(item, index) in menu" :key="index">
       <NavMenu :menu="item.items" />
     </span>
@@ -8,7 +12,7 @@
 
 <script lang="ts" setup>
 
-import NavMenu from './NavMenu'
+import NavMenu from './NavMenu.vue'
 
 const props = defineProps({
   menu: {

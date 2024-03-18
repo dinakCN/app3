@@ -1,6 +1,6 @@
 <template>
   <div>
-    
+
     <!-- TYPE -->
 
     <v-row
@@ -8,13 +8,13 @@
       class="mx-1"
     >
       <v-col cols="12" sm="6">
-        <v-card 
+        <v-card
           class="rounded-lg"
           :class="type == 'expir' ? 'primary lighten-4 elevation-14' : ''"
           style="height: 100%"
           :disabled="loading"
-          @click="type = 'expir'"          
-        > 
+          @click="type = 'expir'"
+        >
 
           <v-list-item>
             <v-list-item-content>
@@ -22,7 +22,7 @@
                 {{ $tc('payment.types.expir.head') }}
                 <v-icon small>bx bx-pin</v-icon>
               </v-list-item-title>
-              <v-list-item-content class="text-body-2 grey--text text--darken-2 pb-0">
+              <v-list-item-content class="text-body-2 grey--text text-darken-2 pb-0">
                 {{ $t('payment.types.expir.desc') }}
               </v-list-item-content>
             </v-list-item-content>
@@ -30,9 +30,9 @@
 
         </v-card>
       </v-col>
- 
+
       <v-col cols="12" sm="6">
-        <v-card 
+        <v-card
           rounded="lg"
           :color="type == 'count' ? 'success lighten-3 elevation-14' : ''"
           style="height: 100%"
@@ -46,7 +46,7 @@
                 {{ $tc('payment.types.count.head') }}
                 <v-icon small>bx bx-pin</v-icon>
               </v-list-item-title>
-              <v-list-item-content class="text-body-2 grey--text text--darken-2 pb-0">
+              <v-list-item-content class="text-body-2 grey--text text-darken-2 pb-0">
                 {{ $t('payment.types.count.desc') }}
               </v-list-item-content>
             </v-list-item-content>
@@ -58,7 +58,7 @@
 
     <!-- BODY -->
 
-    <v-card 
+    <v-card
       :disabled="loading"
       class="mx-2 mt-2 rounded-lg"
     >
@@ -73,26 +73,26 @@
         <v-spacer></v-spacer>
 
         <!-- discount -->
-        <v-chip    
+        <v-chip
           :color="user.discount ? 'red lighten-1' : 'secondary lighten-4'"
           outlined
           class="px-2 mx-1 mt-0 font-weight-bold text-button"
         >
-          <v-icon small class="pr-1">mdi-gift-outline</v-icon> 
-          <span class="px-1">Cкидка</span> 
+          <v-icon small class="pr-1">mdi-gift-outline</v-icon>
+          <span class="px-1">Cкидка</span>
           <span>{{ user.discount }}%</span>
           <div v-if="user.discount">
             <span class="px-1">=</span>
             <span>{{ format.format(discountInt) }}</span>
           </div>
- 
+
         </v-chip>
 
       </div>
 
       <!-- users -->
 
-      <div 
+      <div
         v-if="usersList.length"
         class="mx-2"
       >
@@ -118,7 +118,7 @@
           mandatory
         >
           <template v-for="i in products">
-            <v-chip                    
+            <v-chip
               :key="i?.id"
               :value="i?.id"
               filter
@@ -150,13 +150,13 @@
           <div class="text-h4 py-1 font-weight-light">
             {{ format.format(toPayDiscount) }}
           </div>
-        </div>     
+        </div>
       </div>
 
     </v-card>
 
     <!-- BUTTONS -->
-    
+
     <div class="pt-2 mx-2 text-right">
       <v-btn
         color="primary"
@@ -192,7 +192,7 @@
               alt="You are lucky!"
               class="mt-2 mx-2"
               style="margin:0 auto"
-            ></v-img> 
+            ></v-img>
 
           </v-col>
           <v-col class="">
@@ -201,14 +201,14 @@
               Спасибо за заказ
             </h4>
 
-            <div class="grey--text text-body-1 text--darken-3 font-weight-regular text-center self-justify-center">
+            <div class="grey--text text-body-1 text-darken-3 font-weight-regular text-center self-justify-center">
               <div class="my-1 text-center">{{ $tc('payment.valid.company.submit') }} <b>{{ e.value }}</b></div>
             </div>
 
           </v-col>
 
-        </v-row>        
-        
+        </v-row>
+
       </v-card>
 
       <div class="d-flex align-bottom mt-2">
@@ -251,18 +251,18 @@
             @click="dataDialog = false"
           >
             <v-icon>mdi-close</v-icon>
-          </v-btn>  
+          </v-btn>
 
         </div>
 
         <!-- FORM -->
-        <v-form 
+        <v-form
           ref="form"
           v-model="valid"
           :disabled="loading"
           class="pb-1"
-        > 
-          
+        >
+
           <!-- RESIDENT OF COMPANY -->
 
           <v-radio-group
@@ -278,7 +278,7 @@
                 <div>{{ $t('payment.userdata.resident.in') }}</div>
               </template>
             </v-radio>
-            
+
             <v-radio
               :value="false"
             >
@@ -288,20 +288,20 @@
             </v-radio>
           </v-radio-group>
 
-          <v-row 
+          <v-row
             dense
             class="mt-1 mx-2"
           >
 
             <v-scale-transition>
 
-              <v-col 
+              <v-col
                 v-if="c.redn"
                 cols="12"
               >
 
                 <v-row dense>
-                
+
                   <v-col>
                     <v-text-field
                       v-model="c['regn']"
@@ -327,7 +327,7 @@
                     </v-btn>
                   </v-col>
                 </v-row>
-                
+
               </v-col>
 
             </v-scale-transition>
@@ -342,7 +342,7 @@
                 clearable
                 type="text"
               >
-              </v-text-field> 
+              </v-text-field>
             </v-col>
 
             <v-col cols="12">
@@ -355,7 +355,7 @@
                 clearable
                 type="text"
               >
-              </v-text-field> 
+              </v-text-field>
             </v-col>
 
             <v-col
@@ -388,9 +388,9 @@
 
             <!-- EMAIL -->
 
-            <v-col 
+            <v-col
               v-if="e['show']"
-              cols="12"          
+              cols="12"
             >
               <v-text-field
                 v-model="e['value']"
@@ -405,7 +405,7 @@
 
           </v-row>
 
-        </v-form> 
+        </v-form>
 
         <div class="d-flex justify-center py-2 px-2">
 
@@ -423,7 +423,7 @@
           </v-btn>
 
         </div>
-        
+
       </v-card>
 
     </v-dialog>
@@ -466,7 +466,7 @@ export default {
       c: {
         // residence boolean, true == residence, false == unresidence
         redn: true,
-        name: null,        
+        name: null,
         regn: null,
         ogrn: null,
         address: null,
@@ -512,7 +512,7 @@ export default {
         const o = {
           id: i.id,
           type: i.type,
-          price: i.price,          
+          price: i.price,
           period: i.period
         }
 
@@ -521,7 +521,7 @@ export default {
         }
 
         return o
-              
+
       })
     },
 
@@ -535,7 +535,7 @@ export default {
 
     toPay() {
       if (!this.selectedProducts?.price) return null
-      
+
       let { price } = this.selectedProducts
 
       if (this.usersSelected) price += this.selectedProducts.period * this.usersSelected.price
@@ -559,7 +559,7 @@ export default {
       if (!this.tarifList?.optns?.length) return []
 
       return this.tarifList.optns
-    }, 
+    },
 
     usersSelected() {
       if (!this.usersList.length || !this.users) return null
@@ -582,7 +582,7 @@ export default {
       if (!type) this.valid = true
 
     }
-  }, 
+  },
   mounted() {
 
     this.getPaymentsList()
@@ -600,13 +600,13 @@ export default {
         types.forEach((type) => {
 
           if (r[type].length) {
-          
+
             r[type].forEach((i) => {
               this.tarifList[type].push({
                 id: i.id,
                 type: i.type,
-                price: i.price,                
-                period: i.period,                
+                price: i.price,
+                period: i.period,
                 text: ''
               })
             })
@@ -614,9 +614,9 @@ export default {
           }
         })
 
-        // пользователи        
+        // пользователи
 
-        if (r['users'].length) { 
+        if (r['users'].length) {
 
           /** sort */
 
@@ -632,7 +632,7 @@ export default {
             })
 
           })
-        
+
         }
 
         /** добавить 1 пользователя */
@@ -646,7 +646,7 @@ export default {
         })
 
         this.users = 1
-        
+
         this.setLoading(false)
       })
 
@@ -671,10 +671,10 @@ export default {
           /** не валидный email показан */
           this.e.show = true
         }
-        
+
         /**
          * company data
-         * 
+         *
          */
 
         // resident
@@ -683,7 +683,7 @@ export default {
           this.c.redn = true
         } else {
           this.c.redn = redn ? true : false
-        }        
+        }
 
         // name company
         if (name) this.c.name = name
@@ -710,7 +710,7 @@ export default {
     ...mapMutations('app', ['setLoading']),
     ...mapActions('app', ['showSuccess', 'showError', 'hideToast']),
     ...mapActions('cargo', ['getPaymentsList', 'postPayments', 'postConfigProfile', 'getConfig']),
-    
+
     validate() {
 
       if (!this.$refs.form.validate()) return this.showError(this.$t('item.message.form_error') )
@@ -732,7 +732,7 @@ export default {
       /** скорпировать данные компании */
 
       if (this.typeUserPayment === 1)  data.company = Object.assign({}, this.c)
-      
+
       /** событие метрики */
 
       this.$metrika.reachGoal('get.payment', { order_price: this.toPayDiscount, currency: 'RUB' })
@@ -748,11 +748,11 @@ export default {
 
             return this.dialog = true
           }
-          
-          if (!this.typeUserPayment && r.data.redirect) return window.location.replace(r.data.redirect) 
+
+          if (!this.typeUserPayment && r.data.redirect) return window.location.replace(r.data.redirect)
 
           this.showError(this.$tc('payment.valid.default.error'))
- 
+
         })
     },
 
@@ -764,7 +764,7 @@ export default {
       if ((charCode > 31 && (charCode < 48 || charCode > 57)) && charCode !== 46) {
 
         return evt.preventDefault()
-      } 
+      }
 
       return true
     },
@@ -784,7 +784,7 @@ export default {
           'Accept': 'application/json',
           'Authorization': 'Token ' + token
         },
-        body: JSON.stringify({ 
+        body: JSON.stringify({
           query: this.c.regn,
           count: 2
         })
@@ -797,7 +797,7 @@ export default {
           // console.log(result)
 
           this.hideToast()
-          
+
           if (!result?.suggestions?.length) return this.showError(this.$t('$vuetify.dataIterator.noResultsText') )
 
           const [i] = result.suggestions

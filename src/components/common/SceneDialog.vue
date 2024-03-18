@@ -21,13 +21,13 @@
             alt="calculate error"
             class="mt-2"
             style="margin:0 auto"
-          ></v-img> 
+          ></v-img>
         </div>
 
         <div>
 
-          <v-card-text class="grey--text text--darken-3 font-weight-regular">
-        
+          <v-card-text class="grey--text text-darken-3 font-weight-regular">
+
             <div v-show="text" class="mt-1">{{ text }}</div>
             <div v-show="call" class="mt-1 font-weight-bold">{{ call }}</div>
 
@@ -49,7 +49,7 @@
           @click="close"
         >
           {{ this.$t('$vuetify.close') }}
-        </v-btn>       
+        </v-btn>
 
         <v-btn
           rounded
@@ -61,7 +61,7 @@
         </v-btn>
 
       </v-card-actions>
-      
+
     </v-card>
   </v-dialog>
 </template>

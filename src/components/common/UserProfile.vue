@@ -9,24 +9,24 @@
 
       <v-card-text class="black--text">
         <v-row dense>
-          <v-col cols="6" sm="5" md="4" lg="3">                    
+          <v-col cols="6" sm="5" md="4" lg="3">
             {{ $t('user.name') }}:
           </v-col>
           <v-col class="font-weight-medium primary--text" @click="setReName()">
             {{ name }}
-            <v-btn 
+            <v-btn
               color="primary"
-              icon 
-              small 
+              icon
+              small
               @click="setReName()"
             >
-              <v-icon small>bx bx-edit-alt</v-icon>                
+              <v-icon small>bx bx-edit-alt</v-icon>
             </v-btn>
           </v-col>
         </v-row>
 
         <v-row dense class="mt-0">
-          <v-col cols="6" sm="5" md="4" lg="3">                    
+          <v-col cols="6" sm="5" md="4" lg="3">
             {{ $t('user.email') }}:
           </v-col>
           <v-col class="font-weight-medium">
@@ -37,25 +37,25 @@
         <v-row
           dense
           class="mt-1"
-          :class="[user.discount ? 'red--text text--lighten-1' : 'black--text']"
+          :class="[user.discount ? 'red--text text-lighten-1' : 'black--text']"
         >
-          <v-col 
-            :class="[user.discount && 'font-weight-bold']" 
+          <v-col
+            :class="[user.discount && 'font-weight-bold']"
             cols="6"
             sm="5"
             md="4"
             lg="3"
-          >                    
+          >
             Скидка:
           </v-col>
-          <v-col 
+          <v-col
             class="font-weight-medium"
-            :class="[user.discount && 'font-weight-bold']" 
+            :class="[user.discount && 'font-weight-bold']"
           >
             {{ user.discount }}%
           </v-col>
         </v-row>
-        
+
       </v-card-text>
 
       <!-- SUBMISSION -->
@@ -69,7 +69,7 @@
             :key="index"
             dense
           >
-            <v-col cols="6" sm="5" md="4" lg="3">                    
+            <v-col cols="6" sm="5" md="4" lg="3">
               {{ i.head }}:
             </v-col>
             <v-col :class="[i.color && colors]" class="font-weight-medium">
@@ -79,7 +79,7 @@
         </template>
       </v-card-text>
 
-      <div v-if="stats" class="grey--text text--darken-3">
+      <div v-if="stats" class="grey--text text-darken-3">
 
         <div class="text-button font-weight-bold mx-2 pt-1">
           Статистика
@@ -88,7 +88,7 @@
         <!-- STATS -->
         <v-card-text>
           <v-row dense>
-            <v-col cols="6" sm="5" md="4" lg="3">                    
+            <v-col cols="6" sm="5" md="4" lg="3">
               Расчетов выполнено:
             </v-col>
             <v-col class="font-weight-medium">
@@ -182,7 +182,7 @@ export default {
       } else if (Number(this.user.tarif.type) === 1) {
         cr = 'success--text'
       } else {
-        cr = 'grey--text text--darken-3'
+        cr = 'grey--text text-darken-3'
       }
 
       return cr
@@ -200,9 +200,9 @@ export default {
 
         if (this.licExpir) {
           o.push({ head: this.$t('tarif.expir'), text: this.licExpir, color: true })
-        }   
+        }
 
-      }         
+      }
 
       return o
     },
@@ -211,7 +211,7 @@ export default {
         const date = new Date(this.user.tarif.expir)
 
         return `${date.getDate()}.${(date.getMonth() + 1)}.${date.getFullYear()}`
-      } 
+      }
 
       return ''
     }
@@ -224,7 +224,7 @@ export default {
         if (stats?.counts) this.stats = stats.counts
         if (user?.email)   this.email = user.email
         if (user?.name)    this.name  = user.name
-        
+
       })
   },
   methods: {

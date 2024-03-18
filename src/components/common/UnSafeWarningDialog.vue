@@ -22,13 +22,13 @@
             alt="calculate error"
             class="mt-2"
             style="margin:0 auto"
-          ></v-img> 
+          ></v-img>
         </div>
 
         <div>
 
-          <v-card-text class="grey--text text--darken-3 font-weight-regular">
-        
+          <v-card-text class="grey--text text-darken-3 font-weight-regular">
+
             <div class="mt-1">После изменения данных проект будет полностью пересчитан</div>
             <div class="mt-1 font-weight-bold">Грузовые места перемещаемые вручную потеряют изменят свое положение</div>
 
@@ -47,7 +47,7 @@
           @click="close"
         >
           Отменить
-        </v-btn>       
+        </v-btn>
 
         <v-btn
           rounded
@@ -60,7 +60,7 @@
         </v-btn>
 
       </v-card-actions>
-      
+
     </v-card>
   </v-dialog>
 </template>

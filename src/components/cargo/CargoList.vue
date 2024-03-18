@@ -1,6 +1,6 @@
 <template>
   <div>
-    <v-card 
+    <v-card
       v-show="!filter || filter && item.length !== 0"
       class="rounded-lg"
       style="z-index: 1"
@@ -14,20 +14,20 @@
             <v-scale-transition group hide-on-leave>
               <v-chip
                 v-show="order"
-                key="order"                
+                key="order"
                 :color="getPoint[clid].color"
                 class="text-caption font-weight-medium"
               >
                 <span v-if="!$vuetify.breakpoint.mobile">{{ $t('cargolist.header') }} # </span>{{ order ? order : '...' }}
               </v-chip>
-              <v-chip 
+              <v-chip
                 v-if="!order"
-                key="!order"                
+                key="!order"
                 class="text-caption white--text"
                 color="red lighten-1"
                 close
                 close-icon="mdi-close"
-                @click:close="changeView()"     
+                @click:close="changeView()"
               >
                 {{ this.$t('cargolist.disable') }}
               </v-chip>
@@ -44,7 +44,7 @@
               :style="(!order && $vuetify.breakpoint.mobile) && 'display:none;'"
               @click="renamePoint()"
             >
-              <span 
+              <span
                 class="text-truncate text-caption font-weight-medium"
                 :style="$vuetify.breakpoint.mobile && 'max-width:120px'"
               >
@@ -55,11 +55,11 @@
           </v-col>
 
           <v-col cols="auto">
-            <v-btn 
+            <v-btn
               :disabled="item.length === 0"
               icon
               @click="changeMini()"
-            >    
+            >
               <v-icon small>{{ logoMini }}</v-icon>
             </v-btn>
             <v-btn
@@ -69,7 +69,7 @@
             >
               <v-icon small>{{ logoView }}</v-icon>
             </v-btn>
-            <v-btn 
+            <v-btn
               icon
               @click="removePoint()"
             >
@@ -84,7 +84,7 @@
       <v-card-text
         v-if="getPoint[clid].mini && item.length > 0"
         class="d-flex align-center caption black--text lighten-3"
-      > 
+      >
         <div>{{ this.$t('cargolist.windoff') }}</div>
         <v-btn
           text
@@ -103,13 +103,13 @@
 
       <!-- BODY -->
       <div v-if="!getPoint[clid].mini">
-        
+
         <v-card-text v-show="item.length" class="py-0">
           <v-row no-gutters>
 
             <v-col cols="auto" class="d-flex align-center">
               <v-checkbox
-                :value="selectAll"                
+                :value="selectAll"
                 :indeterminate="selectAlmostAll"
                 @click.stop="onSelectAll(selectAll)"
               ></v-checkbox>
@@ -123,22 +123,22 @@
 
             <v-col v-if="selected.length > 0" cols="auto" class="align-self-center">
               <div class="d-flex align-center">
-                <v-btn 
+                <v-btn
                   text
                   small
                   color="primary"
-                  class="font-weight-medium px-1"          
+                  class="font-weight-medium px-1"
                   @click="editItems()"
                 >
                   <v-icon left>bx-edit</v-icon>
                   <span>{{ $t('common.edit') }}</span>
                 </v-btn>
 
-                <v-btn 
+                <v-btn
                   text
                   small
                   color="primary"
-                  class="font-weight-medium px-1"          
+                  class="font-weight-medium px-1"
                   @click="moveItems()"
                 >
                   <v-icon left>bx-repost</v-icon>
@@ -149,7 +149,7 @@
                   text
                   small
                   color="primary"
-                  class="font-weight-medium px-1" 
+                  class="font-weight-medium px-1"
                   @click="setTemplate()"
                 >
                   <v-icon left>bx bx-save</v-icon>
@@ -160,7 +160,7 @@
                   text
                   small
                   color="primary"
-                  class="font-weight-medium px-1" 
+                  class="font-weight-medium px-1"
                   @click="removeItemsSelected()"
                 >
                   <v-icon left>bx-trash</v-icon>
@@ -182,11 +182,11 @@
         <v-list color="transparent pt-0">
           <v-scale-transition group>
             <template
-              v-for="(i) in item"       
-            > 
+              v-for="(i) in item"
+            >
 
-              <v-list-item                
-                :key="i.id"        
+              <v-list-item
+                :key="i.id"
                 :class="selectedById[i.id] && 'v-list-item--active primary--text'"
                 :link="!$vuetify.breakpoint.mobile"
                 style="height:76px;"
@@ -197,12 +197,12 @@
                       <v-checkbox v-model="selected" :value="i.id"></v-checkbox>
                     </v-col>
                     <v-col cols="auto" class="d-flex align-center mx-1">
-                      <v-list-item-avatar 
+                      <v-list-item-avatar
                         class="mx-0"
                         :color="i.cr"
                         @click.stop="$router.push(`/cargo/item/${clid}/${i.id}`)"
-                      >  
-                        <v-icon 
+                      >
+                        <v-icon
                           color="grey darken-4"
                           rounded
                         >
@@ -212,7 +212,7 @@
                     </v-col>
                     <v-col class="flex-grow-1 text-truncate mx-1 d-flex align-center">
 
-                      <v-list-item-content 
+                      <v-list-item-content
                         @click="$router.push(`/cargo/item/${clid}/${i.id}`)"
                       >
 
@@ -223,9 +223,9 @@
                         <v-list-item-subtitle :class="selectedById[i.id] && 'primary--text'">
                           {{ i.tt }} {{ i.sz }}, {{ i.cn }} {{ $t('units.co') }}
                         </v-list-item-subtitle>
-                        
+
                         <v-list-item-subtitle>
-                          
+
                           <v-icon
                             :color="i.st ? 'grey darken-3' : 'grey lighten-1'"
                             small
@@ -233,50 +233,50 @@
                             mdi-layers-outline
                           </v-icon>
 
-                          <span 
-                            :class="i.st ? 'grey--text text--darken-3' : 'grey--text text--lighten-1'"
+                          <span
+                            :class="i.st ? 'grey--text text-darken-3' : 'grey--text text-lighten-1'"
                             class="mr-1 font-weight-thin text-lowercase"
                            >
                             {{ $t('item.st.label') }}: {{ i.attr.st }}
                           </span>
-                        
-                          <v-icon 
+
+                          <v-icon
                             :color="i.lm && i.st === 1 ? 'grey darken-3' : 'grey lighten-1'"
                             small
                           >
                             mdi-plus
                           </v-icon>
 
-                          <span 
-                            :class="i.lm && i.st === 1 ? 'grey--text text--darken-3' : 'grey--text text--lighten-1'"
+                          <span
+                            :class="i.lm && i.st === 1 ? 'grey--text text-darken-3' : 'grey--text text-lighten-1'"
                             class="mr-1 font-weight-thin text-lowercase"
                            >
                             {{ $t('item.lm.label') }}: {{ i.attr.lm }}
                           </span>
 
-                          <v-icon 
+                          <v-icon
                             :color="i?.rt ? 'grey darken-3' : 'grey lighten-1'"
                             small
                           >
                             mdi-swap-horizontal
                           </v-icon>
 
-                          <span 
-                            :class="i?.rt ? 'grey--text text--darken-3' : 'grey--text text--lighten-1'"
+                          <span
+                            :class="i?.rt ? 'grey--text text-darken-3' : 'grey--text text-lighten-1'"
                             class="mr-1 font-weight-thin text-lowercase"
                            >
                             {{ $t('item.rt.label') }}: {{ i.attr.rt }}
                           </span>
 
-                          <v-icon 
+                          <v-icon
                             :color="i?.ov ? 'grey darken-3' : 'grey lighten-1'"
                             small
                           >
                             mdi-swap-vertical
                           </v-icon>
 
-                          <span 
-                            :class="i?.ov ? 'grey--text text--darken-3' : 'grey--text text--lighten-1'"
+                          <span
+                            :class="i?.ov ? 'grey--text text-darken-3' : 'grey--text text-lighten-1'"
                             class="mr-1 font-weight-thin text-lowercase"
                            >
                             {{ $t('item.ov.label') }}: {{ i.attr.ov }}
@@ -307,7 +307,7 @@
                           >
                             <v-icon>bx-copy</v-icon>
                           </v-btn>
-                          <v-btn 
+                          <v-btn
                             icon
                             @click.stop="removeItem(i.id)"
                           >
@@ -326,7 +326,7 @@
         </v-list>
 
         <template v-if="item.length === 0">
-          <div class="text-body-2 grey--text text--darken-2 mx-3 mt-4 mb-5 text-center"> 
+          <div class="text-body-2 grey--text text-darken-2 mx-3 mt-4 mb-5 text-center">
             <div class="font-weight-bold mb-1">... {{ $t('cargolist.no-items') }} ...</div>
             <div class="d-flex justify-center font-weight-thin">
               <div>{{ $t('cargolist.no-items-description-1') }}</div>
@@ -337,7 +337,7 @@
             </div>
           </div>
         </template>
-        
+
         <!-- BUTTONS -->
         <v-card-actions>
           <v-row dense>
@@ -376,11 +376,11 @@
               >
 
                 <v-hover v-model="hover.custom">
-                  <v-btn 
+                  <v-btn
                     rounded
                     class="px-2 font-weight-regular"
                     color="primary"
-                    @click="addItem()" 
+                    @click="addItem()"
                   >
                     <v-icon left>
                       bx bx-plus-circle
@@ -407,7 +407,7 @@
               </v-btn>
             </v-col>
 
-          </v-row>        
+          </v-row>
 
         </v-card-actions>
 
@@ -473,7 +473,7 @@ export default {
       return this.order ? Object.freeze('bx bxs-hide') : Object.freeze('bx bx-show-alt')
     },
     subResult() {
-      
+
       if (!this.item.length) return ''
 
       let array = this.item
@@ -494,8 +494,8 @@ export default {
       result.wg = getDigits(result.wg)
       result.vl = getDigits(result.vl)
 
-      return Object.freeze(Number(result.cn) + ' ' + this.$t('units.co') + ', ' +  
-      result.wg + ' ' + this.$t('units.wght.' + this.unitsCargo.wght) + ', ' + 
+      return Object.freeze(Number(result.cn) + ' ' + this.$t('units.co') + ', ' +
+      result.wg + ' ' + this.$t('units.wght.' + this.unitsCargo.wght) + ', ' +
       result.vl + ' ' + this.$t('units.m3'))
     },
     selectedById() {
@@ -547,7 +547,7 @@ export default {
     selectedObject() {
       return { clid: this.clid, selected: this.selected }
     },
-    
+
     clearSelected() {
       this.selected = []
       this.selectAll = false
@@ -579,7 +579,7 @@ export default {
     },
 
     // POINT
-    
+
     renamePoint() {
       this.$emit('renamepoint', { clid: this.clid, name: this.getPoint[this.clid]['name']  })
     },

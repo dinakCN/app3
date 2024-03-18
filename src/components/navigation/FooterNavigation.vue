@@ -1,12 +1,19 @@
 <template>
-  <v-bottom-navigation color="primary" grow horizontal>
+  <v-bottom-navigation
+    color="primary"
+    grow
+    horizontal
+    active-class
+  >
     <template v-for="(foot, index) in footer" :key="index">
 
       <v-btn :to="foot.to">
-        <v-icon>
+        <v-icon :icon="mobile">
           {{ foot.icon }}
         </v-icon>
-        <span>{{ foot.key }}</span>
+        <span v-if="!mobile">
+          {{ $t(foot.key) }}
+        </span>
       </v-btn>
 
     </template>

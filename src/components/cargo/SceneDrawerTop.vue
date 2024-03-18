@@ -25,11 +25,11 @@
         <div class="text-caption text-center py-1">
           <div class="text-uppercase font-weight-bold">
             {{ area?.nm }}
-          </div>          
+          </div>
           <div>
             {{ area?.sz }}
           </div>
-          <div class="grey--text text--darken-3">
+          <div class="grey--text text-darken-3">
             {{ area?.tt }}: {{ scenePageMax }} {{ $t('units.co') }}
           </div>
         </div>
@@ -67,28 +67,28 @@
           >
             <v-icon>bx bxs-chevron-left</v-icon>
           </v-btn>
-        </div>            
-        
+        </div>
+
         <v-spacer></v-spacer>
 
         <div v-show="scenePageMax" class="text-caption text-center py-1">
-          
+
           <div class="text-uppercase font-weight-bold">
             {{ area?.tt }} {{ scenePage }} / {{ scenePageMax }}
           </div>
 
-          <div class="red--text text--darken-2">
+          <div class="red--text text-darken-2">
             {{ $t('common.totally') }} {{ pageResult['brutto'] }} {{ $t('units.wght.' + unitsLoads.wght) }}, {{ pageResult['volume'] }} {{ $t('units.m3') }}, {{ pageResult['count'] }} {{ $t('units.co') }}
           </div>
 
-          <div class="teal--text text--darken-2">
+          <div class="teal--text text-darken-2">
             {{ $t('scene.total.free') }} {{ pageFree?.wg }} {{ $t('units.wght.' + unitsLoads.wght) }}, {{ pageFree?.vl }}  {{ $t('units.m3') }}
           </div>
 
         </div>
 
         <v-spacer></v-spacer>
-        
+
         <div v-show="scenePageMax > 1">
           <v-btn
             :disabled="scenePage >= scenePageMax"
@@ -98,8 +98,8 @@
             @click="nextPage()"
           >
             <v-icon>bx bxs-chevron-right</v-icon>
-          </v-btn> 
-        </div>            
+          </v-btn>
+        </div>
       </div>
     </v-card>
 
@@ -111,7 +111,7 @@
       class="ml-1 mb-1"
       style="font-size: 100%"
     >
-      
+
       <v-expansion-panels
         flat
         accordion
@@ -129,7 +129,7 @@
                 <thead>
                   <tr>
                     <th class="text-left font-weight-regular pr-1">
-                      Стороны                    
+                      Стороны
                     </th>
                     <th class="text-center font-weight-regular px-1">
                       Итого
@@ -147,19 +147,19 @@
                     v-for="(i, x) in options.max"
                     :key="x"
                   >
-                    <td class="caption text-left " :class="!i.valid && 'red--text text--darken-2'">{{ i.head }}</td>
-                    <td class="caption text-center" :class="!i.valid && 'red--text text--darken-2'">{{ i.reslt }}</td>
-                    <td class="caption grey--text text--darken-3 text-center">{{ i.maxmm }}</td>
-                    <td class="caption text-center" :class="!i.valid && 'red--text text--darken-2'">{{ i.offst }}</td>
+                    <td class="caption text-left " :class="!i.valid && 'red--text text-darken-2'">{{ i.head }}</td>
+                    <td class="caption text-center" :class="!i.valid && 'red--text text-darken-2'">{{ i.reslt }}</td>
+                    <td class="caption grey--text text-darken-3 text-center">{{ i.maxmm }}</td>
+                    <td class="caption text-center" :class="!i.valid && 'red--text text-darken-2'">{{ i.offst }}</td>
                   </tr>
                   <tr
                     v-for="(i, x) in options.ldm"
                     :key="x + 10"
                   >
                     <td class="caption text-left">{{ i.head }}</td>
-                    <td class="caption grey--text text--darken-3 text-center">{{ i.reslt }}</td>
-                    <td class="caption grey--text text--darken-3 text-center">{{ i.maxmm }}</td>
-                    <td class="caption grey--text text--darken-3 text-center">{{ i.offst }}</td>
+                    <td class="caption grey--text text-darken-3 text-center">{{ i.reslt }}</td>
+                    <td class="caption grey--text text-darken-3 text-center">{{ i.maxmm }}</td>
+                    <td class="caption grey--text text-darken-3 text-center">{{ i.offst }}</td>
                   </tr>
                 </tbody>
               </template>
@@ -199,17 +199,17 @@
                     v-for="(i, x) in options.tt"
                     :key="x + 20"
                   >
-                    <td class="caption text-left" :class="!i.vald ? 'red--text text--darken-2' : 'success--text text--darken-1'" >{{ i.head }}</td>
+                    <td class="caption text-left" :class="!i.vald ? 'red--text text-darken-2' : 'success--text text-darken-1'" >{{ i.head }}</td>
                     <td class="caption text-center">
                       {{ i.text }}
                     </td>
                     <td class="caption text-center">{{ i.maxn }}</td>
-                    <td 
+                    <td
                       class="caption text-center"
-                      :class="!i.vald ? 'red--text text--darken-2' : 'success--text text--darken-1'"
+                      :class="!i.vald ? 'red--text text-darken-2' : 'success--text text-darken-1'"
                     >
                       <span v-show="!i.vald">+ </span>
-                      {{ i.offs }}                    
+                      {{ i.offs }}
                     </td>
                   </tr>
                 </tbody>
@@ -225,7 +225,7 @@
                   <thead>
                     <tr>
                       <th class="text-left font-weight-regular pr-1">
-                        Ось 
+                        Ось
                       </th>
                       <th class="text-center font-weight-regular px-1">
                         Итого
@@ -243,14 +243,14 @@
                       v-for="(i, x) in options.pp"
                       :key="x + 30"
                     >
-                      <td class="caption text-left" :class="!i.vald ? 'red--text text--darken-2' : 'success--text text--darken-1'" >{{ i.head }}</td>
+                      <td class="caption text-left" :class="!i.vald ? 'red--text text-darken-2' : 'success--text text-darken-1'" >{{ i.head }}</td>
                       <td class="caption text-center">
                         {{ i.text }}
                       </td>
                       <td class="caption text-center">{{ i.maxn }}</td>
-                      <td 
+                      <td
                         class="caption text-center"
-                        :class="!i.vald ? 'red--text text--darken-2' : 'success--text text--darken-1'"
+                        :class="!i.vald ? 'red--text text-darken-2' : 'success--text text-darken-1'"
                       >
                         <span v-show="!i.vald">+ </span>
                         {{ i.offs }}
@@ -328,7 +328,7 @@ export default {
       const i = this.plus
       const vl = i?.vl ? i.vl : 0
       const wg = i?.wg ? i.wg : 0
-      
+
       const volume = setVolume(vl)
       const brutto = getDigits(getWght(wg, this.unitsLoads.wght))
 
@@ -366,18 +366,18 @@ export default {
       const wd = this.area?.base?.wd ? getSize(this.area.base.wd, this.unitsCargo.size) : 0
 
       const u = this.$t('units.size.' + this.unitsCargo.size)
-      const w = this.$t('units.wght.' + this.unitsLoads.wght) 
+      const w = this.$t('units.wght.' + this.unitsLoads.wght)
 
       /**
        * max sizes
-       * 
+       *
        */
 
       if (this.maxn?.l && ln) {
 
         const o_ln = getSize(this.area.base.ln - this.maxn.l, this.unitsCargo.size)
 
-        o.max.push({ 
+        o.max.push({
           head: this.$t('scene.results.max.length'),
           reslt: getSize(this.maxn.l, this.unitsCargo.size) + ' ' + u,
           maxmm: ln + ' ' + u,
@@ -390,7 +390,7 @@ export default {
 
         const o_wd =  getSize(this.area.base.wd - this.maxn.w, this.unitsCargo.size)
 
-        o.max.push({ 
+        o.max.push({
           head: this.$t('scene.results.max.width'),
           reslt: getSize(this.maxn.w, this.unitsCargo.size) + ' ' + u,
           maxmm: wd + ' ' + u,
@@ -403,7 +403,7 @@ export default {
 
         const o_hg =  getSize(this.area.base.hg - this.maxn.h, this.unitsCargo.size)
 
-        o.max.push({ 
+        o.max.push({
           head: this.$t('scene.results.max.height'),
           reslt: getSize(this.maxn.h, this.unitsCargo.size) + ' ' + u,
           maxmm: hg + ' ' + u,
@@ -413,9 +413,9 @@ export default {
       }
 
       /**
-       * 
+       *
        * ldm
-       * 
+       *
        */
 
       if (this.ldms) {
@@ -428,9 +428,9 @@ export default {
       }
 
       /**
-       * 
+       *
        * tt
-       * 
+       *
        */
 
       if (this.axis?.tt) {
@@ -438,7 +438,7 @@ export default {
         const tt = Object.values(this.axis.tt)
 
         if (tt.length) {
-          
+
           tt.forEach((t, x) => {
 
             const head = `${this.$t('scene.results.axies.label')} ${x + 1} `
@@ -454,9 +454,9 @@ export default {
       }
 
       /**
-       * 
+       *
        * pp
-       * 
+       *
        */
 
       if (this.axis?.pp) {
@@ -464,7 +464,7 @@ export default {
         const pp = Object.values(this.axis.pp)
 
         if (pp.length) {
-          
+
           pp.forEach((p, x) => {
 
             const head = `${this.$t('scene.results.axies.label')} ${x + 1} `
@@ -478,7 +478,7 @@ export default {
           })
         }
       }
-    
+
       for (const p of Object.keys(o)) o[p] = Object.freeze(o[p])
 
       return o
@@ -496,7 +496,7 @@ export default {
     },
 
     // PAGE
-    nextPage() {      
+    nextPage() {
       this.$emit('nextPage', this.scenePage)
     },
 
