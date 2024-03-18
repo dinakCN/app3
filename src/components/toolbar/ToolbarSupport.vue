@@ -1,19 +1,18 @@
 <template>
-  <v-list nav dense>
+  <v-list nav density="comfortable">
     <v-list-item
       link
       to="/support"
+      color="primary"
     >
-      <v-list-item-icon>
-        <v-icon color="primary">
-          bx bxl-telegram
+      <template v-slot:prepend>
+        <v-icon>
+         fa-brands fa-telegram
         </v-icon>
-      </v-list-item-icon>
-      <v-list-item-content >
-        <v-list-item-title class="primary--text">
-          {{ $t('menu.support') }}
-        </v-list-item-title>
-      </v-list-item-content>
+      </template>
+      <v-list-item-title class="primary">
+        {{ $t('menu.support') }}
+      </v-list-item-title>
     </v-list-item>
   </v-list>
 </template>

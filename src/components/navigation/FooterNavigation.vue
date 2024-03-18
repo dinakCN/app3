@@ -7,8 +7,8 @@
   >
     <template v-for="(foot, index) in footer" :key="index">
 
-      <v-btn :to="foot.to">
-        <v-icon :icon="mobile">
+      <v-btn :to="foot.to" :icon="mobile">
+        <v-icon>
           {{ foot.icon }}
         </v-icon>
         <span v-if="!mobile">

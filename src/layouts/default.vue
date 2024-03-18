@@ -5,11 +5,9 @@
     v-model="drawer"
     temporary
   >
-
     <MainMenu :menu="menu" />
-
-    <template slot="append">
-      <!-- <toolbar-support></toolbar-support> -->
+    <template v-slot:append>
+      <ToolbarSupport />
     </template>
   </v-navigation-drawer>
 
@@ -49,6 +47,7 @@
 
 import { ref } from "vue"
 import MainMenu from "../components/navigation/MainMenu.vue";
+import ToolbarSupport from '../components/toolbar/ToolbarSupport.vue'
 import { menu } from '../configs/navigation.js'
 
 const drawer = ref(false)
