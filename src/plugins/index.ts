@@ -15,8 +15,8 @@ import type { App } from 'vue'
 
 export function registerPlugins (app: App) {
   app
-    .use(i18n)
     .use(vuetify)
+    .use(i18n)
     .use(router)
     .use(pinia)
 }
