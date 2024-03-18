@@ -9,11 +9,11 @@
       active-class="primary--text"
       link
     >
-      <v-list-item-icon>
+      <!-- <v-list-item-icon> -->
         <v-icon :small="small" :class="{ 'grey--text': menuItem.disabled }">
           {{ menuItem.icon || 'mdi-circle-medium' }}
         </v-icon>
-      </v-list-item-icon>
+      <!-- </v-list-item-icon> -->
       <v-list-item-content>
         <v-list-item-title>
           {{ menuItem.key ? $t(menuItem.key) : menuItem.text }}
@@ -23,18 +23,10 @@
   </div>
 </template>
 
-<script>
-/*
-|---------------------------------------------------------------------
-| Navigation Menu Item Component
-|---------------------------------------------------------------------
-|
-| Navigation items for the NavMenu component
-|
-*/
-export default {
-  props: {
-    menuItem: {
+<script lang="ts" setup>
+
+const props = defineProps({
+  menuItem: {
       type: Object,
       default: () => {}
     },
@@ -42,6 +34,6 @@ export default {
       type: Boolean,
       default: false
     }
-  }
-}
+})
+
 </script>

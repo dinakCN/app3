@@ -1,5 +1,5 @@
-// import en from '../translations/en'
-// import ru from '../translations/ru'
+import en from '../translations/en'
+import ru from '../translations/ru'
 
 // const supported = ['en', 'ru']
 const supported = ['ru']

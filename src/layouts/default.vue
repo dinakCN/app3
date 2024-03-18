@@ -5,8 +5,8 @@
     v-model="drawer"
     temporary
   >
-  
-    <!-- <main-menu /> -->
+
+    <MainMenu :menu="menu" />
 
     <template slot="append">
       <!-- <toolbar-support></toolbar-support> -->
@@ -41,13 +41,17 @@
     <router-view />
   </v-main>
 
-  <AppFooter />
+  <FooterNavigation />
 
 </template>
 
 <script lang="ts" setup>
-import { ref } from "vue"
+
+import { ref, reactive } from "vue"
+import MainMenu from "@/components/navigation/MainMenu.vue";
+import { menu } from '@/configs/navigation.js'
 
 const drawer = ref(false)
+// const menu = reactive(menu)
 
 </script>

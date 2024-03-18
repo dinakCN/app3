@@ -17,6 +17,7 @@ declare module 'vue' {
     EditDialog: typeof import('./components/common/EditDialog.vue')['default']
     ErrorMessage: typeof import('./components/error/ErrorMessage.vue')['default']
     ExportToFile: typeof import('./components/cargo/ExportToFile.vue')['default']
+    FooterNavigation: typeof import('./components/navigation/FooterNavigation.vue')['default']
     HelloWorld: typeof import('./components/HelloWorld.vue')['default']
     HelpButton: typeof import('./components/brief/HelpButton.vue')['default']
     ImportData: typeof import('./components/cargo/importData.vue')['default']

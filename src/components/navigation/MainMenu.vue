@@ -1,23 +1,20 @@
 <template>
   <v-list nav dense>
     <span v-for="(item, index) in menu" :key="index">
-      <nav-menu :menu="item.items" />
+      <NavMenu :menu="item.items" />
     </span>
   </v-list>
 </template>
 
-<script>
+<script lang="ts" setup>
+
 import NavMenu from './NavMenu'
 
-export default {
-  components: {
-    NavMenu
-  },
-  props: {
-    menu: {
-      type: Array,
-      default: () => []
-    }
+const props = defineProps({
+  menu: {
+    type: Array,
+    default: () => []
   }
-}
+})
+
 </script>
