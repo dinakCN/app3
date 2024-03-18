@@ -13,9 +13,9 @@
   </v-btn>
 </template>
 
-<script lang="ts" setup>
+<script setup lang="ts">
 
-import { ref, computed, reactive } from "vue"
+import { computed, reactive } from "vue"
 import { useAppStore } from "@/stores/app.js"
 import { useI18n } from 'vue-i18n'
 

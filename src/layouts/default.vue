@@ -59,7 +59,7 @@
 
 </template>
 
-<script lang="ts" setup>
+<script setup lang="ts" >
 
 import { ref } from "vue"
 import { menu } from '../configs/navigation.js'
