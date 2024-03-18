@@ -31,6 +31,24 @@
         </span>
       </div>
     </v-app-bar-title>
+
+    <v-spacer></v-spacer>
+
+    <div>
+      <ToolbarUser />
+      <ToolbarSetting />
+      <ToolbarLicense />
+    </div>
+
+    <v-progress-linear
+      :active="appStore.loading"
+      :indeterminate="appStore.loading"
+      absolute
+      bottom
+      color="teal"
+      style="z-index: 9"
+    ></v-progress-linear>
+
   </v-app-bar>
 
   <v-main>
@@ -44,10 +62,15 @@
 <script lang="ts" setup>
 
 import { ref } from "vue"
+import { menu } from '../configs/navigation.js'
+import { useAppStore } from '../stores/app.js'
 import MainMenu from "../components/navigation/MainMenu.vue";
 import ToolbarSupport from '../components/toolbar/ToolbarSupport.vue'
-import { menu } from '../configs/navigation.js'
+import ToolbarUser from '../components/toolbar/ToolbarUser.vue'
+import ToolbarSetting from '../components/toolbar/ToolbarSetting.vue'
+import ToolbarLicense from '../components/toolbar/ToolbarLicense.vue'
 
 const drawer = ref(false)
+const appStore = useAppStore()
 
 </script>

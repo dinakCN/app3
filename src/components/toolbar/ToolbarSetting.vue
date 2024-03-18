@@ -5,6 +5,6 @@
     to="/user#user-setting"
     active-class="primary--text"
   >
-    <v-icon>bx bxs-cog</v-icon>
+    <v-icon>fa-solid fa-gear</v-icon>
   </v-btn>
 </template>

@@ -1,39 +1,39 @@
 <template>
   <v-btn
     icon
-    :to="{ path: '/user#user-tarif'}"
+    to="/user#user-tarif"
   >
     <v-avatar
       size="38"
-      :class="color"
-      class="text-caption text-uppercase white--text"
+      :color="avatartColor"
+      class="text-caption text-uppercase text-white"
     >
       {{ name }}
     </v-avatar>
   </v-btn>
 </template>
 
-<script>
-import { mapState } from 'vuex'
+<script lang="ts" setup>
 
-export default {
-  computed: {
-    ...mapState('app', ['user']),
-    name() {
-      return this.user.tarif.type ? this.$t('tarif.type.1.subtitle') : this.$t('tarif.type.0.subtitle')
-    },
-    color() {
-      if (this.user.tarif.type === 2) {
+import { ref, computed, reactive } from "vue"
+import { useAppStore } from "@/stores/app.js"
+import { useI18n } from 'vue-i18n'
 
-        return 'primary'
-      } else if (this.user.tarif.type === 1) {
+const { t } = useI18n()
 
-        return 'success'
-      } else {
+const appStore = useAppStore();
+const user = reactive(appStore.user);
 
-        return 'grey lighten-1'
-      }
-    }
-  }
-}
+const name = computed(() => {
+  return user.tarif.type ? t('tarif.type.1.subtitle') : t('tarif.type.0.subtitle');
+})
+
+const avatartColor = computed(() => {
+
+  if (user.tarif.type === 2) return 'primary'
+  if (user.tarif.type === 1) return 'success'
+
+  return 'grey-lighten-1'
+})
+
 </script>
