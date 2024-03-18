@@ -47,11 +47,10 @@
 
 <script lang="ts" setup>
 
-import { ref, reactive } from "vue"
-import MainMenu from "@/components/navigation/MainMenu.vue";
-import { menu } from '@/configs/navigation.js'
+import { ref } from "vue"
+import MainMenu from "../components/navigation/MainMenu.vue";
+import { menu } from '../configs/navigation.js'
 
 const drawer = ref(false)
-// const menu = reactive(menu)
 
 </script>

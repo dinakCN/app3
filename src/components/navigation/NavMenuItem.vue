@@ -9,16 +9,16 @@
       active-class="primary--text"
       link
     >
-      <!-- <v-list-item-icon> -->
+
+      <template v-slot:prepend>
         <v-icon :small="small" :class="{ 'grey--text': menuItem.disabled }">
           {{ menuItem.icon || 'mdi-circle-medium' }}
         </v-icon>
-      <!-- </v-list-item-icon> -->
-      <v-list-item-content>
-        <v-list-item-title>
-          {{ menuItem.key ? $t(menuItem.key) : menuItem.text }}
-        </v-list-item-title>
-      </v-list-item-content>
+      </template>
+
+      <v-list-item-title>
+        {{ menuItem.key ? $t(menuItem.key) : menuItem.text }}
+      </v-list-item-title>
     </v-list-item>
   </div>
 </template>
