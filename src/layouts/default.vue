@@ -12,7 +12,8 @@
   </v-navigation-drawer>
 
   <!-- app -->
-  <v-app-bar>
+  <v-app-bar flat tile>
+
     <!-- menu btn -->
     <template v-slot:prepend>
       <v-app-bar-nav-icon
