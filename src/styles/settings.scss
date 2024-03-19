@@ -5,6 +5,7 @@
  */
 
 // https://vuetifyjs.com/features/sass-variables/`
-// @use 'vuetify/settings' with (
-//   $color-pack: false
-// );
+@use 'vuetify/settings' with (
+  // $application-background: '#f2f5f8',
+  $app-bar-background: rgb(var(--v-theme-surface)),
+);
