@@ -16,8 +16,8 @@
 <script setup lang="ts">
 
 import { computed, reactive } from "vue"
-import { useAppStore } from "@/stores/app.js"
-import { useI18n } from 'vue-i18n'
+import { useAppStore } from "../../stores/app.ts"
+import { useI18n } from "vue-i18n"
 
 const { t } = useI18n()
 
