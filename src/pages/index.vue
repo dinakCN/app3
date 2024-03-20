@@ -81,7 +81,7 @@
 </route>
 
 <script lang="ts" setup>
-import { ref, reactive, computed } from "vue"
+import { ref, reactive, computed, watchEffect } from "vue"
 import { useAppStore } from '../stores/app.ts'
 import { useCargoStore } from '../stores/cargo.ts'
 import { useI18n } from "vue-i18n"
@@ -111,7 +111,7 @@ const loading = ref(false)
 const filter = ref([])
 const projects = ref([])
 const projectsLength = computed(() => {
-  console.log(projects.value.length)
+  if (!projects.value.length) return 0
 
   return projects.value.length
 })
@@ -120,7 +120,7 @@ const projectsLength = computed(() => {
  * Sort
  */
 const sort = ref(2)
-const sortList = reactive([
+const sortList = ref([
   { name: t('project.sort.name'), value: 1 },
   { name: t('project.sort.add_time'), value: 2 },
   { name: t('project.sort.modified'), value: 0 }
@@ -130,13 +130,13 @@ const sortList = reactive([
  * Order
  */
 const order = ref(0);
-const orderList = reactive([
+const orderList = ref([
   { name: t('project.sort.name'), value: 1 },
   { name: t('project.sort.add_time'), value: 2 },
   { name: t('project.sort.modified'), value: 0 }
 ]);
 const orderData = computed(() => {
-  if (order.value > orderList.length) {
+  if (order.value > orderList.value.length) {
     orderList[0]
   }
 
