@@ -13,7 +13,7 @@
         <v-scale-transition>
           <v-card
             :loading="loading"
-            class="rounded-xl"
+            class="rounded-lg"
           >
             <!-- COMMAND -->
             <v-card-actions class="d-flex align-center">
@@ -25,14 +25,11 @@
                 </div>
 
                 <div class="text-button mx-1">
-                  <!-- <div :class="[projects.length >= config.limit.projects ? 'red--text text--lighten-2' : '']">
-                    {{ projects.length }} / {{ config.limit.projects }}
-                  </div> -->
+                  <div :class="[projectsLength >= limit.projects ? 'red--text text--lighten-2' : '']">
+                    {{ projectsLength }} / {{ limit.projects }}
+                  </div>
                 </div>
-                
-                <!-- <div v-if="!user.tarif.type" class="pr-1 text-caption font-weight-light">
-                  <router-link to="/user#user-tarif" class="red--text text-decoration-none">{{ t('message.project.add.call') }}</router-link>
-                </div> -->
+
               </div>
 
               <v-spacer></v-spacer>
@@ -43,15 +40,16 @@
             <v-text-field
               v-model="filter"
               :placeholder="t('common.search')"
-              :outlined="Boolean(filter)"
+              :outlined="Boolean(filter.value)"
               :max-length="35"
-              prepend-inner-icon="mdi-magnify"
+              prepend-inner-icon="mdi:mdi mdi-magnify"
+              clear-icon="mdi:mdi mdi-close"
               density="comfortable"
               hide-details
-              block
               clearable
               variant="solo"
               flat
+              single-line
             ></v-text-field>
           </v-card>
         </v-scale-transition>
@@ -62,14 +60,12 @@
           class="mt-4 mb-1 d-flex justify-center"
         >
           <v-btn
-            class="px-2 font-weight-medium elevation-18"
+            class="elevation-18"
             rounded
             color="primary"
+            prepend-icon="mdi:mdi mdi-plus-box-multiple"
             @click.stop="create()"
           >
-            <v-icon left>
-              bx-add-to-queue
-            </v-icon>
             {{ t('project.create') }}
           </v-btn>
         </div>
@@ -86,7 +82,8 @@
 
 <script lang="ts" setup>
 import { ref, reactive, computed } from "vue"
-import { useAppStore } from '../stores/app.js'
+import { useAppStore } from '../stores/app.ts'
+import { useCargoStore } from '../stores/cargo.ts'
 import { useI18n } from "vue-i18n"
 
 /**
@@ -98,6 +95,10 @@ const { t } = useI18n()
  * Store
  */
 const appStore = useAppStore()
+const user = reactive(appStore.user)
+
+const cargoStore = useCargoStore()
+const limit = reactive(cargoStore.config.limit)
 
 /**
  * Loading
@@ -107,8 +108,13 @@ const loading = ref(false)
 /**
  * Projects
  */
-const filter = reactive([])
-const projects = reactive([])
+const filter = ref([])
+const projects = ref([])
+const projectsLength = computed(() => {
+  console.log(projects.value.length)
+
+  return projects.value.length
+})
 
 /**
  * Sort

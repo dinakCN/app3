@@ -66,11 +66,6 @@
 import { ref } from "vue"
 import { menu } from '../configs/navigation.js'
 import { useAppStore } from '../stores/app.js'
-import MainMenu from "../components/navigation/MainMenu.vue";
-import ToolbarSupport from '../components/toolbar/ToolbarSupport.vue'
-import ToolbarUser from '../components/toolbar/ToolbarUser.vue'
-import ToolbarSetting from '../components/toolbar/ToolbarSetting.vue'
-import ToolbarLicense from '../components/toolbar/ToolbarLicense.vue'
 
 const drawer = ref(false)
 const appStore = useAppStore()

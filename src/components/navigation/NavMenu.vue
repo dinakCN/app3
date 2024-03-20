@@ -29,7 +29,6 @@
 </template>
 
 <script lang="ts" setup>
-import NavMenuItem from './NavMenuItem'
 
 const props = defineProps({
   menu: {

@@ -22,17 +22,17 @@ export const useCargoStore = defineStore('cargo', {
         items: 7000,
         irows: 70,
         loads: 10,
-        projects: 1,
-        templates: 0
+        projects: 10,
+        templates: 10
       },
       units: {
         cargo: {
-          size: '2',
-          wght: '1'
+          size: 2,
+          wght: 1
         },
         loads: {
-          size: '2',
-          wght: '1'
+          size: 2,
+          wght: 1
         }
       },
       scene : {

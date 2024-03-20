@@ -12,8 +12,6 @@
 
 <script lang="ts" setup>
 
-import NavMenu from './NavMenu.vue'
-
 const props = defineProps({
   menu: {
     type: Array,

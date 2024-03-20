@@ -6,6 +6,9 @@
 
 // https://vuetifyjs.com/features/sass-variables/`
 @use 'vuetify/settings' with (
+  $font-size-root: 15px,
+  $line-height-root: 1.5,
+
   $shadow-key-umbra-opacity: rgba(85, 85, 85, 0.08),
   $shadow-key-penumbra-opacity: rgba(85, 85, 85, 0.06),
   $shadow-key-ambient-opacity: rgba(85, 85, 85, 0.03),

@@ -1,10 +1,9 @@
 <template>
   <v-btn
-    icon
-    size="small"
     to="/user#user-profile"
     active-class="primary--text"
+    icon="mdi:mdi mdi-account-circle"
+    variant="text"
   >
-    <v-icon>fa-solid fa-user-circle</v-icon>
   </v-btn>
 </template>
