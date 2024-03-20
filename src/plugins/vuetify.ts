@@ -8,6 +8,12 @@
 import '@mdi/font/css/materialdesignicons.css'
 import '@fortawesome/fontawesome-free/css/all.css'
 import 'vuetify/styles'
+// import '@/styles/main.scss'
+
+// Vuetify Library Variables
+// import '../styles/vuetify/variables/_index.scss';
+// Custom Vuetify Style Overrides
+// import '../styles/vuetify/overrides.scss';
 
 // Composables
 import { createVuetify, type ThemeDefinition } from 'vuetify'

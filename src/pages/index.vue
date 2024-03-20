@@ -1,76 +1,82 @@
 <template>
-  <v-row
-    ref="projects"
-    justify="center"
-  >
-    <v-col
-      cols="12"
-      lg="8"
+  <v-container>
+    <v-row
+      ref="projects"
+      justify="center"
+      no-gutters
     >
-      <!-- header -->
-      <v-scale-transition>
-        <v-card
-          class="rounded-lg mb-2"
-          name="projects_header"
-          :loading="loading"
-        >
-          <!-- COMMAND -->
-          <v-card-actions class="d-flex align-center">
+      <v-col
+        cols="12"
+        lg="8"
+      >
+        <!-- header -->
+        <v-scale-transition>
+          <v-card
+            :loading="loading"
+            class="rounded-xl"
+          >
+            <!-- COMMAND -->
+            <v-card-actions class="d-flex align-center">
 
-            <div class="d-sm-flex align-center">
-              <div class="text-button font-weight-bold ml-1">
-                {{ t('project.list') }}
-              </div>
-              <div class="text-button mx-1">
-                <!-- <div :class="[projects.length >= config.limit.projects ? 'red--text text--lighten-2' : '']">
-                  {{ projects.length }} / {{ config.limit.projects }}
+              <div class="d-sm-flex align-center">
+
+                <div class="text-button font-weight-bold ml-2">
+                  {{ t('project.list') }}
+                </div>
+
+                <div class="text-button mx-1">
+                  <!-- <div :class="[projects.length >= config.limit.projects ? 'red--text text--lighten-2' : '']">
+                    {{ projects.length }} / {{ config.limit.projects }}
+                  </div> -->
+                </div>
+                
+                <!-- <div v-if="!user.tarif.type" class="pr-1 text-caption font-weight-light">
+                  <router-link to="/user#user-tarif" class="red--text text-decoration-none">{{ t('message.project.add.call') }}</router-link>
                 </div> -->
               </div>
-              <!-- <div v-if="!user.tarif.type" class="pr-1 text-caption font-weight-light">
-                <router-link to="/user#user-tarif" class="red--text text-decoration-none">{{ t('message.project.add.call') }}</router-link>
-              </div> -->
-            </div>
 
-            <v-spacer></v-spacer>
+              <v-spacer></v-spacer>
 
-          </v-card-actions>
+            </v-card-actions>
 
-          <!-- filter -->
-          <v-text-field
-            v-model="filter"
-            :placeholder="t('common.search')"
-            :outlined="Boolean(filter)"
-            :max-length="35"
-            prepend-inner-icon="mdi-magnify"
-            hide-details
-            block
-            clearable
-            solo
-            flat
-          ></v-text-field>
-        </v-card>
-      </v-scale-transition>
+            <!-- filter -->
+            <v-text-field
+              v-model="filter"
+              :placeholder="t('common.search')"
+              :outlined="Boolean(filter)"
+              :max-length="35"
+              prepend-inner-icon="mdi-magnify"
+              density="comfortable"
+              hide-details
+              block
+              clearable
+              variant="solo"
+              flat
+            ></v-text-field>
+          </v-card>
+        </v-scale-transition>
 
-      <!-- create -->
-      <div
-        name="projects_add"
-        class="mt-4 mb-1 d-flex justify-center"
-      >
-        <v-btn
-          class="px-2 font-weight-medium elevation-18"
-          rounded
-          color="primary"
-          @click.stop="create()"
+        <!-- create -->
+        <div
+          name="projects_add"
+          class="mt-4 mb-1 d-flex justify-center"
         >
-          <v-icon left>
-            bx-add-to-queue
-          </v-icon>
-          {{ t('project.create') }}
-        </v-btn>
-      </div>
+          <v-btn
+            class="px-2 font-weight-medium elevation-18"
+            rounded
+            color="primary"
+            @click.stop="create()"
+          >
+            <v-icon left>
+              bx-add-to-queue
+            </v-icon>
+            {{ t('project.create') }}
+          </v-btn>
+        </div>
 
-    </v-col>
-  </v-row>
+      </v-col>
+    </v-row>
+</v-container>
 </template>
 
 <route lang="yaml">
