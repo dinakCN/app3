@@ -22,6 +22,8 @@ const myCustomLightTheme: ThemeDefinition = {
   colors: {
     background: '#F2F5F8',
     surface: '#FFFFFF',
+    // 'surface-variant': '#ffff00',
+    // 'on-surface-variant': '#ffffff',
   },
 }
 

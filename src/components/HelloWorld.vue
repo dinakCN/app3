@@ -54,11 +54,11 @@
 
         <v-col cols="6">
           <v-card
-            append-icon="mdi-open-in-new"
+            append-icon="mdi: open-in-new"
             class="py-4"
             color="surface-variant"
             href="https://vuetifyjs.com/"
-            prepend-icon="mdi-text-box-outline"
+            prepend-icon="mdi:text-box-outline"
             rel="noopener noreferrer"
             rounded="lg"
             subtitle="Learn about all things Vuetify in our documentation."

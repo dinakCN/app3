@@ -12,11 +12,12 @@
   </v-navigation-drawer>
 
   <!-- app -->
-  <v-app-bar flat tile>
+  <v-app-bar :elevation="12">
 
     <!-- menu btn -->
     <template v-slot:prepend>
       <v-app-bar-nav-icon
+        size="small"
         @click.stop="drawer = !drawer"
       >
       </v-app-bar-nav-icon>
@@ -35,7 +36,7 @@
 
     <v-spacer></v-spacer>
 
-    <div>
+    <div class="mx-2">
       <ToolbarUser />
       <ToolbarSetting />
       <ToolbarLicense />

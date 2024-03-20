@@ -1,7 +1,7 @@
 <template>
   <v-btn
     icon
-    large
+    size="small"
     to="/user#user-profile"
     active-class="primary--text"
   >

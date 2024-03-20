@@ -4,6 +4,7 @@
     grow
     horizontal
     active-class
+    :elevation="24"
   >
     <template v-for="(foot, index) in footer" :key="index">
 
