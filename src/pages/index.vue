@@ -54,6 +54,51 @@
           </v-card>
         </v-scale-transition>
 
+        <!-- no-projects -->
+        <div v-if="!projectsCount" class="mt-7 mb-1 text-center text-body-2 grey--text text--darken-2">
+          <div class="font-weight-bold mb-1">... {{ t('project.no-projects') }} ...</div>
+          <div>{{ t('project.no-projects-description-1') }}</div>
+          <div>{{ t('project.no-projects-description-2') }}</div>
+        </div>
+
+        <!-- sort -->
+        <div v-if="!mobile">
+          <div
+            name="projects_sort"
+            class="mb-2 px-0 d-flex align-center"
+          >
+            <v-chip-group
+              v-model="sort"
+              active-class="primary--text"
+              mandatory
+            >
+              <template v-for="(i, x) in sortList" :key="x">
+                <v-chip
+                  :value="i.value"
+                  outlined
+                  small
+                >
+                  {{ i.name }}
+                </v-chip>
+              </template>
+            </v-chip-group>
+
+            <v-spacer></v-spacer>
+
+            <v-btn
+              text
+              small
+              rounded
+              class="font-weight-regular"
+              @click.stop="() => true"
+            >
+              {{ orderData.name }}
+              <v-icon right>{{ orderData.icon }}</v-icon>
+            </v-btn>
+
+          </div>
+        </div>
+
         <!-- create -->
         <div
           name="projects_add"
@@ -85,6 +130,12 @@ import { ref, reactive, computed, watchEffect } from "vue"
 import { useAppStore } from '../stores/app'
 import { useCargoStore } from '../stores/cargo'
 import { useI18n } from "vue-i18n"
+import { useDisplay } from 'vuetify'
+
+/**
+ * Flag mobile
+ */
+const { mobile } = useDisplay()
 
 /**
  * Lang

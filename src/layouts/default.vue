@@ -65,7 +65,7 @@
 
 import { ref } from "vue"
 import { menu } from '../configs/navigation.js'
-import { useAppStore } from '../stores/app.js'
+import { useAppStore } from '../stores/app'
 
 const drawer = ref(false)
 const appStore = useAppStore()
