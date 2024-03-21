@@ -25,8 +25,8 @@
                 </div>
 
                 <div class="text-button mx-1">
-                  <div :class="[projectsLength >= limit.projects ? 'red--text text--lighten-2' : '']">
-                    {{ projectsLength }} / {{ limit.projects }}
+                  <div :class="[projectsCount >= limit.projects ? 'red--text text--lighten-2' : '']">
+                    {{ projectsCount }} / {{ limit.projects }}
                   </div>
                 </div>
 
@@ -112,6 +112,117 @@ const filter = ref('')
 const isFilter = computed(() => {
   return Boolean(filter.value)
 })
+const filterList = computed(() => {
+
+  /**
+   * Check
+   */
+  if (!projectsCount) return []
+
+  /**
+   * Filter
+   */
+  const filter = projects.array.reduce((o, i: object) => {
+
+    if (filter)  {
+
+      let flag = false
+
+      /**
+       * compare with priject name
+       *
+       */
+
+      if (String(i.name).toLowerCase().indexOf(String(filter).toLowerCase()) !== -1) flag = true
+
+      /**
+       * admin only
+       *
+       */
+
+      if (user.id === 1) {
+
+        /**
+         * compare with user ID & Project ID
+         *
+         */
+
+        if (String(i.id).toLowerCase().indexOf(String(filter).toLowerCase()) !== -1) flag = true
+        if (String(i.user_id).toLowerCase().indexOf(String(filter).toLowerCase()) !== -1) flag = true
+
+      }
+
+      if (flag) o.push(i)
+
+    } else {
+      o.push(i)
+    }
+
+    return o
+
+  }, [])
+
+  /**
+   * Resort
+   */
+  if (filter.length) {
+
+    let field: string
+
+    switch (sort.value) {
+    case 1:
+      field = 'name'
+      break
+    case 2:
+      field = 'add_time'
+      break
+    case 0:
+    default:
+      field = 'last_modified'
+      break
+    }
+
+    /**
+     * sort
+     *
+     */
+
+    filter.sort((a, b) => {
+
+      let at: number|string, bt: number|string
+
+      if (field !== 'name') {
+
+        at = new Date(a[field]).getTime()
+        bt = new Date(b[field]).getTime()
+
+      }
+
+      if (field === 'name') {
+
+        at = a[field].toUpperCase()
+        bt = b[field].toUpperCase()
+
+      }
+
+      if (at > bt) {
+        if (order) return 1
+
+        return -1
+      }
+
+      if (at < bt) {
+        if (order) return -1
+
+        return 1
+      }
+
+      return 0
+    })
+  }
+
+  return filter
+})
 
 /**
  * Projects
@@ -120,7 +231,7 @@ const projects = reactive({
   array: []
 })
 
-const projectsLength = computed(() => {
+const projectsCount = computed(() => {
   return projects.array.length
 })
 
