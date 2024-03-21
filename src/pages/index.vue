@@ -86,7 +86,7 @@
             <v-spacer></v-spacer>
 
             <v-btn
-              text
+              variant="text"
               small
               rounded
               class="font-weight-regular"
