@@ -40,7 +40,7 @@
             <v-text-field
               v-model="filter"
               :placeholder="t('common.search')"
-              :outlined="Boolean(filter.value)"
+              :outlined="isFilter"
               :max-length="35"
               prepend-inner-icon="mdi:mdi mdi-magnify"
               clear-icon="mdi:mdi mdi-close"
@@ -64,7 +64,7 @@
             rounded
             color="primary"
             prepend-icon="mdi:mdi mdi-plus-box-multiple"
-            @click.stop="create()"
+            @click.stop="() => true"
           >
             {{ t('project.create') }}
           </v-btn>
@@ -82,8 +82,8 @@
 
 <script lang="ts" setup>
 import { ref, reactive, computed, watchEffect } from "vue"
-import { useAppStore } from '../stores/app.ts'
-import { useCargoStore } from '../stores/cargo.ts'
+import { useAppStore } from '../stores/app'
+import { useCargoStore } from '../stores/cargo'
 import { useI18n } from "vue-i18n"
 
 /**
@@ -106,14 +106,22 @@ const limit = reactive(cargoStore.config.limit)
 const loading = ref(false)
 
 /**
+ * Filter
+ */
+const filter = ref('')
+const isFilter = computed(() => {
+  return Boolean(filter.value)
+})
+
+/**
  * Projects
  */
-const filter = ref([])
-const projects = ref([])
-const projectsLength = computed(() => {
-  if (!projects.value.length) return 0
+const projects = reactive({
+  array: []
+})
 
-  return projects.value.length
+const projectsLength = computed(() => {
+  return projects.array.length
 })
 
 /**
