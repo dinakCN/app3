@@ -1,20 +1,10 @@
 <template>
   <v-container>
-    <v-row
-      ref="projects"
-      justify="center"
-      no-gutters
-    >
-      <v-col
-        cols="12"
-        lg="8"
-      >
+    <v-row ref="projects" justify="center" no-gutters>
+      <v-col cols="12" lg="8">
         <!-- header -->
         <v-scale-transition>
-          <v-card
-            :loading="loading"
-            class="rounded-lg"
-          >
+          <v-card :loading="loading" class="rounded-lg">
             <!-- head -->
             <v-card-actions class="d-flex align-center">
 
@@ -37,20 +27,9 @@
             </v-card-actions>
 
             <!-- filter -->
-            <v-text-field
-              v-model="filter"
-              :placeholder="t('common.search')"
-              :outlined="isFilter"
-              :max-length="35"
-              prepend-inner-icon="mdi:mdi mdi-magnify"
-              clear-icon="mdi:mdi mdi-close"
-              density="comfortable"
-              hide-details
-              clearable
-              variant="solo"
-              flat
-              single-line
-            ></v-text-field>
+            <v-text-field v-model="filter" :placeholder="t('common.search')" :outlined="isFilter" :max-length="35"
+              prepend-inner-icon="mdi:mdi mdi-magnify" clear-icon="mdi:mdi mdi-close" density="comfortable" hide-details
+              clearable variant="solo" flat single-line></v-text-field>
           </v-card>
         </v-scale-transition>
 
@@ -62,21 +41,10 @@
         </div>
 
         <!-- sort & order-->
-        <div
-          name="projects_sort"
-          class="d-flex align-center"
-        >
-          <v-chip-group
-            v-model="sort"
-            selected-class="text-primary"
-            mandatory
-            variant="text"
-          >
+        <div name="projects_sort" class="d-flex align-center">
+          <v-chip-group v-model="sort" selected-class="text-primary" mandatory variant="text">
             <template v-for="i in sortList" :key="i.value">
-              <v-chip
-                :value="i.value"
-                size="small"
-              >
+              <v-chip :value="i.value" size="small">
                 {{ i.name }}
               </v-chip>
             </template>
@@ -84,145 +52,108 @@
 
           <v-spacer></v-spacer>
 
-          <v-chip
-            size="small"
-            variant="text"
-            color="primary"
-            :append-icon="orderData.icon"
-            @click.stop="changeOrder"
-          >
+          <v-chip size="small" variant="text" color="primary" :append-icon="orderData.icon" @click.stop="changeOrder">
             {{ orderData.name }}
           </v-chip>
 
         </div>
 
-        <!-- list
-          :style="{ 'max-height': projectsCardHeight + 'px' }"
-        -->
+        <!-- list -->
         <v-card
-          v-if="filterList.length || isFilter"
-          id="projects-list"
-          class="rounded-lg overflow-y-auto"
-          :disabled="loading"
+          rounded="lg"
         >
-          <v-scale-transition group>
-            <template>
+          <v-list
+            variant="flat"
+          >
+            <!-- <v-scale-transition group> -->
               <v-list-item
                 v-for="item in filterList"
-                :id="item.id === project.id && 'project-active'"
                 :key="item.id"
-                :class="item.id === project.id && 'primary lighten-4'"
-                style="height:60px;"
+                style="height: 60px;"
                 link
               >
-                <v-lazy width="100%">
-                  <v-row no-gutters>
-                    <v-col cols="auto" class="d-flex align-center mr-2">
+                <v-row no-gutters>
+                  <v-col cols="auto" class="d-flex align-center mr-2">
 
-                      <v-list-item-avatar
-                        class="mx-0"
-                        @click.stop="set(item.id)"
-                      >
-                        <v-icon
-                          color="grey darken-4"
-                          rounded
-                        >
-                          {{ item.id === project.id ? 'bx bx-folder-open' : 'bx-folder' }}
-                        </v-icon>
-                      </v-list-item-avatar>
+                    <!-- <v-list-item-avatar class="mx-0" @click.stop="set(item.id)">
+                      <v-icon color="grey darken-4" rounded>
+                        {{ item.id === project.id ? 'bx bx-folder-open' : 'bx-folder' }}
+                      </v-icon>
+                    </v-list-item-avatar> -->
 
-                    </v-col>
-                    <v-col class="flex-grow-1 text-truncate mr-1 d-flex align-center">
+                  </v-col>
+                  <v-col class="flex-grow-1 text-truncate mr-1 d-flex align-center">
 
-                      <template @click.stop="set(item.id)">
-                        <v-list-item-title>
-                          <div>
-                            <span v-if="user.id === 1" class="text-caption text--secondary" >project_ID :{{ item.id }} user_ID {{ item.user_id }}</span>
-                            {{ item.name }}
-                          </div>
-                        </v-list-item-title>
+                    <template @click.stop="set(item.id)">
+                      <v-list-item-title>
+                        <div>
+                          <span v-if="user.id === 1" class="text-caption text--secondary">project_ID :{{ item.id }}
+                            user_ID {{ item.user_id }}</span>
+                          {{ item.name }}
+                        </div>
+                      </v-list-item-title>
 
-                        <v-list-item-subtitle v-if="!$vuetify.breakpoint.mobile" class="text-lowercase">
-                          {{ t('common.add_time') }} {{ item.add_time | formatDate() }}, {{ t('project.last_sync_time') }} {{ item.last_modified | formatDate() }}
-                        </v-list-item-subtitle>
+                      <v-list-item-subtitle v-if="!mobile" class="text-lowercase">
+                        {{ t('common.add_time') }} {{ item.add_time }}, {{ t('project.last_sync_time')
+                        }} {{ item.last_modified }}
+                      </v-list-item-subtitle>
 
-                      </template>
+                    </template>
 
-                      <template v-if="projects.length === 1 && !project.id" @click.stop="set(item.id)">
-                        <v-list-item-title class="text-right">
-                          <div class="mx-1 text-body-2 grey--text text--darken-3 text-lowercase">
-                            {{ t('project.no-projects-description-3') }}
-                          </div>
-                        </v-list-item-title>
-                      </template>
+                    <template v-if="projects.length === 1 && !project.id" @click.stop="set(item.id)">
+                      <v-list-item-title class="text-right">
+                        <div class="mx-1 text-body-2 grey--text text--darken-3 text-lowercase">
+                          {{ t('project.no-projects-description-3') }}
+                        </div>
+                      </v-list-item-title>
+                    </template>
 
-                    </v-col>
-                    <v-col
-                      cols="auto"
-                      class="flex-shrink-0 d-flex align-center"
-                    >
-                      <v-list-item-action class="mr-0">
-                        <div class="d-flex align-center">
-                          <v-btn
+                  </v-col>
+                  <v-col cols="auto" class="flex-shrink-0 d-flex align-center">
+                    <v-list-item-action class="mr-0">
+                      <div class="d-flex align-center">
+                        <v-btn
                             v-show="item.id !== project.id"
-                            text
+                            variant="text"
                             class="font-weight-medium text-lowercase"
                             @click.stop="set(item.id)"
                           >
-                            {{ t('common.open') }}
-                          </v-btn>
-                          <v-btn
-                            icon
-                            @click.stop="setReName({ name: item.name, id: item.id })"
-                          >
-                            <v-icon>bx bx-rename</v-icon>
-                          </v-btn>
-                          <v-btn
-                            icon
-                            @click.stop="copy(item.id)"
-                          >
-                            <v-icon>bx-copy</v-icon>
-                          </v-btn>
-                          <v-btn
-                            icon
-                            @click.stop="remove(item.id)"
-                          >
-                            <v-icon>bx-trash</v-icon>
-                          </v-btn>
-                        </div>
-                      </v-list-item-action>
-                    </v-col>
-                  </v-row>
-                </v-lazy>
+                          {{ t('common.open') }}
+                        </v-btn>
+                        <v-btn icon @click.stop="setReName({ name: item.name, id: item.id })">
+                          <v-icon>bx bx-rename</v-icon>
+                        </v-btn>
+                        <v-btn icon @click.stop="copy(item.id)">
+                          <v-icon>bx-copy</v-icon>
+                        </v-btn>
+                        <v-btn icon @click.stop="remove(item.id)">
+                          <v-icon>bx-trash</v-icon>
+                        </v-btn>
+                      </div>
+                    </v-list-item-action>
+                  </v-col>
+                </v-row>
               </v-list-item>
-            </template>
-          </v-scale-transition>
+            <!-- </v-scale-transition> -->
 
-          <v-card-text v-if="isFilter && !filterList.length" class="py-4 text-center">
-            <span class="text-body-2 font-weight-regular">... {{ t('common.noresult') }} ...</span>
-          </v-card-text>
+            <v-card-text v-if="isFilter && !filterList.length" class="py-4 text-center">
+              <span class="text-body-2 font-weight-regular">... {{ t('common.noresult') }} ...</span>
+            </v-card-text>
 
+          </v-list>
         </v-card>
 
         <!-- create -->
-        <div
-          name="projects_add"
-          class="mt-4 mb-1 d-flex justify-center"
-        >
-          <v-btn
-            class="elevation-18"
-            rounded
-            color="primary"
-            prepend-icon="mdi:mdi mdi-plus-box-multiple"
-            @click.stop="() => true"
-          >
+        <div name="projects_add" class="mt-4 mb-1 d-flex justify-center">
+          <v-btn class="elevation-18" rounded color="primary" prepend-icon="mdi:mdi mdi-plus-box-multiple"
+            @click.stop="() => true">
             {{ t('project.create') }}
           </v-btn>
         </div>
 
       </v-col>
     </v-row>
-</v-container>
+  </v-container>
 </template>
 
 <route lang="yaml">
@@ -253,9 +184,11 @@ const { t } = useI18n()
  */
 const appStore = useAppStore()
 const user = reactive(appStore.user)
+const version = ref(appStore.version)
 
 const cargoStore = useCargoStore()
 const limit = reactive(cargoStore.config.limit)
+const project = reactive(cargoStore.project)
 
 /**
  * Loading
@@ -265,7 +198,7 @@ const loading = ref(false)
 /**
  * Projects
  */
- interface Project {
+interface Project {
   id: number,
   add_time: string,
   status: number,
@@ -274,16 +207,238 @@ const loading = ref(false)
   json_data: string,
   last_modified: string
 }
-const projects: Array<Project> = reactive([])
+const projects: Array<Project> = reactive([
+  {
+    id: 1,
+    add_time: '1',
+    status: 1,
+    user_id: 1,
+    name: 'name',
+    json_data: 'json',
+    last_modified: 'date'
+  }
+])
 const projectsCount: Ref<number> = computed(() => {
   return projects.length
 })
+
+const getList = (scrollToActive = false, clearStorage = true, active = project?.id) => {
+
+  /**
+   * clear storage
+   *
+   */
+
+  if (clearStorage) removeProjectsStorage()
+
+  /**
+   * get storage
+   *
+   */
+
+  const getStorageProjects = localStorage.getItem('projectsList_' + user.id)
+  const r = getStorageProjects ? JSON.parse(getStorageProjects) : []
+
+  if (r.length) {
+
+    for (const p of r) r[p] = Object.freeze(r[p])
+
+    projects = r
+
+    /**
+     * scroll to active project
+     *
+     */
+
+    if (scrollToActive) $nextTick(() => scrollIntoView(active))
+
+  } else {
+
+    /**
+     * get axios
+     *
+     */
+
+    loading = true
+    getProjectsList()
+      .then((r) => {
+
+        for (const p of r) r[p] = Object.freeze(r[p])
+
+        projects = r
+
+        /**
+         * scroll to active project
+         *
+         */
+
+        if (scrollToActive) $nextTick(() => scrollIntoView(active))
+
+        /**
+         * set storage list
+         *
+         */
+
+        if (localStorage && projects.length) localStorage.setItem('projectsList_' + user.id, JSON.stringify(projects))
+
+      })
+      .finally(() => loading = false)
+
+  }
+}
+
+const set = (id) => {
+  if (String(project.id) === String(id)) return $router.push('/cargo')
+
+  loading = true
+
+  return getProject(id)
+    .then(() => {
+      loading = false
+
+      $router.push('/cargo')
+    })
+}
+
+const add = (n) => {
+  loading = true
+
+  addProject(n)
+    .then((r) => {
+
+      getList(true, true, r.id)
+      $metrika.reachGoal('add.project')
+
+    }, (message) => {
+      addError(message)
+    })
+    .finally(() => {
+      loading = false
+    })
+}
+
+const create = async () => {
+  const n = await $refs.dialogReName.open('')
+
+  if (!n) return false
+
+  return add(n)
+}
+
+const copy = (id) => {
+  loading = true
+
+  copyProject(id)
+    .then((r) => {
+
+      getList(true, true, r.id)
+      $metrika.reachGoal('add.project')
+
+    }, (message) => {
+
+      addError(message)
+    })
+    .finally(() => loading = false)
+}
+
+const addError = (message) => {
+  if (message) {
+    message = JSON.parse(message)
+
+    if (!user.tarif.type && message.type === 'maxProjects') $refs.promo.open()
+
+    message = getMessage(message)
+
+  } else {
+    message = $t('scene.valid.error')
+  }
+
+  showError(message)
+}
+
+const remove = async (id) => {
+  const confirm = await $confirm($t('common.delete') + '?')
+
+  if (confirm) {
+    loading = true
+
+    /**
+     * Мгновенное удаление из массива
+     *
+     */
+
+    const index = projects.findIndex((i) => String(i.id) === String(id))
+
+    if (index !== -1) {
+      projects.splice(index, 1)
+    }
+
+    /**
+     * Удаление с базы данных и обновление
+     *
+     */
+
+    delProject(id)
+      .then(() => {
+
+        getList(false, true)
+        loading = false
+
+      })
+  }
+}
+
+const setReName = async (obj) => {
+  const { id, name } = obj
+  const update = await $refs.dialogReName.open(name)
+
+  if (update) {
+    projects.forEach((i) => {
+      if (String(i.id) === String(id)) i.name = update
+    })
+
+    if (String(project.id) === String(id)) changeProjectName(update)
+
+    loading = true
+    putProject({ id, name: update })
+      .then(() => removeProjectsStorage())
+      .finally(() => loading = false)
+  }
+}
+
+const scrollIntoView = (id) => {
+
+  if (!id) return false
+
+  const list = document.getElementById('projects-list')
+
+  if (list) {
+
+    const find = filterList.findIndex((i) => String(i.id) === String(id))
+
+    if (find !== -1) {
+
+      const offset = (find * 60) - Math.round(projectsCardHeight / 2)
+
+      if (offset > 0) return list.scrollTo(0, offset)
+
+      return list.scrollTo(0, 0)
+    }
+  }
+
+  return false
+}
+
+const removeProjectsStorage = () => {
+
+  if (localStorage) localStorage.removeItem('projectsList_' + user.id)
+}
 
 /**
  * Filter
  */
 const filter: Ref<string> = ref('')
-const isFilter = computed<Boolean>(() => {
+const isFilter = computed<boolean>(() => {
   return Boolean(filter.value)
 })
 const filterList = computed<Array<Project>>(() => {
@@ -298,7 +453,7 @@ const filterList = computed<Array<Project>>(() => {
    */
   const f = projects.reduce((o: Array<Project>, i: Project) => {
 
-    if (filter)  {
+    if (filter.value) {
 
       let flag = false
 
@@ -307,7 +462,7 @@ const filterList = computed<Array<Project>>(() => {
        *
        */
 
-      if (String(i.name).toLowerCase().indexOf(String(filter).toLowerCase()) !== -1) flag = true
+      if (String(i.name).toLowerCase().indexOf(String(filter.value).toLowerCase()) !== -1) flag = true
 
       /**
        * admin only
@@ -338,13 +493,16 @@ const filterList = computed<Array<Project>>(() => {
   }, [])
 
   /**
-   * Resort
+   * Check
    */
-  if (f.length) {
+  if (!f.length) return []
 
-    let field: string
+  /**
+   * Sort
+   */
+  let field: string
 
-    switch (sort.value) {
+  switch (sort.value) {
     case 1:
       field = 'name'
       break
@@ -354,47 +512,37 @@ const filterList = computed<Array<Project>>(() => {
     case 0:
     default:
       field = 'last_modified'
-      break
+  }
+
+  f.sort((a, b) => {
+
+    if (field !== 'name') {
+
+      let at: number = new Date(a[field]).getTime()
+      let bt: number = new Date(b[field]).getTime()
+
+      if (at > bt) return -1
+      if (at < bt) return 1
     }
 
-    /**
-     * sort
-     *
-     */
+    if (field === 'name') {
 
-    // f.sort((a, b) => {
+      let at: string = a[field].toUpperCase()
+      let bt: string = b[field].toUpperCase()
 
-    //   let at: number|string, bt: number|string
+      if (at > bt) return -1
+      if (at < bt) return 1
+    }
 
-    //   if (field !== 'name') {
+    return 0
+  })
 
-    //     let at = new Date(a[field]).getTime()
-    //     let bt = new Date(b[field]).getTime()
+  /**
+   * Order
+   */
+  if (order) f.reverse()
 
-    //   }
-
-    //   if (field === 'name') {
-
-    //     let at = a[field].toUpperCase()
-    //     let bt = b[field].toUpperCase()
-
-    //   }
-
-    //   if (at > bt) {
-    //     if (order) return 1
-
-    //     return -1
-    //   }
-
-    //   if (at < bt) {
-    //     if (order) return -1
-
-    //     return 1
-    //   }
-
-    //   return 0
-    // })
-  }
+  console.log(f)
 
   return f
 })
@@ -402,7 +550,7 @@ const filterList = computed<Array<Project>>(() => {
 /**
  * Sort
  */
-const sort = ref(2)
+const sort: Ref<number> = ref(2)
 const sortList = reactive([
   { name: t('project.sort.name'), value: 1 },
   { name: t('project.sort.add_time'), value: 2 },
@@ -412,7 +560,7 @@ const sortList = reactive([
 /**
  * Order
  */
-const order = ref(0);
+const order: Ref<number> = ref(0);
 const orderList = reactive([
   { name: t('project.order.false'), value: 0, icon: 'mdi:mdi mdi-chevron-down' },
   { name: t('project.order.true'), value: 1, icon: 'mdi:mdi mdi-chevron-up' }
@@ -425,8 +573,21 @@ const orderData = computed(() => {
   return orderList[order.value]
 })
 const changeOrder = () => {
-    if (order.value === 0) return order.value = 1
+  if (order.value === 0) return order.value = 1
 
-    return order.value = 0
+  return order.value = 0
+}
+
+/**
+ * Metrika
+ */
+const metrika = () => {
+  // YaMetrika user data
+
+  $metrika.userParams({
+    vip_status: user.tarif.type !== 0 ? true : false,
+    UserID: user.id,
+    version: version
+  })
 }
 </script>
