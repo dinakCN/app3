@@ -1,10 +1,20 @@
 <template>
   <v-container>
-    <v-row ref="projects" justify="center" no-gutters>
-      <v-col cols="12" lg="8">
+    <v-row
+      ref="projects"
+      justify="center"
+      no-gutters
+    >
+      <v-col
+        cols="12"
+        lg="8"
+      >
         <!-- header -->
         <v-scale-transition>
-          <v-card :loading="loading" class="rounded-lg">
+          <v-card
+            :loading="loading"
+            class="rounded-lg"
+          >
             <!-- head -->
             <v-card-actions class="d-flex align-center">
 
@@ -27,24 +37,52 @@
             </v-card-actions>
 
             <!-- filter -->
-            <v-text-field v-model="filter" :placeholder="t('common.search')" :outlined="isFilter" :max-length="35"
-              prepend-inner-icon="mdi:mdi mdi-magnify" clear-icon="mdi:mdi mdi-close" density="comfortable" hide-details
-              clearable variant="solo" flat single-line></v-text-field>
+            <v-text-field
+              v-model="filter"
+              :placeholder="t('common.search')"
+              :outlined="isFilter"
+              :max-length="35"
+              prepend-inner-icon="mdi:mdi mdi-magnify"
+              clear-icon="mdi:mdi mdi-close"
+              density="comfortable"
+              hide-details
+              clearable
+              variant="solo"
+              flat
+              single-line
+            ></v-text-field>
           </v-card>
         </v-scale-transition>
 
         <!-- no-projects text -->
-        <div v-if="!projectsCount" class="mt-7 mb-1 text-center text-body-2 grey--text text--darken-2">
+        <div
+          v-if="!projectsCount"
+          class="mt-7 mb-1 text-center text-body-2 grey--text text--darken-2"
+        >
           <div class="font-weight-bold mb-1">... {{ t('project.no-projects') }} ...</div>
           <div>{{ t('project.no-projects-description-1') }}</div>
           <div>{{ t('project.no-projects-description-2') }}</div>
         </div>
 
         <!-- sort & order-->
-        <div name="projects_sort" class="d-flex align-center">
-          <v-chip-group v-model="sort" selected-class="text-primary" mandatory variant="text">
-            <template v-for="i in sortList" :key="i.value">
-              <v-chip :value="i.value" size="small">
+        <div
+          name="projects_sort"
+          class="d-flex align-center"
+        >
+          <v-chip-group
+            v-model="sort"
+            selected-class="text-primary"
+            mandatory
+            variant="text"
+          >
+            <template
+              v-for="i in sortList"
+              :key="i.value"
+            >
+              <v-chip
+                :value="i.value"
+                size="small"
+              >
                 {{ i.name }}
               </v-chip>
             </template>
@@ -52,91 +90,97 @@
 
           <v-spacer></v-spacer>
 
-          <v-chip size="small" variant="text" color="primary" :append-icon="orderData.icon" @click.stop="changeOrder">
+          <v-chip
+            size="small"
+            variant="text"
+            color="primary"
+            :append-icon="orderData.icon"
+            @click.stop="changeOrder"
+          >
             {{ orderData.name }}
           </v-chip>
 
         </div>
 
         <!-- list -->
-        <v-card
-          rounded="lg"
-        >
+        <v-card rounded="lg">
           <v-list
             variant="flat"
+            lines="one"
+            nav
           >
             <v-scale-transition group>
               <v-list-item
                 v-for="item in filterList"
                 :key="item.id"
-                style="height: 60px;"
                 link
+                :class="item.id === project.id && 'primary lighten-4'"
+                @click.stop="set(item.id)"
               >
-                <v-row no-gutters>
-                  <v-col cols="auto" class="d-flex align-center mr-2">
 
-                    <!-- <v-list-item-avatar class="mx-0" @click.stop="set(item.id)">
-                      <v-icon color="grey darken-4" rounded>
-                        {{ item.id === project.id ? 'bx bx-folder-open' : 'bx-folder' }}
-                      </v-icon>
-                    </v-list-item-avatar> -->
+                <template v-slot:prepend>
+                  <v-avatar
+                    :icon="item.id === project.id ? 'mdi:mdi mdi-folder-open' : 'mdi:mdi mdi-folder'"
+                    color="grey darken-3"
+                    variant="plain"
+                    size="large"
+                  >
+                  </v-avatar>
+                </template>
 
-                  </v-col>
-                  <v-col class="flex-grow-1 text-truncate mr-1 d-flex align-center">
+                <template v-slot:title>
+                  <span class="text-truncate">
+                    {{ item.name }}
+                  </span>
+                </template>
 
-                    <template @click.stop="set(item.id)">
-                      <v-list-item-title>
-                        <div>
-                          <span v-if="user.id === 1" class="text-caption text--secondary">project_ID :{{ item.id }}
-                            user_ID {{ item.user_id }}</span>
-                          {{ item.name }}
-                        </div>
-                      </v-list-item-title>
+                <template v-slot:subtitle>
+                  <span class="text-truncate text-lowercase">
+                    {{ t('common.add_time') }} {{ item.add_time }},
+                    {{ t('project.last_sync_time')
+                    }} {{ item.last_modified }}
+                  </span>
+                </template>
 
-                      <v-list-item-subtitle v-if="!mobile" class="text-lowercase">
-                        {{ t('common.add_time') }} {{ item.add_time }}, {{ t('project.last_sync_time')
-                        }} {{ item.last_modified }}
-                      </v-list-item-subtitle>
+                <template v-slot:append>
+                  <div class="d-flex align-center">
 
-                    </template>
+                    <!-- rename -->
+                    <v-btn
+                      icon="mdi:mdi mdi-form-textbox"
+                      variant="text"
+                      size="small"
+                      @click.stop="setReName({ name: item.name, id: item.id })"
+                    >
+                    </v-btn>
 
-                    <template v-if="projects.length === 1 && !project.id" @click.stop="set(item.id)">
-                      <v-list-item-title class="text-right">
-                        <div class="mx-1 text-body-2 grey--text text--darken-3 text-lowercase">
-                          {{ t('project.no-projects-description-3') }}
-                        </div>
-                      </v-list-item-title>
-                    </template>
+                    <!-- copy -->
+                    <v-btn
+                      icon="mdi:mdi mdi-content-copy"
+                      variant="text"
+                      size="small"
+                      @click.stop="copy(item.id)"
+                    >
+                    </v-btn>
 
-                  </v-col>
-                  <v-col cols="auto" class="flex-shrink-0 d-flex align-center">
-                    <v-list-item-action class="mr-0">
-                      <div class="d-flex align-center">
-                        <v-btn
-                            v-show="item.id !== project.id"
-                            variant="text"
-                            class="font-weight-medium text-lowercase"
-                            @click.stop="set(item.id)"
-                          >
-                          {{ t('common.open') }}
-                        </v-btn>
-                        <v-btn icon @click.stop="setReName({ name: item.name, id: item.id })">
-                          <v-icon>bx bx-rename</v-icon>
-                        </v-btn>
-                        <v-btn icon @click.stop="copy(item.id)">
-                          <v-icon>bx-copy</v-icon>
-                        </v-btn>
-                        <v-btn icon @click.stop="remove(item.id)">
-                          <v-icon>bx-trash</v-icon>
-                        </v-btn>
-                      </div>
-                    </v-list-item-action>
-                  </v-col>
-                </v-row>
+                    <!-- remove -->
+                    <v-btn
+                      icon="mdi:mdi mdi-trash-can-outline"
+                      variant="text"
+                      size="small"
+                      @click.stop="remove(item.id)"
+                    >
+                    </v-btn>
+                  </div>
+                </template>
+
               </v-list-item>
             </v-scale-transition>
 
-            <v-card-text v-if="isFilter && !filterList.length" class="py-4 text-center">
+            <v-card-text
+              v-if="isFilter && !filterList.length"
+              class="py-4 text-center"
+            >
               <span class="text-body-2 font-weight-regular">... {{ t('common.noresult') }} ...</span>
             </v-card-text>
 
@@ -144,9 +188,17 @@
         </v-card>
 
         <!-- create -->
-        <div name="projects_add" class="mt-4 mb-1 d-flex justify-center">
-          <v-btn class="elevation-18" rounded color="primary" prepend-icon="mdi:mdi mdi-plus-box-multiple"
-            @click.stop="() => true">
+        <div
+          name="projects_add"
+          class="mt-4 mb-1 d-flex justify-center"
+        >
+          <v-btn
+            class="elevation-18"
+            rounded
+            color="primary"
+            prepend-icon="mdi:mdi mdi-plus-box-multiple"
+            @click.stop="() => true"
+          >
             {{ t('project.create') }}
           </v-btn>
         </div>
@@ -161,14 +213,17 @@
     layout: default
 </route>
 
-<script lang="ts" setup>
+<script
+  lang="ts"
+  setup
+>
 import { ref, reactive, computed, watchEffect } from "vue"
 import type { Ref } from 'vue'
 import { useAppStore } from '../stores/app'
 import { useCargoStore } from '../stores/cargo'
 import { useI18n } from "vue-i18n"
 import { useDisplay } from 'vuetify'
-
+import { ProjectInterface } from '../interfaces/ProjectInterface'
 /**
  * Flag mobile
  */
@@ -198,16 +253,7 @@ const loading = ref(false)
 /**
  * Projects
  */
-interface Project {
-  id: number,
-  add_time: string,
-  status: number,
-  user_id: number,
-  name: string,
-  json_data: string,
-  last_modified: string
-}
-const projects: Array<Project> = reactive([
+const projects: Array<ProjectInterface> = reactive([
   {
     id: 1,
     add_time: '1',
@@ -451,7 +497,7 @@ const filterList = computed<Array<Project>>(() => {
   /**
    * Filter
    */
-  const f = projects.reduce((o: Array<Project>, i: Project) => {
+  const f = projects.reduce((o: Array<ProjectInterface>, i: ProjectInterface) => {
 
     if (filter.value) {
 
