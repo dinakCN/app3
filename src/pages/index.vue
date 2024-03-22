@@ -65,7 +65,7 @@
           <v-list
             variant="flat"
           >
-            <!-- <v-scale-transition group> -->
+            <v-scale-transition group>
               <v-list-item
                 v-for="item in filterList"
                 :key="item.id"
@@ -134,7 +134,7 @@
                   </v-col>
                 </v-row>
               </v-list-item>
-            <!-- </v-scale-transition> -->
+            </v-scale-transition>
 
             <v-card-text v-if="isFilter && !filterList.length" class="py-4 text-center">
               <span class="text-body-2 font-weight-regular">... {{ t('common.noresult') }} ...</span>
