@@ -15,7 +15,7 @@
             :loading="loading"
             class="rounded-lg"
           >
-            <!-- COMMAND -->
+            <!-- head -->
             <v-card-actions class="d-flex align-center">
 
               <div class="d-sm-flex align-center">
@@ -54,50 +54,155 @@
           </v-card>
         </v-scale-transition>
 
-        <!-- no-projects -->
+        <!-- no-projects text -->
         <div v-if="!projectsCount" class="mt-7 mb-1 text-center text-body-2 grey--text text--darken-2">
           <div class="font-weight-bold mb-1">... {{ t('project.no-projects') }} ...</div>
           <div>{{ t('project.no-projects-description-1') }}</div>
           <div>{{ t('project.no-projects-description-2') }}</div>
         </div>
 
-        <!-- sort -->
-        <div v-if="!mobile">
-          <div
-            name="projects_sort"
-            class="mb-2 px-0 d-flex align-center"
+        <!-- sort & order-->
+        <div
+          name="projects_sort"
+          class="d-flex align-center"
+        >
+          <v-chip-group
+            v-model="sort"
+            selected-class="text-primary"
+            mandatory
+            variant="text"
           >
-            <v-chip-group
-              v-model="sort"
-              active-class="primary--text"
-              mandatory
-            >
-              <template v-for="(i, x) in sortList" :key="x">
-                <v-chip
-                  :value="i.value"
-                  outlined
-                  small
-                >
-                  {{ i.name }}
-                </v-chip>
-              </template>
-            </v-chip-group>
+            <template v-for="i in sortList" :key="i.value">
+              <v-chip
+                :value="i.value"
+                size="small"
+              >
+                {{ i.name }}
+              </v-chip>
+            </template>
+          </v-chip-group>
 
-            <v-spacer></v-spacer>
+          <v-spacer></v-spacer>
 
-            <v-btn
-              variant="text"
-              small
-              rounded
-              class="font-weight-regular"
-              @click.stop="() => true"
-            >
-              {{ orderData.name }}
-              <v-icon right>{{ orderData.icon }}</v-icon>
-            </v-btn>
+          <v-chip
+            size="small"
+            variant="text"
+            color="primary"
+            :append-icon="orderData.icon"
+            @click.stop="changeOrder"
+          >
+            {{ orderData.name }}
+          </v-chip>
 
-          </div>
         </div>
+
+        <!-- list
+          :style="{ 'max-height': projectsCardHeight + 'px' }"
+        -->
+        <v-card
+          v-if="filterList.length || isFilter"
+          id="projects-list"
+          class="rounded-lg overflow-y-auto"
+          :disabled="loading"
+        >
+          <v-scale-transition group>
+            <template>
+              <v-list-item
+                v-for="item in filterList"
+                :id="item.id === project.id && 'project-active'"
+                :key="item.id"
+                :class="item.id === project.id && 'primary lighten-4'"
+                style="height:60px;"
+                link
+              >
+                <v-lazy width="100%">
+                  <v-row no-gutters>
+                    <v-col cols="auto" class="d-flex align-center mr-2">
+
+                      <v-list-item-avatar
+                        class="mx-0"
+                        @click.stop="set(item.id)"
+                      >
+                        <v-icon
+                          color="grey darken-4"
+                          rounded
+                        >
+                          {{ item.id === project.id ? 'bx bx-folder-open' : 'bx-folder' }}
+                        </v-icon>
+                      </v-list-item-avatar>
+
+                    </v-col>
+                    <v-col class="flex-grow-1 text-truncate mr-1 d-flex align-center">
+
+                      <template @click.stop="set(item.id)">
+                        <v-list-item-title>
+                          <div>
+                            <span v-if="user.id === 1" class="text-caption text--secondary" >project_ID :{{ item.id }} user_ID {{ item.user_id }}</span>
+                            {{ item.name }}
+                          </div>
+                        </v-list-item-title>
+
+                        <v-list-item-subtitle v-if="!$vuetify.breakpoint.mobile" class="text-lowercase">
+                          {{ t('common.add_time') }} {{ item.add_time | formatDate() }}, {{ t('project.last_sync_time') }} {{ item.last_modified | formatDate() }}
+                        </v-list-item-subtitle>
+
+                      </template>
+
+                      <template v-if="projects.length === 1 && !project.id" @click.stop="set(item.id)">
+                        <v-list-item-title class="text-right">
+                          <div class="mx-1 text-body-2 grey--text text--darken-3 text-lowercase">
+                            {{ t('project.no-projects-description-3') }}
+                          </div>
+                        </v-list-item-title>
+                      </template>
+
+                    </v-col>
+                    <v-col
+                      cols="auto"
+                      class="flex-shrink-0 d-flex align-center"
+                    >
+                      <v-list-item-action class="mr-0">
+                        <div class="d-flex align-center">
+                          <v-btn
+                            v-show="item.id !== project.id"
+                            text
+                            class="font-weight-medium text-lowercase"
+                            @click.stop="set(item.id)"
+                          >
+                            {{ t('common.open') }}
+                          </v-btn>
+                          <v-btn
+                            icon
+                            @click.stop="setReName({ name: item.name, id: item.id })"
+                          >
+                            <v-icon>bx bx-rename</v-icon>
+                          </v-btn>
+                          <v-btn
+                            icon
+                            @click.stop="copy(item.id)"
+                          >
+                            <v-icon>bx-copy</v-icon>
+                          </v-btn>
+                          <v-btn
+                            icon
+                            @click.stop="remove(item.id)"
+                          >
+                            <v-icon>bx-trash</v-icon>
+                          </v-btn>
+                        </div>
+                      </v-list-item-action>
+                    </v-col>
+                  </v-row>
+                </v-lazy>
+              </v-list-item>
+            </template>
+          </v-scale-transition>
+
+          <v-card-text v-if="isFilter && !filterList.length" class="py-4 text-center">
+            <span class="text-body-2 font-weight-regular">... {{ t('common.noresult') }} ...</span>
+          </v-card-text>
+
+        </v-card>
 
         <!-- create -->
         <div
@@ -127,6 +232,7 @@
 
 <script lang="ts" setup>
 import { ref, reactive, computed, watchEffect } from "vue"
+import type { Ref } from 'vue'
 import { useAppStore } from '../stores/app'
 import { useCargoStore } from '../stores/cargo'
 import { useI18n } from "vue-i18n"
@@ -157,13 +263,30 @@ const limit = reactive(cargoStore.config.limit)
 const loading = ref(false)
 
 /**
+ * Projects
+ */
+ interface Project {
+  id: number,
+  add_time: string,
+  status: number,
+  user_id: number,
+  name: string,
+  json_data: string,
+  last_modified: string
+}
+const projects: Array<Project> = reactive([])
+const projectsCount: Ref<number> = computed(() => {
+  return projects.length
+})
+
+/**
  * Filter
  */
-const filter = ref('')
-const isFilter = computed(() => {
+const filter: Ref<string> = ref('')
+const isFilter = computed<Boolean>(() => {
   return Boolean(filter.value)
 })
-const filterList = computed(() => {
+const filterList = computed<Array<Project>>(() => {
 
   /**
    * Check
@@ -173,7 +296,7 @@ const filterList = computed(() => {
   /**
    * Filter
    */
-  const filter = projects.array.reduce((o, i: object) => {
+  const f = projects.reduce((o: Array<Project>, i: Project) => {
 
     if (filter)  {
 
@@ -190,16 +313,17 @@ const filterList = computed(() => {
        * admin only
        *
        */
-
       if (user.id === 1) {
 
         /**
          * compare with user ID & Project ID
          *
          */
+        const id = (i.id).toString().toLowerCase()
+        const userID = (i.user_id).toString().toLowerCase()
 
-        if (String(i.id).toLowerCase().indexOf(String(filter).toLowerCase()) !== -1) flag = true
-        if (String(i.user_id).toLowerCase().indexOf(String(filter).toLowerCase()) !== -1) flag = true
+        if (id.indexOf(String(filter).toLowerCase()) !== -1) flag = true
+        if (userID.indexOf(String(filter).toLowerCase()) !== -1) flag = true
 
       }
 
@@ -216,7 +340,7 @@ const filterList = computed(() => {
   /**
    * Resort
    */
-  if (filter.length) {
+  if (f.length) {
 
     let field: string
 
@@ -238,59 +362,48 @@ const filterList = computed(() => {
      *
      */
 
-    filter.sort((a, b) => {
+    // f.sort((a, b) => {
 
-      let at: number|string, bt: number|string
+    //   let at: number|string, bt: number|string
 
-      if (field !== 'name') {
+    //   if (field !== 'name') {
 
-        at = new Date(a[field]).getTime()
-        bt = new Date(b[field]).getTime()
+    //     let at = new Date(a[field]).getTime()
+    //     let bt = new Date(b[field]).getTime()
 
-      }
+    //   }
 
-      if (field === 'name') {
+    //   if (field === 'name') {
 
-        at = a[field].toUpperCase()
-        bt = b[field].toUpperCase()
+    //     let at = a[field].toUpperCase()
+    //     let bt = b[field].toUpperCase()
 
-      }
+    //   }
 
-      if (at > bt) {
-        if (order) return 1
+    //   if (at > bt) {
+    //     if (order) return 1
 
-        return -1
-      }
+    //     return -1
+    //   }
 
-      if (at < bt) {
-        if (order) return -1
+    //   if (at < bt) {
+    //     if (order) return -1
 
-        return 1
-      }
+    //     return 1
+    //   }
 
-      return 0
-    })
+    //   return 0
+    // })
   }
 
-  return filter
-})
-
-/**
- * Projects
- */
-const projects = reactive({
-  array: []
-})
-
-const projectsCount = computed(() => {
-  return projects.array.length
+  return f
 })
 
 /**
  * Sort
  */
 const sort = ref(2)
-const sortList = ref([
+const sortList = reactive([
   { name: t('project.sort.name'), value: 1 },
   { name: t('project.sort.add_time'), value: 2 },
   { name: t('project.sort.modified'), value: 0 }
@@ -300,16 +413,20 @@ const sortList = ref([
  * Order
  */
 const order = ref(0);
-const orderList = ref([
-  { name: t('project.sort.name'), value: 1 },
-  { name: t('project.sort.add_time'), value: 2 },
-  { name: t('project.sort.modified'), value: 0 }
+const orderList = reactive([
+  { name: t('project.order.false'), value: 0, icon: 'mdi:mdi mdi-chevron-down' },
+  { name: t('project.order.true'), value: 1, icon: 'mdi:mdi mdi-chevron-up' }
 ]);
 const orderData = computed(() => {
-  if (order.value > orderList.value.length) {
+  if (order.value > orderList.length) {
     orderList[0]
   }
 
   return orderList[order.value]
 })
+const changeOrder = () => {
+    if (order.value === 0) return order.value = 1
+
+    return order.value = 0
+}
 </script>
