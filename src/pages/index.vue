@@ -40,14 +40,13 @@
             <v-text-field
               v-model="filter"
               :placeholder="t('common.search')"
-              :outlined="isFilter"
               :max-length="35"
               prepend-inner-icon="mdi:mdi mdi-magnify"
               clear-icon="mdi:mdi mdi-close"
               density="comfortable"
               hide-details
               clearable
-              variant="solo"
+              :variant="!isFilter ? 'solo' : 'solo'"
               flat
               single-line
             ></v-text-field>
@@ -181,7 +180,7 @@
               v-if="isFilter && !filterList.length"
               class="py-4 text-center"
             >
-              <span class="text-body-2 font-weight-regular">... {{ t('common.noresult') }} ...</span>
+              <span class="text-caption font-weight-regular">... {{ t('common.noresult') }} ...</span>
             </v-card-text>
 
           </v-list>
