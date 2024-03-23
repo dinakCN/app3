@@ -113,13 +113,13 @@
                 v-for="item in filterList"
                 :key="item.id"
                 link
-                :class="item.id === project.id && 'primary lighten-4'"
+                :class="item.id === project_id && 'primary lighten-4'"
                 @click.stop="set(item.id)"
               >
 
                 <template v-slot:prepend>
                   <v-avatar
-                    :icon="item.id === project.id ? 'mdi:mdi mdi-folder-open' : 'mdi:mdi mdi-folder'"
+                    :icon="item.id === project_id ? 'mdi:mdi mdi-folder-open' : 'mdi:mdi mdi-folder'"
                     color="grey darken-3"
                     variant="plain"
                     size="large"
@@ -220,6 +220,7 @@ import { ref, reactive, computed, watchEffect } from "vue"
 import type { Ref } from 'vue'
 import { useAppStore } from '../stores/app'
 import { useUserStore } from '../stores/user'
+import { useProjectStore } from '../stores/project'
 import { useCargoStore } from '../stores/cargo'
 import { useI18n } from "vue-i18n"
 import { useDisplay } from 'vuetify'
@@ -235,16 +236,29 @@ const { mobile } = useDisplay()
 const { t } = useI18n()
 
 /**
- * Store
+ * App Store
  */
 const appStore = useAppStore()
-const appUser = useUserStore()
-const user = reactive(appUser.user)
 const version = ref(appStore.version)
 
-const cargoStore = useCargoStore()
-const limit = reactive(cargoStore.config.limit)
-const project = reactive(cargoStore.project)
+/**
+ * User Store
+ */
+const appUser = useUserStore()
+const user = reactive(appUser.user)
+const limit = reactive(appUser.config.limit)
+
+/**
+ * Project store
+ */
+const appProject = useProjectStore()
+const project_id = ref(appProject.id)
+
+/**
+ * Cargo store
+ */
+// const cargoStore = useCargoStore()
+// const limit = reactive(cargoStore.config.limit)
 
 /**
  * Loading
@@ -637,4 +651,4 @@ const metrika = () => {
     version: version
   })
 }
-</script>
+</script>../stores/project

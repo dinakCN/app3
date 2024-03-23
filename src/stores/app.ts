@@ -12,17 +12,6 @@ export const useAppStore = defineStore('app', {
      */
     version: 3.00,
 
-    user: {
-      id: null,
-      email: null,
-      tarif: {
-        type: 0,
-        expir: null,
-        count: 0
-      },
-      discount: 0
-    },
-
     toast: {
       show: false,
       color: 'black',

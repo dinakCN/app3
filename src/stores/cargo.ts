@@ -5,45 +5,6 @@ export const useCargoStore = defineStore('cargo', {
   state: () => ({
 
     /**
-     * Project
-     */
-    project: {
-      id: null,
-      name: null,
-      add_time: 0,
-      last_modified: 0
-    },
-
-    /**
-     * Config
-     */
-    config: {
-      limit: {
-        items: 7000,
-        irows: 70,
-        loads: 10,
-        projects: 10,
-        templates: 10
-      },
-      units: {
-        cargo: {
-          size: 2,
-          wght: 1
-        },
-        loads: {
-          size: 2,
-          wght: 1
-        }
-      },
-      scene : {
-        setting: {
-          snap: true,
-          hang: true
-        }
-      }
-    },
-
-    /**
      * Cargo
      */
     cargo: {

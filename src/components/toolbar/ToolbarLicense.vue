@@ -16,13 +16,13 @@
 <script setup lang="ts">
 
 import { computed, reactive } from "vue"
-import { useAppStore } from "../../stores/app.ts"
+import { useUserStore } from "../../stores/user.ts"
 import { useI18n } from "vue-i18n"
 
 const { t } = useI18n()
 
-const appStore = useAppStore();
-const user = reactive(appStore.user);
+const storeUser = useUserStore();
+const user = reactive(storeUser.user);
 
 const name = computed(() => {
   return user.tarif.type ? t('tarif.type.1.subtitle') : t('tarif.type.0.subtitle');

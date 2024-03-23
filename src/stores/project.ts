@@ -1,10 +1,10 @@
 // Utilities
 import { defineStore } from 'pinia'
-import { useUserStore } from '../stores/user'
+import { useUserStore } from './user'
 import axios from '../plugins/axios'
 import { ProjectInterface } from '../interfaces/ProjectInterface'
 
-export const useProjectsStore = defineStore('project', {
+export const useProjectStore = defineStore('project', {
   state: (): ProjectInterface => {
     return {
       id: 0,
