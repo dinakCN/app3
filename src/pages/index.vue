@@ -219,6 +219,7 @@
 import { ref, reactive, computed, watchEffect } from "vue"
 import type { Ref } from 'vue'
 import { useAppStore } from '../stores/app'
+import { useUserStore } from '../stores/user'
 import { useCargoStore } from '../stores/cargo'
 import { useI18n } from "vue-i18n"
 import { useDisplay } from 'vuetify'
@@ -237,7 +238,8 @@ const { t } = useI18n()
  * Store
  */
 const appStore = useAppStore()
-const user = reactive(appStore.user)
+const appUser = useUserStore()
+const user = reactive(appUser.user)
 const version = ref(appStore.version)
 
 const cargoStore = useCargoStore()

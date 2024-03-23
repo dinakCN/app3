@@ -9,10 +9,12 @@
   },
   "dependencies": {
     "@mdi/font": "6.2.95",
+    "axios": "^1.6.8",
     "boxicons": "^2.1.4",
     "core-js": "^3.34.0",
     "roboto-fontface": "*",
     "vue": "^3.4.21",
+    "vue-axios": "^3.5.2",
     "vue-i18n": "^9.10.2",
     "vuetify": "^3.5.9"
   },
