@@ -11,7 +11,7 @@ export const useUserStore = defineStore('user', {
      * 2 - PRO безлимитный
      */
     user: {
-      id: null,
+      id: 1,
       email: null,
       tarif: {
         type: 0,

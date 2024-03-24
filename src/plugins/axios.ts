@@ -11,7 +11,6 @@ axios.defaults.withCredentials = true
 
 /**
  * обработка запроса перед отправкой
- *
  */
 
 axios.interceptors.request.use((config) => {
@@ -20,16 +19,14 @@ axios.interceptors.request.use((config) => {
 
   /**
    * get
-   *
    */
 
   if (config.method === 'get' && config.params) {
-    // config.params.version = store.getters['app/getVers']
+    config.params.version = 3
   }
 
   /**
    * post
-   *
    */
 
   if (config.method === 'post' && config.data) {
@@ -45,7 +42,7 @@ axios.interceptors.request.use((config) => {
  */
 
 axios.interceptors.response.use((r: any) => {
-  if (r?.data?.message === 'no_auth') return window.location.href = 'https://app.jload.me'
+  // if (r?.data?.message === 'no_auth') return window.location.href = 'https://app.jload.me'
 
   return r
 }, (e) => {

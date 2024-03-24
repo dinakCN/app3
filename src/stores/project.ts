@@ -206,14 +206,14 @@ export const useProjectStore = defineStore('project', {
         const appUser = useUserStore()
 
         const param =  {
-          user: appUser.user,
+          user: appUser.user.id,
           status: 1
         }
 
         axios.get('/project', { params: param })
           .then((r) => {
 
-            // console.log('getProjectsList', r)
+            console.log('getProjectsList', r)
 
             if (r.data.success) {
               resolve(r.data.object)

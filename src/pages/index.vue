@@ -216,7 +216,7 @@
   lang="ts"
   setup
 >
-import { ref, reactive, computed, watchEffect } from "vue"
+import { ref, reactive, computed, toRefs, toRef, onMounted } from "vue"
 import type { Ref } from 'vue'
 import { useAppStore } from '../stores/app'
 import { useUserStore } from '../stores/user'
@@ -225,6 +225,7 @@ import { useCargoStore } from '../stores/cargo'
 import { useI18n } from "vue-i18n"
 import { useDisplay } from 'vuetify'
 import { ProjectInterface } from '../interfaces/ProjectInterface'
+
 /**
  * Flag mobile
  */
@@ -239,14 +240,15 @@ const { t } = useI18n()
  * App Store
  */
 const appStore = useAppStore()
-const version = ref(appStore.version)
+const version = toRef(appStore.version)
+const loading = toRef(appStore.loading)
 
 /**
  * User Store
  */
 const appUser = useUserStore()
-const user = reactive(appUser.user)
-const limit = reactive(appUser.config.limit)
+const user = toRefs(appUser.user)
+const limit = toRef(appUser.config.limit)
 
 /**
  * Project store
@@ -259,11 +261,6 @@ const project_id = ref(appProject.id)
  */
 // const cargoStore = useCargoStore()
 // const limit = reactive(cargoStore.config.limit)
-
-/**
- * Loading
- */
-const loading = ref(false)
 
 /**
  * Projects
@@ -283,14 +280,19 @@ const projectsCount: Ref<number> = computed(() => {
   return projects.length
 })
 
-const getList = (scrollToActive = false, clearStorage = true, active = project?.id) => {
+onMounted(() => {
+  // appProject.getProjectsList()
+
+})
+
+const getList = (scrollToActive = false, clearStorage = true, active = project_id.value) => {
 
   /**
    * clear storage
    *
    */
 
-  if (clearStorage) removeProjectsStorage()
+  // if (clearStorage) removeProjectsStorage()
 
   /**
    * get storage
@@ -304,14 +306,14 @@ const getList = (scrollToActive = false, clearStorage = true, active = project?.
 
     for (const p of r) r[p] = Object.freeze(r[p])
 
-    projects = r
+    // projects = []
 
     /**
      * scroll to active project
      *
      */
 
-    if (scrollToActive) $nextTick(() => scrollIntoView(active))
+    // if (scrollToActive) $nextTick(() => scrollIntoView(active))
 
   } else {
 
@@ -320,30 +322,32 @@ const getList = (scrollToActive = false, clearStorage = true, active = project?.
      *
      */
 
-    loading = true
-    getProjectsList()
-      .then((r) => {
+    loading.value = true
 
-        for (const p of r) r[p] = Object.freeze(r[p])
+    appProject.getProjectsList()
+      .then((r: Array<ProjectInterface>) => {
 
-        projects = r
+        for (const p of r) {
+          projects.push(r)
+        }
+
 
         /**
          * scroll to active project
          *
          */
 
-        if (scrollToActive) $nextTick(() => scrollIntoView(active))
+        // if (scrollToActive) $nextTick(() => scrollIntoView(active))
 
         /**
          * set storage list
          *
          */
 
-        if (localStorage && projects.length) localStorage.setItem('projectsList_' + user.id, JSON.stringify(projects))
+        // if (localStorage && projects.length) localStorage.setItem('projectsList_' + user.id, JSON.stringify(projects))
 
       })
-      .finally(() => loading = false)
+      .finally(() => loading.value = false)
 
   }
 }
