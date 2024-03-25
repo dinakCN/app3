@@ -5,21 +5,11 @@ import axios from '../plugins/axios'
 import { ProjectInterface } from '../interfaces/ProjectInterface'
 
 export const useProjectsStore = defineStore('projects', {
-  state: () => {
-    return {
-      projects: [
-        {
-          id: 1,
-          add_time: '1',
-          status: 1,
-          user_id: 1,
-          name: 'name',
-          json_data: 'json',
-          last_modified: 'date'
-        }
-      ] as Array<ProjectInterface>
-    }
-  },
+  state: () => ({
+    projects: [
+
+    ] as Array<ProjectInterface>
+  }),
   actions: {
 
     getProjectsList() {
@@ -38,9 +28,9 @@ export const useProjectsStore = defineStore('projects', {
         axios.get('/project', { params: param })
           .then((r) => {
 
-            if (r.data.success) {
+            console.log('getProjectsList', r)
 
-              console.log('getProjectsList', r)
+            if (r.data.success) {
 
               this.projects = [...r.data.object]
 

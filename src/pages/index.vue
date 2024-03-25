@@ -102,78 +102,85 @@
         </div>
 
         <!-- list -->
-        <v-card rounded="lg">
+        <v-card
+          rounded="lg"
+          class="overflow-y-auto"
+          style="max-height: 40vh"
+        >
           <v-list
             variant="flat"
             lines="one"
             nav
           >
             <v-scale-transition group>
-              <v-list-item
+              <template
                 v-for="item in filterList"
                 :key="item.id"
-                link
-                :class="item.id === project_id && 'primary lighten-4'"
-                @click.stop="set(item.id)"
               >
-
-                <template v-slot:prepend>
-                  <v-avatar
-                    :icon="item.id === project_id ? 'mdi:mdi mdi-folder-open' : 'mdi:mdi mdi-folder'"
-                    color="grey darken-3"
-                    variant="plain"
-                    size="large"
+                <v-lazy>
+                  <v-list-item
+                    link
+                    :class="item.id === project_id && 'primary lighten-4'"
+                    @click.stop="set(item.id)"
                   >
-                  </v-avatar>
-                </template>
+                    <template v-slot:prepend>
+                      <v-avatar
+                        :icon="item.id === project_id ? 'mdi:mdi mdi-folder-open' : 'mdi:mdi mdi-folder'"
+                        color="grey darken-3"
+                        variant="plain"
+                        size="large"
+                      >
+                      </v-avatar>
+                    </template>
 
-                <template v-slot:title>
-                  <span class="text-truncate">
-                    {{ item.name }}
-                  </span>
-                </template>
+                    <template v-slot:title>
+                      <span class="text-truncate">
+                        {{ item.name }}
+                      </span>
+                    </template>
 
-                <template v-slot:subtitle>
-                  <span class="text-truncate text-lowercase">
-                    {{ t('common.add_time') }} {{ item.add_time }},
-                    {{ t('project.last_sync_time')
-                    }} {{ item.last_modified }}
-                  </span>
-                </template>
+                    <template v-slot:subtitle>
+                      <span class="text-truncate text-lowercase">
+                        {{ t('common.add_time') }} {{ item.add_time }},
+                        {{ t('project.last_sync_time')
+                        }} {{ item.last_modified }}
+                      </span>
+                    </template>
 
-                <template v-slot:append>
-                  <div class="d-flex align-center">
+                    <template v-slot:append>
+                      <div class="d-flex align-center">
 
-                    <!-- rename -->
-                    <v-btn
-                      icon="mdi:mdi mdi-form-textbox"
-                      variant="text"
-                      size="small"
-                      @click.stop="setReName({ name: item.name, id: item.id })"
-                    >
-                    </v-btn>
+                        <!-- rename -->
+                        <v-btn
+                          icon="mdi:mdi mdi-form-textbox"
+                          variant="text"
+                          size="small"
+                          @click.stop="setReName({ name: item.name, id: item.id })"
+                        >
+                        </v-btn>
 
-                    <!-- copy -->
-                    <v-btn
-                      icon="mdi:mdi mdi-content-copy"
-                      variant="text"
-                      size="small"
-                      @click.stop="copy(item.id)"
-                    >
-                    </v-btn>
+                        <!-- copy -->
+                        <v-btn
+                          icon="mdi:mdi mdi-content-copy"
+                          variant="text"
+                          size="small"
+                          @click.stop="copy(item.id)"
+                        >
+                        </v-btn>
 
-                    <!-- remove -->
-                    <v-btn
-                      icon="mdi:mdi mdi-trash-can-outline"
-                      variant="text"
-                      size="small"
-                      @click.stop="remove(item.id)"
-                    >
-                    </v-btn>
-                  </div>
-                </template>
-
-              </v-list-item>
+                        <!-- remove -->
+                        <v-btn
+                          icon="mdi:mdi mdi-trash-can-outline"
+                          variant="text"
+                          size="small"
+                          @click.stop="remove(item.id)"
+                        >
+                        </v-btn>
+                      </div>
+                    </template>
+                  </v-list-item>
+                </v-lazy>
+              </template>
             </v-scale-transition>
 
             <v-card-text
@@ -268,224 +275,162 @@ const projectsCount: Ref<number> = computed(() => {
 })
 
 onMounted(() => {
-  // console.log(user.id.value)
-  appProject.getProjectsList()
+
+  /**
+   * Проверка на загрузку проектов
+   */
+  if (!projectsCount.value) {
+    appProjects.getProjectsList()
+  }
 
 })
 
-const getList = (scrollToActive = false, clearStorage = true, active = project_id.value) => {
+// const set = (id) => {
+//   if (String(project.id) === String(id)) return $router.push('/cargo')
 
-  /**
-   * clear storage
-   *
-   */
+//   loading = true
 
-  // if (clearStorage) removeProjectsStorage()
+//   return getProject(id)
+//     .then(() => {
+//       loading = false
 
-  /**
-   * get storage
-   *
-   */
+//       $router.push('/cargo')
+//     })
+// }
 
-  const getStorageProjects = localStorage.getItem('projectsList_' + user.id)
-  const r = getStorageProjects ? JSON.parse(getStorageProjects) : []
+// const add = (n) => {
+//   loading = true
 
-  if (r.length) {
+//   addProject(n)
+//     .then((r) => {
 
-    for (const p of r) r[p] = Object.freeze(r[p])
+//       getList(true, true, r.id)
+//       $metrika.reachGoal('add.project')
 
-    // projects = []
+//     }, (message) => {
+//       addError(message)
+//     })
+//     .finally(() => {
+//       loading = false
+//     })
+// }
 
-    /**
-     * scroll to active project
-     *
-     */
+// const create = async () => {
+//   const n = await $refs.dialogReName.open('')
 
-    // if (scrollToActive) $nextTick(() => scrollIntoView(active))
+//   if (!n) return false
 
-  } else {
+//   return add(n)
+// }
 
-    /**
-     * get axios
-     *
-     */
+// const copy = (id) => {
+//   loading = true
 
-    loading.value = true
+//   copyProject(id)
+//     .then((r) => {
 
-    appProject.getProjectsList()
-      .then((r: Array<ProjectInterface>) => {
+//       getList(true, true, r.id)
+//       $metrika.reachGoal('add.project')
 
-        for (const p of r) {
-          projects.push(r)
-        }
+//     }, (message) => {
 
+//       addError(message)
+//     })
+//     .finally(() => loading = false)
+// }
 
-        /**
-         * scroll to active project
-         *
-         */
+// const addError = (message) => {
+//   if (message) {
+//     message = JSON.parse(message)
 
-        // if (scrollToActive) $nextTick(() => scrollIntoView(active))
+//     if (!user.tarif.type && message.type === 'maxProjects') $refs.promo.open()
 
-        /**
-         * set storage list
-         *
-         */
+//     message = getMessage(message)
 
-        // if (localStorage && projects.length) localStorage.setItem('projectsList_' + user.id, JSON.stringify(projects))
+//   } else {
+//     message = $t('scene.valid.error')
+//   }
 
-      })
-      .finally(() => loading.value = false)
+//   showError(message)
+// }
 
-  }
-}
+// const remove = async (id) => {
+//   const confirm = await $confirm($t('common.delete') + '?')
 
-const set = (id) => {
-  if (String(project.id) === String(id)) return $router.push('/cargo')
+//   if (confirm) {
+//     loading = true
 
-  loading = true
+//     /**
+//      * Мгновенное удаление из массива
+//      *
+//      */
 
-  return getProject(id)
-    .then(() => {
-      loading = false
+//     const index = projects.findIndex((i) => String(i.id) === String(id))
 
-      $router.push('/cargo')
-    })
-}
+//     if (index !== -1) {
+//       projects.splice(index, 1)
+//     }
 
-const add = (n) => {
-  loading = true
+//     /**
+//      * Удаление с базы данных и обновление
+//      *
+//      */
 
-  addProject(n)
-    .then((r) => {
+//     delProject(id)
+//       .then(() => {
 
-      getList(true, true, r.id)
-      $metrika.reachGoal('add.project')
+//         getList(false, true)
+//         loading = false
 
-    }, (message) => {
-      addError(message)
-    })
-    .finally(() => {
-      loading = false
-    })
-}
+//       })
+//   }
+// }
 
-const create = async () => {
-  const n = await $refs.dialogReName.open('')
+// const setReName = async (obj) => {
+//   const { id, name } = obj
+//   const update = await $refs.dialogReName.open(name)
 
-  if (!n) return false
+//   if (update) {
+//     projects.forEach((i) => {
+//       if (String(i.id) === String(id)) i.name = update
+//     })
 
-  return add(n)
-}
+//     if (String(project.id) === String(id)) changeProjectName(update)
 
-const copy = (id) => {
-  loading = true
+//     loading = true
+//     putProject({ id, name: update })
+//       .then(() => removeProjectsStorage())
+//       .finally(() => loading = false)
+//   }
+// }
 
-  copyProject(id)
-    .then((r) => {
+// const scrollIntoView = (id) => {
 
-      getList(true, true, r.id)
-      $metrika.reachGoal('add.project')
+//   if (!id) return false
 
-    }, (message) => {
+//   const list = document.getElementById('projects-list')
 
-      addError(message)
-    })
-    .finally(() => loading = false)
-}
+//   if (list) {
 
-const addError = (message) => {
-  if (message) {
-    message = JSON.parse(message)
+//     const find = filterList.findIndex((i) => String(i.id) === String(id))
 
-    if (!user.tarif.type && message.type === 'maxProjects') $refs.promo.open()
+//     if (find !== -1) {
 
-    message = getMessage(message)
+//       const offset = (find * 60) - Math.round(projectsCardHeight / 2)
 
-  } else {
-    message = $t('scene.valid.error')
-  }
+//       if (offset > 0) return list.scrollTo(0, offset)
 
-  showError(message)
-}
+//       return list.scrollTo(0, 0)
+//     }
+//   }
 
-const remove = async (id) => {
-  const confirm = await $confirm($t('common.delete') + '?')
+//   return false
+// }
 
-  if (confirm) {
-    loading = true
+// const removeProjectsStorage = () => {
 
-    /**
-     * Мгновенное удаление из массива
-     *
-     */
-
-    const index = projects.findIndex((i) => String(i.id) === String(id))
-
-    if (index !== -1) {
-      projects.splice(index, 1)
-    }
-
-    /**
-     * Удаление с базы данных и обновление
-     *
-     */
-
-    delProject(id)
-      .then(() => {
-
-        getList(false, true)
-        loading = false
-
-      })
-  }
-}
-
-const setReName = async (obj) => {
-  const { id, name } = obj
-  const update = await $refs.dialogReName.open(name)
-
-  if (update) {
-    projects.forEach((i) => {
-      if (String(i.id) === String(id)) i.name = update
-    })
-
-    if (String(project.id) === String(id)) changeProjectName(update)
-
-    loading = true
-    putProject({ id, name: update })
-      .then(() => removeProjectsStorage())
-      .finally(() => loading = false)
-  }
-}
-
-const scrollIntoView = (id) => {
-
-  if (!id) return false
-
-  const list = document.getElementById('projects-list')
-
-  if (list) {
-
-    const find = filterList.findIndex((i) => String(i.id) === String(id))
-
-    if (find !== -1) {
-
-      const offset = (find * 60) - Math.round(projectsCardHeight / 2)
-
-      if (offset > 0) return list.scrollTo(0, offset)
-
-      return list.scrollTo(0, 0)
-    }
-  }
-
-  return false
-}
-
-const removeProjectsStorage = () => {
-
-  if (localStorage) localStorage.removeItem('projectsList_' + user.id)
-}
+//   if (localStorage) localStorage.removeItem('projectsList_' + user.id)
+// }
 
 /**
  * Filter
@@ -499,14 +444,12 @@ const filterList = computed(() => {
   /**
    * Check
    */
-  if (!projectsCount) return []
+  if (!projectsCount.value) return []
 
   /**
    * Filter
    */
   const f = projects.reduce((o, i) => {
-
-    console.log(i.value)
 
     if (filter.value) {
 
@@ -595,7 +538,7 @@ const filterList = computed(() => {
   /**
    * Order
    */
-  if (order) f.reverse()
+  if (order.value) f.reverse()
 
   console.log(f)
 
@@ -636,13 +579,13 @@ const changeOrder = () => {
 /**
  * Metrika
  */
-const metrika = () => {
-  // YaMetrika user data
+// const metrika = () => {
+//   // YaMetrika user data
 
-  $metrika.userParams({
-    vip_status: user.tarif.type !== 0 ? true : false,
-    UserID: user.id,
-    version: version
-  })
-}
-</script>../stores/project
+//   $metrika.userParams({
+//     vip_status: user.tarif.type !== 0 ? true : false,
+//     UserID: user.id,
+//     version: version
+//   })
+// }
+</script>
