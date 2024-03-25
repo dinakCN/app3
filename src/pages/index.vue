@@ -221,6 +221,7 @@ import type { Ref } from 'vue'
 import { useAppStore } from '../stores/app'
 import { useUserStore } from '../stores/user'
 import { useProjectStore } from '../stores/project'
+import { useProjectsStore } from '../stores/projects'
 import { useCargoStore } from '../stores/cargo'
 import { useI18n } from "vue-i18n"
 import { useDisplay } from 'vuetify'
@@ -257,31 +258,18 @@ const appProject = useProjectStore()
 const project_id = ref(appProject.id)
 
 /**
- * Cargo store
+ * Projects store
  */
-// const cargoStore = useCargoStore()
-// const limit = reactive(cargoStore.config.limit)
+const appProjects = useProjectsStore()
+const projects = toRefs(appProjects.projects)
 
-/**
- * Projects
- */
-const projects: Array<ProjectInterface> = reactive([
-  {
-    id: 1,
-    add_time: '1',
-    status: 1,
-    user_id: 1,
-    name: 'name',
-    json_data: 'json',
-    last_modified: 'date'
-  }
-])
 const projectsCount: Ref<number> = computed(() => {
   return projects.length
 })
 
 onMounted(() => {
-  // appProject.getProjectsList()
+  // console.log(user.id.value)
+  appProject.getProjectsList()
 
 })
 
@@ -506,7 +494,7 @@ const filter: Ref<string> = ref('')
 const isFilter = computed<boolean>(() => {
   return Boolean(filter.value)
 })
-const filterList = computed<Array<Project>>(() => {
+const filterList = computed(() => {
 
   /**
    * Check
@@ -516,7 +504,9 @@ const filterList = computed<Array<Project>>(() => {
   /**
    * Filter
    */
-  const f = projects.reduce((o: Array<ProjectInterface>, i: ProjectInterface) => {
+  const f = projects.reduce((o, i) => {
+
+    console.log(i.value)
 
     if (filter.value) {
 
@@ -527,35 +517,35 @@ const filterList = computed<Array<Project>>(() => {
        *
        */
 
-      if (String(i.name).toLowerCase().indexOf(String(filter.value).toLowerCase()) !== -1) flag = true
+      if (String(i.value.name).toLowerCase().indexOf(String(filter.value).toLowerCase()) !== -1) flag = true
 
       /**
        * admin only
        *
        */
-      if (user.id === 1) {
+      if (user.id.value === 1) {
 
         /**
          * compare with user ID & Project ID
          *
          */
-        const id = (i.id).toString().toLowerCase()
-        const userID = (i.user_id).toString().toLowerCase()
+        const id = (i.value.id).toString().toLowerCase()
+        const userID = (i.value.user_id).toString().toLowerCase()
 
         if (id.indexOf(String(filter).toLowerCase()) !== -1) flag = true
         if (userID.indexOf(String(filter).toLowerCase()) !== -1) flag = true
 
       }
 
-      if (flag) o.push(i)
+      if (flag) o.push(i.value)
 
     } else {
-      o.push(i)
+      o.push(i.value)
     }
 
     return o
 
-  }, [])
+  }, [] as Array<ProjectInterface>)
 
   /**
    * Check
