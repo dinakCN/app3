@@ -13,7 +13,6 @@
         <v-scale-transition>
           <v-card
             v-if="projectsCount"
-            :loading="loading"
             class="rounded-lg"
           >
             <!-- head -->
@@ -106,10 +105,10 @@
 
         <!-- list -->
         <v-card
-          v-if="projectsCount"
+          v-if="filterList.length || isFilter"
           rounded="lg"
           class="overflow-y-auto"
-          style="max-height: 61vh"
+          style="max-height: 61vh; min-height: 60px;"
         >
           <v-list
             variant="flat"
