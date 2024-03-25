@@ -16,22 +16,22 @@
 <script setup lang="ts">
 
 import { computed, reactive } from "vue"
-import { useUserStore } from "../../stores/user.ts"
+import { useUserStore } from "../../stores/user"
 import { useI18n } from "vue-i18n"
 
 const { t } = useI18n()
 
 const storeUser = useUserStore();
-const user = reactive(storeUser.user);
+const user = computed(() => storeUser.user);
 
 const name = computed(() => {
-  return user.tarif.type ? t('tarif.type.1.subtitle') : t('tarif.type.0.subtitle');
+  return user.value.tarif.type ? t('tarif.type.1.subtitle') : t('tarif.type.0.subtitle');
 })
 
 const avatartColor = computed(() => {
 
-  if (user.tarif.type === 2) return 'primary'
-  if (user.tarif.type === 1) return 'success'
+  if (user.value.tarif.type === 2) return 'primary'
+  if (user.value.tarif.type === 1) return 'success'
 
   return 'grey-lighten-1'
 })

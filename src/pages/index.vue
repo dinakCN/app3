@@ -12,6 +12,7 @@
         <!-- header -->
         <v-scale-transition>
           <v-card
+            v-if="projectsCount"
             :loading="loading"
             class="rounded-lg"
           >
@@ -33,6 +34,8 @@
               </div>
 
               <v-spacer></v-spacer>
+
+              <HelpButton />
 
             </v-card-actions>
 
@@ -103,14 +106,14 @@
 
         <!-- list -->
         <v-card
+          v-if="projectsCount"
           rounded="lg"
           class="overflow-y-auto"
-          style="max-height: 40vh"
+          style="max-height: 61vh"
         >
           <v-list
             variant="flat"
             lines="one"
-            nav
           >
             <v-scale-transition group>
               <template
@@ -224,6 +227,7 @@
   setup
 >
 import { ref, reactive, computed, toRefs, toRef, onMounted } from "vue"
+import { storeToRefs } from 'pinia'
 import type { Ref } from 'vue'
 import { useAppStore } from '../stores/app'
 import { useUserStore } from '../stores/user'
@@ -233,6 +237,7 @@ import { useCargoStore } from '../stores/cargo'
 import { useI18n } from "vue-i18n"
 import { useDisplay } from 'vuetify'
 import { ProjectInterface } from '../interfaces/ProjectInterface'
+import HelpButton from "../components/brief/HelpButton.vue"
 
 /**
  * Flag mobile
@@ -248,7 +253,6 @@ const { t } = useI18n()
  * App Store
  */
 const appStore = useAppStore()
-const version = toRef(appStore.version)
 const loading = toRef(appStore.loading)
 
 /**
@@ -268,10 +272,10 @@ const project_id = ref(appProject.id)
  * Projects store
  */
 const appProjects = useProjectsStore()
-const projects = toRefs(appProjects.projects)
+const projects = computed(() => appProjects.store.projects)
 
 const projectsCount: Ref<number> = computed(() => {
-  return projects.length
+  return projects.value.length
 })
 
 onMounted(() => {
@@ -449,7 +453,7 @@ const filterList = computed(() => {
   /**
    * Filter
    */
-  const f = projects.reduce((o, i) => {
+  const f = projects.value.reduce((o, i) => {
 
     if (filter.value) {
 
@@ -460,7 +464,7 @@ const filterList = computed(() => {
        *
        */
 
-      if (String(i.value.name).toLowerCase().indexOf(String(filter.value).toLowerCase()) !== -1) flag = true
+      if (String(i.name).toLowerCase().indexOf(String(filter.value).toLowerCase()) !== -1) flag = true
 
       /**
        * admin only
@@ -472,18 +476,18 @@ const filterList = computed(() => {
          * compare with user ID & Project ID
          *
          */
-        const id = (i.value.id).toString().toLowerCase()
-        const userID = (i.value.user_id).toString().toLowerCase()
+        const id = (i.id).toString().toLowerCase()
+        const userID = (i.user_id).toString().toLowerCase()
 
         if (id.indexOf(String(filter).toLowerCase()) !== -1) flag = true
         if (userID.indexOf(String(filter).toLowerCase()) !== -1) flag = true
 
       }
 
-      if (flag) o.push(i.value)
+      if (flag) o.push(i)
 
     } else {
-      o.push(i.value)
+      o.push(i)
     }
 
     return o
@@ -540,7 +544,7 @@ const filterList = computed(() => {
    */
   if (order.value) f.reverse()
 
-  console.log(f)
+  // console.log(f)
 
   return f
 })
