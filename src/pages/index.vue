@@ -68,7 +68,7 @@
         <!-- sort & order-->
         <div
           name="projects_sort"
-          class="d-flex align-center"
+          class="d-flex align-center my-1"
         >
           <v-chip-group
             v-model="sort"
@@ -108,7 +108,7 @@
           v-if="filterList.length || isFilter"
           rounded="lg"
           class="overflow-y-auto"
-          style="max-height: 61vh; min-height: 60px;"
+          style="max-height: 40vh; min-height: 60px;"
         >
           <v-list
             variant="flat"
@@ -122,6 +122,7 @@
                 <v-lazy>
                   <v-list-item
                     link
+                    height="60px"
                     :class="item.id === project_id && 'primary lighten-4'"
                     @click.stop="set(item.id)"
                   >
@@ -198,11 +199,12 @@
         <!-- create -->
         <div
           name="projects_add"
-          class="mt-4 mb-1 d-flex justify-center"
+          class="mt-6 mb-1 d-flex justify-center"
         >
           <v-btn
-            class="elevation-18"
+            :elevation="18"
             rounded
+            size="default"
             color="primary"
             prepend-icon="mdi:mdi mdi-plus-box-multiple"
             @click.stop="() => true"
@@ -241,7 +243,7 @@ import HelpButton from "../components/brief/HelpButton.vue"
 /**
  * Flag mobile
  */
-const { mobile } = useDisplay()
+const { mobile, height } = useDisplay()
 
 /**
  * Lang

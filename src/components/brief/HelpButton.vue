@@ -1,23 +1,20 @@
 <template>
-  <span>
-
-    <v-btn
-      icon
-      @click.stop="brief()"
+  <v-btn
+    icon
+    size="default"
+    @click.stop="brief()"
+  >
+    <v-icon>mdi:mdi mdi-help-circle-outline</v-icon>
+    <v-tooltip
+      activator="parent"
+      location="start"
     >
-      <v-icon>mdi:mdi mdi-help-circle-outline</v-icon>
-      <v-tooltip
-        activator="parent"
-        location="start"
-      >
-        {{ t('common.help') }}
-      </v-tooltip>
-    </v-btn>
+      {{ t('common.help') }}
+    </v-tooltip>
+  </v-btn>
 
-    <!-- Dialog -->
-    <BriefDialog v-model="dialog.open"/>
-
-  </span>
+  <!-- Dialog -->
+  <BriefDialog v-model="dialog.open" />
 </template>
 
 <script

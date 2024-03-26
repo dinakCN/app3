@@ -1,27 +1,43 @@
 // Utilities
 import { defineStore } from 'pinia'
+import { reactive } from 'vue'
 
-export const useAppStore = defineStore('app', {
-  state: () => ({
+export const useAppStore = defineStore('app', () => {
 
-    /**
-     * типы тарифов
-     * 0 - free
-     * 1 - PRO расчетный
-     * 2 - PRO безлимитный
-     */
-    version: 3.00,
+  /**
+   * Version
+   */
+  const version = '3.0.0'
 
-    toast: {
+  /**
+   * Loading
+   */
+  const loading = reactive({
+    data: false as Boolean
+  })
+
+  function setLoading(bool: Boolean = false) {
+    loading.data = bool
+  }
+
+  /**
+   * Toast
+   */
+  const toast = reactive({
+    data: {
       show: false,
       color: 'black',
       message: '',
       right: false,
       rounded: 'xl',
       timeout: 3000
-    },
+    }
+  })
 
-    loading: false
-
-  }),
+  return {
+    version,
+    loading,
+    setLoading,
+    toast
+  }
 })

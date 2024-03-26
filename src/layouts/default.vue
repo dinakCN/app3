@@ -43,8 +43,8 @@
     </div>
 
     <v-progress-linear
-      :active="appStore.loading"
-      :indeterminate="appStore.loading"
+      :active="loading"
+      :indeterminate="loading"
       absolute
       bottom
       color="teal"
@@ -63,11 +63,12 @@
 
 <script setup lang="ts" >
 
-import { ref } from "vue"
+import { ref, computed } from "vue"
 import { menu } from '../configs/navigation.js'
 import { useAppStore } from '../stores/app'
 
 const drawer = ref(false)
 const appStore = useAppStore()
+const loading = computed(() => Boolean(appStore.loading.data))
 
 </script>

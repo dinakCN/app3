@@ -10,6 +10,13 @@
       text="Your application will relaunch automatically after the update is complete."
       title="Update in progress"
     >
+      <template v-slot:append>
+        <v-btn
+          icon="mdi:mdi mdi-close"
+          variant="text"
+          @click="dialog.open = false"
+        ></v-btn>
+      </template>
       <template v-slot:actions>
         <v-btn
           class="ms-auto"
@@ -35,6 +42,14 @@
 import { ref, reactive } from "vue"
 // import { LazyYoutube } from 'vue-lazytube'
 
+const props = defineProps({
+  modelValue: {
+    default: false
+  }
+})
+
+const emit = defineEmits(['update:modelValue'])
+
 const dialog = reactive({
   open: false
 })
@@ -51,6 +66,6 @@ const show = (url: string) => {
 
 const close = () => {
   // this.$refs.youtube.stopVideo()
-  dialog.open = false
+  emit('update:modelValue', false)
 }
 </script>
