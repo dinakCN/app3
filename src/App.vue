@@ -39,7 +39,7 @@ import { useAppStore } from './stores/app'
 const storeApp = useAppStore()
 const toast = computed(() => storeApp.toast)
 
-onMounted(() => {
-  storeApp.showError('test')
-})
+// onMounted(() => {
+//   storeApp.showError('test')
+// })
 </script>

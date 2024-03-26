@@ -108,7 +108,8 @@
           v-if="filterList.length || isFilter"
           rounded="lg"
           class="overflow-y-auto"
-          style="max-height: 40vh; min-height: 60px;"
+          :max-height="vh"
+          style="min-height: 60px;"
         >
           <v-list
             variant="flat"
@@ -245,16 +246,18 @@ import HelpButton from "../components/brief/HelpButton.vue"
  */
 const { mobile, height } = useDisplay()
 
+const vh = computed(() => height.value - 377)
+
 /**
  * Lang
  */
 const { t } = useI18n()
 
+
 /**
  * App Store
  */
 const appStore = useAppStore()
-const loading = toRef(appStore.loading)
 
 /**
  * User Store
@@ -285,7 +288,7 @@ onMounted(() => {
    * Проверка на загрузку проектов
    */
   if (!projectsCount.value) {
-    console.log(height.value)
+    console.log(vh.value)
     appProjects.getProjectsList()
   }
 

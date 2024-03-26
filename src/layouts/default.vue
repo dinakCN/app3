@@ -47,7 +47,7 @@
       :indeterminate="loading"
       absolute
       bottom
-      color="teal"
+      color="primary"
       style="z-index: 9"
     ></v-progress-linear>
 
