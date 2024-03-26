@@ -10,7 +10,7 @@
         activator="parent"
         location="start"
       >
-        {{ $t('common.help') }}
+        {{ t('common.help') }}
       </v-tooltip>
     </v-btn>
 
@@ -25,14 +25,22 @@
   setup
 >
 import { reactive } from 'vue';
-import { useRoute, useRouter } from 'vue-router'
+import { useRoute } from 'vue-router'
+import { useI18n } from "vue-i18n"
 import { VideoInterface } from '../../interfaces/VideoInterfaces';
-
 import links from '../../configs/video'
 
+/**
+ * Router
+ */
 const route = useRoute()
 
-const v: Array<VideoInterface> = reactive([links])
+/**
+ * Lang
+ */
+const { t } = useI18n()
+
+const v: Array<VideoInterface> = reactive([...links])
 
 const brief = () => {
   const current = v.find((i) => {

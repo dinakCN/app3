@@ -5,4 +5,3 @@ export interface VideoInterface {
   time: string,
   page: Array<String>
 }
-
