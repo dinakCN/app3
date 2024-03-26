@@ -25,22 +25,20 @@
   setup
 >
 import { reactive } from 'vue';
+import { useRoute, useRouter } from 'vue-router'
+import { VideoInterface } from '../../interfaces/VideoInterfaces';
 
-// import links from '@/configs/video'
+import links from '../../configs/video'
 
-// props: {
-//   name: {
-//     type: String,
-//     default: ''
-//   }
-// },
+const route = useRoute()
 
-const v = reactive([])
+const v: Array<VideoInterface> = reactive([links])
 
 const brief = () => {
-  const current = v.find((i) => i.page.includes(String(this.$route.name)))
+  const current = v.find((i) => {
+    return i.page.includes(String(route.name))
+  })
 
   if (current?.link) $refs.briefs.show(current.link)
 }
-
 </script>
