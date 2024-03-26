@@ -199,30 +199,5 @@ export const useProjectStore = defineStore('project', {
       })
     },
 
-    getProjectsList() {
-
-      return new Promise((resolve, reject) => {
-
-        const appUser = useUserStore()
-
-        const param =  {
-          user: appUser.user.id,
-          status: 1
-        }
-
-        axios.get('/project', { params: param })
-          .then((r) => {
-
-            console.log('getProjectsList', r)
-
-            if (r.data.success) {
-              resolve(r.data.object)
-            } else {
-              reject(r)
-            }
-          })
-      })
-    },
-
   },
 })

@@ -16,7 +16,7 @@
             class="rounded-lg"
           >
             <!-- head -->
-            <v-card-actions class="d-flex align-center">
+            <v-card-actions class="d-flex align-center pt-0">
 
               <div class="d-sm-flex align-center">
 
@@ -202,7 +202,7 @@
           class="mt-6 mb-1 d-flex justify-center"
         >
           <v-btn
-            :elevation="18"
+            variant="text"
             rounded
             size="default"
             color="primary"
@@ -285,6 +285,7 @@ onMounted(() => {
    * Проверка на загрузку проектов
    */
   if (!projectsCount.value) {
+    console.log(height.value)
     appProjects.getProjectsList()
   }
 

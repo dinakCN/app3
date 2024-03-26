@@ -1,9 +1,10 @@
 // Utilities
 import { defineStore } from 'pinia'
 import { useUserStore } from './user'
-import axios from '../plugins/axios'
+import { useAppStore } from './app'
 import { ProjectInterface } from '../interfaces/ProjectInterface'
 import { reactive } from 'vue'
+import axios from 'axios'
 
 export const useProjectsStore = defineStore('projects', () => {
 
@@ -14,27 +15,38 @@ export const useProjectsStore = defineStore('projects', () => {
   function getProjectsList() {
     return new Promise((resolve, reject) => {
 
-      const appUser = useUserStore()
+      const storeUser = useUserStore()
+      const storeApp = useAppStore()
 
-      const param =  {
-        user: appUser.user.id,
-        status: 1
-      }
-
+      /**
+       * Очистить все проекты
+       */
       store.projects = []
 
-      axios.get('/project', { params: param })
+      /**
+       * Индикатор загрузки
+       */
+      storeApp.setLoading(true)
+
+      axios.get('/project', {
+        params: {
+          user: storeUser.user.id,
+          status: 1
+        }
+      })
         .then((r) => {
-
-          // console.log('getProjectsList', r)
-
           if (r.data.success) {
+
             store.projects = [...r.data.object]
             resolve(null)
+
           } else {
+
             reject(r)
+
           }
         })
+        .finally(() => storeApp.setLoading(false))
     })
   }
 
