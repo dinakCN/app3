@@ -92,6 +92,7 @@
           <v-spacer></v-spacer>
 
           <v-chip
+            v-if="!mobile"
             size="small"
             variant="text"
             color="primary"
@@ -246,18 +247,12 @@ import HelpButton from "../components/brief/HelpButton.vue"
  */
 const { mobile, height } = useDisplay()
 
-const vh = computed(() => height.value - 377)
+const vh = computed(() => height.value - 395)
 
 /**
  * Lang
  */
 const { t } = useI18n()
-
-
-/**
- * App Store
- */
-const appStore = useAppStore()
 
 /**
  * User Store
