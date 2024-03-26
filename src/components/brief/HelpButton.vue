@@ -14,8 +14,8 @@
       </v-tooltip>
     </v-btn>
 
-    <!-- BRIEF -->
-    <!-- <brief-dialog ref="briefs" /> -->
+    <!-- Dialog -->
+    <BriefDialog v-model="dialog.open"/>
 
   </span>
 </template>
@@ -41,12 +41,18 @@ const route = useRoute()
 const { t } = useI18n()
 
 const v: Array<VideoInterface> = reactive([...links])
+const dialog = reactive({
+  open: false
+})
 
 const brief = () => {
   const current = v.find((i) => {
+    console.log(route.name)
     return i.page.includes(String(route.name))
   })
 
-  if (current?.link) $refs.briefs.show(current.link)
+  console.log(current)
+
+  if (current?.link) dialog.open = true
 }
 </script>

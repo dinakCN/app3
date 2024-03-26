@@ -1,6 +1,6 @@
 import { VideoInterface } from "../interfaces/VideoInterfaces"
 
-const promo: VideoInterface = { link: 'https://www.youtube.com/watch?v=pF7xrtRZlh8', id: 'pF7xrtRZlh8', key:'brief.promo', time:'3.29', page:[''] }
+const promo: VideoInterface = { link: 'https://www.youtube.com/watch?v=pF7xrtRZlh8', id: 'pF7xrtRZlh8', key:'brief.promo', time:'3.29', page:['/'] }
 
 const cargoadd: VideoInterface = { link: 'https://www.youtube.com/watch?v=1sUQWBAsFNs', id: '1sUQWBAsFNs', key:'brief.cargoadd', time:'3.01', page:['item'] }
 const loadsadd: VideoInterface = { link: 'https://www.youtube.com/watch?v=X-ClnmXmmI0', id: 'X-ClnmXmmI0', key:'brief.loadsadd', time:'0.47', page:['area'] }

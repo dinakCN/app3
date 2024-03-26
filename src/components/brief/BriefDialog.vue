@@ -4,17 +4,19 @@
     max-width="560px"
     @click:outside="close()"
   >
-    <div class="text-right pb-1">
-      <v-btn
-        icon
-        color="white"
-        @click="close()"
-      >
-        <v-icon>mdi:mdi mdi-close</v-icon>
-      </v-btn>
-    </div>
-
-    <v-card>
+    <v-card
+      width="100%"
+      prepend-icon="mdi-update"
+      text="Your application will relaunch automatically after the update is complete."
+      title="Update in progress"
+    >
+      <template v-slot:actions>
+        <v-btn
+          class="ms-auto"
+          text="Close"
+          @click="close()"
+        ></v-btn>
+      </template>
 
       <!-- <LazyYoutube
         ref="youtube"
