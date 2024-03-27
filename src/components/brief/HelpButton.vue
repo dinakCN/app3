@@ -14,7 +14,10 @@
   </v-btn>
 
   <!-- Dialog -->
-  <BriefDialog v-model="dialog.open" :video_id="video_id" :title="title" />
+  <BriefDialog
+    v-model="dialog.open"
+    :data="video_data"
+  />
 </template>
 
 <script
@@ -43,24 +46,16 @@ const dialog = reactive({
   open: false
 })
 
-const video_id = computed(() => {
+const video_data = computed(() => {
   const current = v.find((i) => i.page.includes(String(route.name)))
 
-  if (current?.id) return current.id
+  if (current?.key) return current
 
-  return ''
-})
-
-const title = computed(() => {
-  const current = v.find((i) => i.page.includes(String(route.name)))
-
-  if (current?.key) return t(current.key)
-
-  return ''
+  return null
 })
 
 const open = () => {
-  if (video_id.value) dialog.open = true
+  if (video_data.value) dialog.open = true
 }
 
 </script>
