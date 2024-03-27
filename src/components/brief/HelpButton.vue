@@ -2,7 +2,7 @@
   <v-btn
     icon
     size="default"
-    @click.stop="brief()"
+    @click.stop="open()"
   >
     <v-icon>mdi:mdi mdi-help-circle-outline</v-icon>
     <v-tooltip
@@ -14,14 +14,14 @@
   </v-btn>
 
   <!-- Dialog -->
-  <BriefDialog v-model="dialog.open" />
+  <BriefDialog v-model="dialog.open" :video_id="video_id" :title="title" />
 </template>
 
 <script
   lang="ts"
   setup
 >
-import { reactive } from 'vue';
+import { reactive, computed } from 'vue';
 import { useRoute } from 'vue-router'
 import { useI18n } from "vue-i18n"
 import { VideoInterface } from '../../interfaces/VideoInterfaces';
@@ -38,18 +38,29 @@ const route = useRoute()
 const { t } = useI18n()
 
 const v: Array<VideoInterface> = reactive([...links])
+
 const dialog = reactive({
   open: false
 })
 
-const brief = () => {
-  const current = v.find((i) => {
-    console.log(route.name)
-    return i.page.includes(String(route.name))
-  })
+const video_id = computed(() => {
+  const current = v.find((i) => i.page.includes(String(route.name)))
 
-  console.log(current)
+  if (current?.id) return current.id
 
-  if (current?.link) dialog.open = true
+  return ''
+})
+
+const title = computed(() => {
+  const current = v.find((i) => i.page.includes(String(route.name)))
+
+  if (current?.key) return t(current.key)
+
+  return ''
+})
+
+const open = () => {
+  if (video_id.value) dialog.open = true
 }
+
 </script>
