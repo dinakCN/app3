@@ -230,9 +230,7 @@
   setup
 >
 import { ref, reactive, computed, toRefs, toRef, onMounted } from "vue"
-import { storeToRefs } from 'pinia'
 import type { Ref } from 'vue'
-import { useAppStore } from '../stores/app'
 import { useUserStore } from '../stores/user'
 import { useProjectStore } from '../stores/project'
 import { useProjectsStore } from '../stores/projects'
@@ -247,7 +245,7 @@ import HelpButton from "../components/brief/HelpButton.vue"
  */
 const { mobile, height } = useDisplay()
 
-const vh = computed(() => height.value - 395)
+const vh = computed(() => mobile.value ? height.value - 395 : height.value - 375)
 
 /**
  * Lang
