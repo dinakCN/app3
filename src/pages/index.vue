@@ -281,7 +281,7 @@ onMounted(() => {
    * Проверка на загрузку проектов
    */
   if (!projectsCount.value) {
-    console.log(vh.value)
+    // console.log(vh.value)
     appProjects.getProjectsList()
   }
 
