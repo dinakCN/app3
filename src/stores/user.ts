@@ -3,21 +3,10 @@ import { defineStore } from 'pinia'
 import { reactive } from 'vue'
 import { useAppStore } from './app'
 import axios from 'axios'
+import { User, Config  } from '../interfaces/UserInterface'
 
 
 export const useUserStore = defineStore('user', () => {
-
-  interface User {
-    id: number,
-    name: string,
-    email: string,
-    tarif: {
-      type: number,
-      expir: string,
-      count: number
-    },
-    discount: number
-  }
 
   /**
    * User
@@ -26,7 +15,7 @@ export const useUserStore = defineStore('user', () => {
    * 2 - PRO безлимитный
    */
   const user = reactive({
-    id: 1,
+    id: 0,
     name: '',
     email: '',
     tarif: {
@@ -139,7 +128,7 @@ export const useUserStore = defineStore('user', () => {
   }
 
   function getConfig() {
-    return new Promise((resolve, reject) => {
+    return new Promise<Config>((resolve, reject) => {
 
       /**
        * Store
@@ -161,14 +150,18 @@ export const useUserStore = defineStore('user', () => {
 
           if (r.data.success) {
 
-            setConfigUser(r.data.object)
-            setConfigLicense(r.data.object)
-            setConfigLimits(r.data.object)
-            setConfigUnits(r.data.object)
+            const config: Config = r.data.object
+
+            setConfigUser(config)
+            setConfigLicense(config)
+            setConfigLimits(config)
+            setConfigUnits(config)
 
             // return all object
-            resolve(r.data.object)
+            resolve(config)
           }
+
+          reject(null)
         })
         .finally(() => storeApp.setLoading(false))
     })

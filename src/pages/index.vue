@@ -221,8 +221,10 @@
 </template>
 
 <route lang="yaml">
+  name: 'main'
   meta:
     layout: default
+    requiresAuth: true
 </route>
 
 <script
