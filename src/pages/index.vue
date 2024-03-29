@@ -16,11 +16,11 @@
             class="rounded-lg"
           >
             <!-- head -->
-            <v-card-actions class="d-flex align-center pt-0">
+            <v-card-actions class="d-flex align-center pt-1">
 
               <div class="d-sm-flex align-center">
 
-                <div class="text-button font-weight-bold ml-2">
+                <div class="text-button font-weight-bold ml-1">
                   {{ t('project.list') }}
                 </div>
 
@@ -43,7 +43,6 @@
               v-model="filter"
               :placeholder="t('common.search')"
               :max-length="35"
-              prepend-inner-icon="mdi:mdi mdi-magnify"
               clear-icon="mdi:mdi mdi-close"
               density="default"
               hide-details
@@ -51,7 +50,11 @@
               :variant="!isFilter ? 'solo' : 'solo'"
               flat
               single-line
-            ></v-text-field>
+            >
+              <template #prepend-inner>
+                <v-icon color="black">mdi:mdi mdi-magnify</v-icon>
+              </template>
+            </v-text-field>
           </v-card>
         </v-scale-transition>
 
