@@ -1,7 +1,8 @@
 <template>
   <v-btn
     icon
-    size="default"
+    size="40"
+    class="mr-1"
     @click.stop="open()"
   >
     <v-icon>mdi:mdi mdi-help-circle-outline</v-icon>

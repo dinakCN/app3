@@ -45,7 +45,7 @@
               :max-length="35"
               prepend-inner-icon="mdi:mdi mdi-magnify"
               clear-icon="mdi:mdi mdi-close"
-              density="comfortable"
+              density="default"
               hide-details
               clearable
               :variant="!isFilter ? 'solo' : 'solo'"
@@ -68,7 +68,7 @@
         <!-- sort & order-->
         <div
           name="projects_sort"
-          class="d-flex align-center my-4"
+          class="d-flex align-center my-2"
         >
           <v-chip-group
             v-model="sort"
@@ -115,6 +115,7 @@
           <v-list
             variant="flat"
             lines="one"
+            class="py-0"
           >
             <v-scale-transition group>
               <template
@@ -130,11 +131,12 @@
                   >
                     <template v-slot:prepend>
                       <v-avatar
-                        :icon="item.id === project_id ? 'mdi:mdi mdi-folder-open' : 'mdi:mdi mdi-folder'"
-                        color="grey darken-3"
-                        variant="plain"
+                        :icon="item.id === project_id ? 'mdi:mdi mdi-folder-open' : 'mdi:mdi mdi-folder-outline'"
+                        color="black"
+                        variant="text"
                         size="large"
                       >
+
                       </v-avatar>
                     </template>
 
@@ -157,29 +159,32 @@
 
                         <!-- rename -->
                         <v-btn
-                          icon="mdi:mdi mdi-form-textbox"
+                          icon
                           variant="text"
                           size="small"
                           @click.stop="setReName({ name: item.name, id: item.id })"
                         >
+                          <v-icon size="20">mdi:mdi mdi-form-textbox</v-icon>
                         </v-btn>
 
                         <!-- copy -->
                         <v-btn
-                          icon="mdi:mdi mdi-content-copy"
+                          icon
                           variant="text"
                           size="small"
                           @click.stop="copy(item.id)"
                         >
+                          <v-icon size="20">mdi:mdi mdi-content-copy</v-icon>
                         </v-btn>
 
                         <!-- remove -->
                         <v-btn
-                          icon="mdi:mdi mdi-trash-can-outline"
+                          icon
                           variant="text"
                           size="small"
                           @click.stop="remove(item.id)"
                         >
+                          <v-icon size="20">mdi:mdi mdi-trash-can-outline</v-icon>
                         </v-btn>
                       </div>
                     </template>
@@ -201,7 +206,7 @@
         <!-- create -->
         <div
           name="projects_add"
-          class="mt-6 mb-1 d-flex justify-center"
+          class="mt-4 d-flex justify-center"
         >
           <v-btn
             rounded
@@ -246,7 +251,7 @@ import HelpButton from "../components/brief/HelpButton.vue"
  */
 const { mobile, height } = useDisplay()
 
-const vh = computed(() => mobile.value ? height.value - 395 : height.value - 410)
+const vh = computed(() => mobile.value ? height.value - 395 : height.value - 460)
 
 /**
  * Lang
