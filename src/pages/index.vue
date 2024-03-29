@@ -7,7 +7,7 @@
     >
       <v-col
         cols="12"
-        lg="8"
+        xl="8"
       >
         <!-- header -->
         <v-scale-transition>
@@ -68,13 +68,13 @@
         <!-- sort & order-->
         <div
           name="projects_sort"
-          class="d-flex align-center my-1"
+          class="d-flex align-center my-4"
         >
           <v-chip-group
             v-model="sort"
             selected-class="text-primary"
             mandatory
-            variant="text"
+            variant="tonal"
           >
             <template
               v-for="i in sortList"
@@ -94,7 +94,7 @@
           <v-chip
             v-if="!mobile"
             size="small"
-            variant="text"
+            variant="tonal"
             color="primary"
             :append-icon="orderData.icon"
             @click.stop="changeOrder"
@@ -204,7 +204,6 @@
           class="mt-6 mb-1 d-flex justify-center"
         >
           <v-btn
-            variant="text"
             rounded
             size="default"
             color="primary"
@@ -247,7 +246,7 @@ import HelpButton from "../components/brief/HelpButton.vue"
  */
 const { mobile, height } = useDisplay()
 
-const vh = computed(() => mobile.value ? height.value - 395 : height.value - 375)
+const vh = computed(() => mobile.value ? height.value - 395 : height.value - 410)
 
 /**
  * Lang
