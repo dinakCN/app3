@@ -46,7 +46,7 @@ export const useProjectStore = defineStore('project', () => {
      * add_time
      * last_modified
      */
-    project.id  = id
+    project.id = id
     project.name = name
     project.add_time = new Date(add_time)
     project.last_modified = new Date(last_modified)
@@ -78,20 +78,18 @@ export const useProjectStore = defineStore('project', () => {
 
       const appUser = useUserStore()
 
-      const param = {
+      const params = {
         user: appUser.user,
         id: id,
         status: 1
       }
 
       axios.get('/project', {
-        params: param
+        params
       })
         .then((r) => {
           if (r.data.success) {
-
-            console.log(r.data.object)
-
+            // console.log(r.data.object)
             setProject(r.data.object)
 
             resolve(r)
@@ -177,8 +175,6 @@ export const useProjectStore = defineStore('project', () => {
 
       axios.post('/project', param)
         .then((r) => {
-
-          // console.log(r, param)
 
           if (r.data.success) {
 

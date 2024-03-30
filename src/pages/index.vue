@@ -290,7 +290,7 @@ onMounted(() => {
    * Проверка на загрузку проектов
    */
   if (!projectsCount.value) {
-    console.log(project_id.value)
+    // console.log(project_id.value)
     appProjects.getProjectsList()
   }
 
@@ -415,33 +415,28 @@ onMounted(() => {
 //   }
 // }
 
-// const scrollIntoView = (id) => {
+const scrollIntoView = (id) => {
 
-//   if (!id) return false
+  if (!id) return false
 
-//   const list = document.getElementById('projects-list')
+  const list = document.getElementById('projects-list')
 
-//   if (list) {
+  if (list) {
 
-//     const find = filterList.findIndex((i) => String(i.id) === String(id))
+    const find = filterList.value.findIndex((i) => String(i.id) === String(id))
 
-//     if (find !== -1) {
+    if (find !== -1) {
 
-//       const offset = (find * 60) - Math.round(projectsCardHeight / 2)
+      const offset = (find * 60) - Math.round(vh.value / 2)
 
-//       if (offset > 0) return list.scrollTo(0, offset)
+      if (offset > 0) return list.scrollTo(0, offset)
 
-//       return list.scrollTo(0, 0)
-//     }
-//   }
+      return list.scrollTo(0, 0)
+    }
+  }
 
-//   return false
-// }
-
-// const removeProjectsStorage = () => {
-
-//   if (localStorage) localStorage.removeItem('projectsList_' + user.id)
-// }
+  return false
+}
 
 /**
  * Filter
