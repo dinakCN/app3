@@ -2,13 +2,18 @@
   <v-bottom-navigation
     color="primary"
     grow
-    horizontal
     active-class
-    :elevation="24"
   >
-    <template v-for="(foot, index) in footer" :key="index">
+    <template
+      v-for="(foot, index) in footer"
+      :key="index"
+    >
 
-      <v-btn :to="foot.to" :icon="mobile">
+      <v-btn
+        :to="foot.to"
+        :icon="mobile"
+        :stacked=true
+      >
         <v-icon>
           {{ foot.icon }}
         </v-icon>
@@ -21,7 +26,10 @@
   </v-bottom-navigation>
 </template>
 
-<script setup lang="ts">
+<script
+  setup
+  lang="ts"
+>
 import { footerNavigation } from '../../configs/footer.js'
 import { reactive } from 'vue'
 import { useDisplay } from 'vuetify'

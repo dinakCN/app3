@@ -1,3 +1,5 @@
+import { Units } from "./UnitsInterfase"
+
 interface Tarif {
   type: number,
   expir: string,
@@ -18,11 +20,6 @@ interface Limit {
   projects: number,
   templates: number,
   irows: number
-}
-
-interface Units {
-  size: number,
-  wght: number
 }
 
 interface Stats {
@@ -59,7 +56,6 @@ export {
   Tarif,
   User,
   Limit,
-  Units,
   Stats,
   Company,
   Config

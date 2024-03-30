@@ -8,10 +8,10 @@
 import { createRouter, createWebHistory } from 'vue-router/auto'
 import { setupLayouts } from 'virtual:generated-layouts'
 import { useUserStore } from '../stores/user'
+import { useProjectStore } from '../stores/project'
 
 const router = createRouter({
   history: createWebHistory(process.env.BASE_URL),
-  // routes,
   extendRoutes: setupLayouts,
 })
 
@@ -24,35 +24,38 @@ router.beforeEach(async (to, from) => {
     return window.location.href = to.meta.redirect
   }
 
-  // console.log(to)
+  /**
+   * MainPage
+   */
+  const mainPage = { name: 'main' }
 
   /**
    * Store
    */
   const storeUser = useUserStore()
+  const storeProject = useProjectStore()
 
   /**
-   * User Auth
+   * Auth?
    */
   if (!storeUser.user.id && to.meta.requiresAuth) {
 
     return storeUser.getConfig()
       .then((obj) => {
 
-        // console.log(obj)
+        const { last_project } = obj
 
-        if (!obj?.last_project) return { name: 'main' }
+        if (!last_project) return mainPage
 
-        // return storeUser.getProject(obj.last_project)
-        //   .then(
-        //     () => false,
-        //     () => { name: 'main' }
-        //   )
-      },
-        () => {
-          return { name: 'main' }
-        }
-      )
+        storeProject.getProject(last_project)
+          .catch(() => {
+            return mainPage
+          })
+
+      })
+      .catch(() => {
+        return mainPage
+      })
   }
 
   return true

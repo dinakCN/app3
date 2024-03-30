@@ -4,9 +4,12 @@
  * Configures SASS variables and Vuetify overwrites
  */
 
+// Button
+$btn-font-weight: 700 !default;
+
 // https://vuetifyjs.com/features/sass-variables/`
 @use 'vuetify/settings' with (
-
+  
   $font-size-root: 15px,
   $line-height-root: 1.5,
 
@@ -92,13 +95,16 @@
     23: (0px 9px 40px 8px rgba(85, 85, 85, 0.03)),
     24: (0px 9px 40px 8px rgba(85, 85, 85, 0.03))),
 
+  // Rounded
   $border-radius-root: 6px,
 
   // Spacing
-  $spacer: 8px,
+  $spacer: 6px,
 
   // Inputs and labels
   $label-font-size: 14px,
   $input-font-size: 14px,
 
+  // Card
+  $card-elevation: 2,
 )

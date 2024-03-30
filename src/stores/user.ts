@@ -39,6 +39,8 @@ export const useUserStore = defineStore('user', () => {
 
     const { tarif } = arr
 
+    if (!user?.tarif) return
+
     user.tarif.type = Object.freeze(tarif.type)
     user.tarif.expir = Object.freeze(tarif.expir)
     user.tarif.count = Object.freeze(tarif.count)

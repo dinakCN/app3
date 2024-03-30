@@ -1,12 +1,12 @@
 <template>
   <v-container>
     <v-row
-      ref="projects"
       justify="center"
       no-gutters
     >
       <v-col
         cols="12"
+        lg="10"
         xl="8"
       >
         <!-- header -->
@@ -272,7 +272,7 @@ const limit = toRef(appUser.config.limit)
  * Project store
  */
 const appProject = useProjectStore()
-const project_id = ref(appProject.id)
+const project_id = ref(appProject.project.id)
 
 /**
  * Projects store
@@ -290,7 +290,7 @@ onMounted(() => {
    * Проверка на загрузку проектов
    */
   if (!projectsCount.value) {
-    // console.log(vh.value)
+    console.log(project_id.value)
     appProjects.getProjectsList()
   }
 
