@@ -103,7 +103,7 @@ export const useProjectStore = defineStore('project', () => {
   }
 
   function setProjectLastModified(time) {
-    this.last_modified = new Date(time).getTime()
+    last_modified = new Date(time).getTime()
   }
 
   function clearProject() {
@@ -111,7 +111,7 @@ export const useProjectStore = defineStore('project', () => {
   }
 
   function changeProjectName(name: string = '') {
-    if (name) this.name = name
+    if (name) name = name
   }
 
   function addProject(name: string) {
@@ -131,7 +131,7 @@ export const useProjectStore = defineStore('project', () => {
 
           if (r.data.success) {
 
-            this.setProjectLastModified()
+            setProjectLastModified()
 
             resolve(r.data.object)
           } else {
@@ -182,7 +182,7 @@ export const useProjectStore = defineStore('project', () => {
 
           if (r.data.success) {
 
-            if (String(this.id) === String(id)) this.delProject2()
+            if (String(id) === String(id)) clearProject()
 
             resolve(r)
           } else {
@@ -199,7 +199,7 @@ export const useProjectStore = defineStore('project', () => {
 
       const param = {
         type: 'put',
-        id: arr?.id ? arr.id : this.id,
+        id: arr?.id ? arr.id : id,
         name: arr?.name ? arr.name : '',
         // data: arr?.alias ? state[arr.alias] : '',
         alias: arr?.alias ? arr.alias : '',
@@ -220,7 +220,7 @@ export const useProjectStore = defineStore('project', () => {
           // console.log(r)
 
           if (r.data.success) {
-            this.setProjectLastModified(r.data.object)
+            setProjectLastModified(r.data.object)
             resolve(r)
           } else {
             reject(r)
