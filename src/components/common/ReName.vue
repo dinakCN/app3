@@ -2,7 +2,6 @@
   <v-card
     class="rounded-lg pb-2"
     :class="[!head ? 'pt-2' : '']"
-    elevation="2"
   >
     <v-card-actions v-if="head">
       <span class="text-button font-weight-bold ml-1">
@@ -17,17 +16,17 @@
     >
       <v-text-field
         v-model="v$.name"
-        :label="$t(label)"
-        :hint="$t('item.name.hint')"
+        :label="t(label)"
+        :hint="t('item.name.hint')"
         :error-messages="nameErrors"
         :counter="config.max"
         required
         :max-length="config.max"
         clearable
         @click:clear="name = ''"
-        @input="v$.name.$touch()"
+        @input="v$.name.touch()"
         @change="nameLimiter()"
-        @blur="v$.name.$touch()"
+        @blur="v$.name.touch()"
       >
       </v-text-field>
       <v-btn
@@ -117,7 +116,7 @@ const nameErrors = computed(() => {
 })
 
 const nameLimiter = () => {
-  v$.name.$touch()
+  v$.name.touch()
 
   if (state.name === null) return
   if (state.name.length > config.max) state.name = state.name.substring(0, config.max)
@@ -125,7 +124,7 @@ const nameLimiter = () => {
 
 const submit = () => {
 
-  v$.$touch()
+  v$.touch()
 
   if (v$.validationGroup.$error) {
     return false
