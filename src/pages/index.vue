@@ -316,6 +316,7 @@ onMounted(() => {
        */
       if (project_id.value) {
         nextTick(() => scrollIntoView(project_id.value))
+
       }
     })
 
@@ -442,12 +443,14 @@ onMounted(() => {
 //   }
 // }
 
-const scrollIntoView = (id:number) => {
+const scrollIntoView = async (id:number) => {
 
   const list = document.getElementById('projects-list')
   console.log(list)
 
   if (list) {
+
+    list.scrollTop += 25
 
     const find = filterList.value.findIndex((i) => String(i.id) === String(id))
 
@@ -458,6 +461,13 @@ const scrollIntoView = (id:number) => {
       console.log(offset)
 
       if (offset > 0) {
+        await nextTick()
+        await nextTick()
+        await nextTick()
+
+        if (projectsList.value) projectsList.value.scrollTop = 150
+
+        console.log('123')
         list.scrollTo(0, offset)
 
         return
