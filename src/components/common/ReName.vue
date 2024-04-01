@@ -7,27 +7,27 @@
     <v-card-actions v-if="head">
       <span class="text-button font-weight-bold ml-1">
         {{ head }}
-      </span>     
+      </span>
     </v-card-actions>
 
     <!-- FORM -->
     <v-form
       class="mx-2 d-flex align-center"
       @submit.prevent="submit()"
-    >       
+    >
       <v-text-field
-        v-model="nm"
+        v-model="v$.name"
         :label="$t(label)"
-        :hint="$t('item.nm.hint')"  
-        :error-messages="nmErrors"
+        :hint="$t('item.name.hint')"
+        :error-messages="nameErrors"
         :counter="config.max"
         required
         :max-length="config.max"
         clearable
-        @click:clear="nm = ''"
-        @input="$v.nm.$touch()"
-        @change="nmLimiter()"
-        @blur="$v.nm.$touch()"
+        @click:clear="name = ''"
+        @input="v$.name.$touch()"
+        @change="nameLimiter()"
+        @blur="v$.name.$touch()"
       >
       </v-text-field>
       <v-btn
@@ -44,87 +44,100 @@
   </v-card>
 </template>
 
-<script>
-import { nm as nameConfig } from '@/configs/items.js'
-import { validationMixin } from 'vuelidate'
-import { required, maxLength } from 'vuelidate/lib/validators'
+<script
+  setup
+  lang="ts"
+>
+import { reactive, computed } from 'vue'
+import { useI18n } from "vue-i18n"
+import { useVuelidate } from '@vuelidate/core'
+import { required, maxLength } from '@vuelidate/validators'
+import { nm as config } from '../../configs/items.js'
+import { onMounted } from 'vue'
+import { onUnmounted } from 'vue'
 
-export default {
-  mixins: [validationMixin],
-  props: {
-    icon: {
-      type: String,
-      default: 'bx bxs-plus-circle'
-    },
-    color: {
-      type: String,
-      default: 'primary'
-    },
-    name: {
-      type: String,
-      default: ''
-    },
-    head: {
-      type: String,
-      default: ''
-    },
-    label: {
-      type: String,
-      default: 'common.name'
-    }
+const props = defineProps({
+  icon: {
+    type: String,
+    default: 'bx bxs-plus-circle'
   },
-  data() {
-    return {
-      config: nameConfig,
-      nm: this.name
-    }
+  color: {
+    type: String,
+    default: 'primary'
   },
-  computed: {
-    nmErrors () {
-      const errors = []
-
-      if (!this.$v.nm.$dirty) return errors
-      !this.$v.nm.maxLength && errors.push(this.$t('common.validation.maxLength') + ' ' + this.config.max)
-      !this.$v.nm.required && errors.push(this.$t('common.validation.required'))
-
-      return errors
-    }
+  name: {
+    type: String,
+    default: ''
   },
-  validations() {
-    return {
-      nm: { 
-        required,
-        maxLength: maxLength(this.config.max)
-      },
-      validationGroup: ['nm']
-    }
+  head: {
+    type: String,
+    default: ''
   },
-  mounted() {
-    this.$v.$reset()
-  },
-  beforeDestroy() {
-    this.$v.$reset()
-  },
-  methods: {
-    nmLimiter() {
-      this.$v.nm.$touch()
-      if (this.nm === null) return
-      if (this.nm.length > this.config.max) this.nm = this.nm.substring(0, this.config.max)
-    },
-    submit() {
-      this.$v.$touch()
-
-      if (this.$v.validationGroup.$error) {
-        return false
-      } 
-      
-      const name = this.nm
-
-      this.nm = ''
-      this.$v.$reset()      
-
-      return this.$emit('submit', name)
-    }
+  label: {
+    type: String,
+    default: 'common.name'
   }
+})
+
+onMounted(() => {
+  v$.$reset()
+})
+onUnmounted(() => {
+  v$.$reset()
+})
+
+/**
+ * Lang
+ */
+const { t } = useI18n()
+
+const state = reactive({
+  name: ''
+})
+
+const rules = computed(() => ({
+  name: {
+    required,
+    maxLength: maxLength(config.max)
+  }
+}))
+
+const v$ = useVuelidate(rules, state)
+
+const nameErrors = computed(() => {
+
+  const errors: Array<string | readonly string[] | null | undefined> = []
+
+  if (!v$.name.$dirty) return errors
+
+  !v$.name.maxLength && errors.push(t('common.validation.maxLength') + ' ' + config.max)
+  !v$.name.required && errors.push(t('common.validation.required'))
+
+  return errors
+})
+
+const nameLimiter = () => {
+  v$.name.$touch()
+
+  if (state.name === null) return
+  if (state.name.length > config.max) state.name = state.name.substring(0, config.max)
 }
+
+const submit = () => {
+
+  v$.$touch()
+
+  if (v$.validationGroup.$error) {
+    return false
+  }
+
+  const name = name
+
+  name = ''
+
+  v$.$reset()
+
+  return $emit('submit', name)
+}
+
 </script>

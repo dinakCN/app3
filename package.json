@@ -11,6 +11,8 @@
     "@mdi/font": "6.2.95",
     "@vue-youtube/component": "^0.0.6",
     "@vue-youtube/core": "^0.0.6",
+    "@vuelidate/core": "^2.0.3",
+    "@vuelidate/validators": "^2.0.4",
     "axios": "^1.6.8",
     "boxicons": "^2.1.4",
     "core-js": "^3.34.0",

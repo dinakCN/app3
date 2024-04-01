@@ -298,7 +298,7 @@ onMounted(() => {
   /**
    * Закрыть все уведомления
    */
-   storeApp.hideToast()
+  storeApp.hideToast()
 
   /**
    * Проверка на загрузку проектов
@@ -309,19 +309,17 @@ onMounted(() => {
      * Загрузить проекты
      */
     appProjects.getProjectsList()
-    .then(() => {
+      .then(() => {
 
-      /**
-       * Промотка окна до активного проекта
-       */
-      if (project_id.value) {
-        nextTick(() => scrollIntoView(project_id.value))
-
-      }
-    })
-
+        /**
+         * Промотка окна до активного проекта
+         */
+        if (project_id.value) {
+          nextTick()
+          setTimeout(() => scrollIntoView(project_id.value), 300)
+        }
+      })
   }
-
 })
 
 // const set = (id) => {
@@ -425,57 +423,40 @@ onMounted(() => {
 //   }
 // }
 
-// const setReName = async (obj) => {
-//   const { id, name } = obj
-//   const update = await $refs.dialogReName.open(name)
+const setReName = async (obj) => {
 
-//   if (update) {
-//     projects.forEach((i) => {
-//       if (String(i.id) === String(id)) i.name = update
-//     })
+  const { id, name } = obj
+  const update = await $refs.dialogReName.open(name)
 
-//     if (String(project.id) === String(id)) changeProjectName(update)
+  if (update) {
+    projects.forEach((i) => {
+      if (String(i.id) === String(id)) i.name = update
+    })
 
-//     loading = true
-//     putProject({ id, name: update })
-//       .then(() => removeProjectsStorage())
-//       .finally(() => loading = false)
-//   }
-// }
+    if (String(project.id) === String(id)) changeProjectName(update)
 
-const scrollIntoView = async (id:number) => {
+    loading = true
+    putProject({ id, name: update })
+      .then(() => removeProjectsStorage())
+      .finally(() => loading = false)
+  }
+}
+
+const scrollIntoView = (id: number) => {
 
   const list = document.getElementById('projects-list')
-  console.log(list)
 
-  if (list) {
+  if (!list) return
 
-    list.scrollTop += 25
+  const find = filterList.value.findIndex((i) => String(i.id) === String(id))
 
-    const find = filterList.value.findIndex((i) => String(i.id) === String(id))
+  if (find === -1) return
 
-    if (find !== -1) {
+  const offset = (find * 60) - Math.round(vh.value / 2)
 
-      const offset = (find * 60) - Math.round(vh.value / 2)
+  if (offset > 0) return list.scrollTo(0, offset)
 
-      console.log(offset)
-
-      if (offset > 0) {
-        await nextTick()
-        await nextTick()
-        await nextTick()
-
-        if (projectsList.value) projectsList.value.scrollTop = 150
-
-        console.log('123')
-        list.scrollTo(0, offset)
-
-        return
-      }
-    }
-  }
-
-  return
+  return list.scrollTo(0, 0)
 }
 
 /**
