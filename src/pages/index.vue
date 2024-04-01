@@ -111,8 +111,10 @@
         <v-card
           v-if="filterList.length || isFilter"
           rounded="lg"
-          class="overflow-y-auto"
+          id="projects-list"
+          ref="projectsList"
           :max-height="vh"
+          class="overflow-y-auto"
           style="min-height: 60px;"
         >
           <v-list
@@ -129,6 +131,7 @@
                   <v-list-item
                     link
                     height="60px"
+                    :id="item.id === project_id && 'project-active'"
                     :class="item.id === project_id && 'primary lighten-4'"
                     @click.stop="set(item.id)"
                   >
@@ -238,12 +241,12 @@
   lang="ts"
   setup
 >
-import { ref, reactive, computed, toRefs, toRef, onMounted } from "vue"
+import { ref, reactive, computed, toRefs, toRef, onMounted, nextTick } from "vue"
 import type { Ref } from 'vue'
 import { useUserStore } from '../stores/user'
 import { useProjectStore } from '../stores/project'
 import { useProjectsStore } from '../stores/projects'
-import { useCargoStore } from '../stores/cargo'
+import { useAppStore } from '../stores/app'
 import { useI18n } from "vue-i18n"
 import { useDisplay } from 'vuetify'
 import { ProjectInterface } from '../interfaces/ProjectInterface'
@@ -260,6 +263,11 @@ const vh = computed(() => mobile.value ? height.value - 395 : height.value - 460
  * Lang
  */
 const { t } = useI18n()
+
+/**
+ * App store
+ */
+const storeApp = useAppStore()
 
 /**
  * User Store
@@ -279,6 +287,7 @@ const project_id = ref(appProject.project.id)
  */
 const appProjects = useProjectsStore()
 const projects = computed(() => appProjects.store.projects)
+const projectsList = ref<HTMLElement | null>(null)
 
 const projectsCount: Ref<number> = computed(() => {
   return projects.value.length
@@ -287,11 +296,29 @@ const projectsCount: Ref<number> = computed(() => {
 onMounted(() => {
 
   /**
+   * Закрыть все уведомления
+   */
+   storeApp.hideToast()
+
+  /**
    * Проверка на загрузку проектов
    */
   if (!projectsCount.value) {
-    // console.log(project_id.value)
+
+    /**
+     * Загрузить проекты
+     */
     appProjects.getProjectsList()
+    .then(() => {
+
+      /**
+       * Промотка окна до активного проекта
+       */
+      if (project_id.value) {
+        nextTick(() => scrollIntoView(project_id.value))
+      }
+    })
+
   }
 
 })
@@ -415,11 +442,10 @@ onMounted(() => {
 //   }
 // }
 
-const scrollIntoView = (id) => {
-
-  if (!id) return false
+const scrollIntoView = (id:number) => {
 
   const list = document.getElementById('projects-list')
+  console.log(list)
 
   if (list) {
 
@@ -429,13 +455,17 @@ const scrollIntoView = (id) => {
 
       const offset = (find * 60) - Math.round(vh.value / 2)
 
-      if (offset > 0) return list.scrollTo(0, offset)
+      console.log(offset)
 
-      return list.scrollTo(0, 0)
+      if (offset > 0) {
+        list.scrollTo(0, offset)
+
+        return
+      }
     }
   }
 
-  return false
+  return
 }
 
 /**

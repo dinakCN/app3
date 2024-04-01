@@ -74,7 +74,7 @@ export const useProjectStore = defineStore('project', () => {
   }
 
   function getProject(id: number = 0) {
-    return new Promise((resolve, reject) => {
+    return new Promise<ProjectInterface>((resolve, reject) => {
 
       const appUser = useUserStore()
 
@@ -89,19 +89,17 @@ export const useProjectStore = defineStore('project', () => {
       })
         .then((r) => {
           if (r.data.success) {
-            // console.log(r.data.object)
             setProject(r.data.object)
-
-            resolve(r)
+            resolve(r.data.object)
           } else {
-            reject(r)
+            reject(null)
           }
         })
     })
   }
 
   function setProjectLastModified(time) {
-    last_modified = new Date(time).getTime()
+    project.last_modified = new Date(time)
   }
 
   function clearProject() {

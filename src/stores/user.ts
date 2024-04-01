@@ -28,11 +28,11 @@ export const useUserStore = defineStore('user', () => {
 
   function setConfigUser(arr) {
 
-    const { user } = arr
+    const { user:u } = arr
 
-    user.id = Object.freeze(user.id)
-    user.email = user?.email ? Object.freeze(user?.email) : Object.freeze('')
-    user.discount = user?.discount ? Object.freeze(Number(user.discount)) : Object.freeze(0)
+    user.id = Object.freeze(u.id)
+    user.email = u?.email ? Object.freeze(u?.email) : Object.freeze('')
+    user.discount = u?.discount ? Object.freeze(Number(u.discount)) : Object.freeze(0)
   }
 
   function setConfigLicense(arr) {

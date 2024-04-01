@@ -43,11 +43,14 @@ router.beforeEach(async (to, from) => {
     return storeUser.getConfig()
       .then((obj) => {
 
+        // console.log(obj)
+
         const { last_project } = obj
 
         if (!last_project) return mainPage
 
-        storeProject.getProject(last_project)
+        return storeProject.getProject(last_project)
+          .then(() => true)
           .catch(() => {
             return mainPage
           })
