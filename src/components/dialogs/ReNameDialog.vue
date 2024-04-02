@@ -12,7 +12,6 @@
 
       <v-form
         class="ma-2"
-        @submit.prevent="submit(state.name)"
       >
         <ReName
 

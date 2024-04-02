@@ -11,9 +11,9 @@
       clearable
       variant="plain"
       @click:clear="state.name = ''"
-      @input="v$.name.touch()"
+      @input="v$.value.name.touch()"
       @change="nameLimiter()"
-      @blur="v$.name.touch()"
+      @blur="v$.value.name.touch()"
       style="width:100%"
     >
     </v-text-field>
