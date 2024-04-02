@@ -228,7 +228,11 @@
       </v-col>
     </v-row>
 
-    <ReNameDialog ref="dialogRename" />
+    <ReNameDialog
+      ref="dialogName"
+      icon="bx bxs-check-circle"
+      color="primary"
+    />
   </v-container>
 </template>
 
@@ -355,7 +359,7 @@ onMounted(() => {
 // }
 
 // const create = async () => {
-//   const n = await $refs.dialogReName.open('')
+//   const n = await $refs.dialogName.open('')
 
 //   if (!n) return false
 
@@ -590,26 +594,27 @@ const changeOrder = () => {
 /**
  * Dialogs
  */
-const dialogRename = ref<HTMLElement | null>(null)
+const dialogName = ref(null)
 
 const setReName = async (obj: { name: string, id: number }) => {
 
   const { id, name } = obj
 
-  console.log(dialogRename.value.test())
+  if (!dialogName.value) return
 
-  if (!dialogRename.value) return
+  const update = await dialogName.value.open(name)
 
-  const update = await dialogRename.value.open(name)
+  console.log(update)
+
+  return
 
   if (update) {
+
     projects.forEach((i) => {
       if (String(i.id) === String(id)) i.name = update
     })
 
     if (String(project.id) === String(id)) changeProjectName(update)
-
-    loading = true
 
     putProject({ id, name: update })
       .then(() => removeProjectsStorage())

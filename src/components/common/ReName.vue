@@ -1,46 +1,23 @@
 <template>
-  <v-card
-    class="rounded-lg pb-2"
-    :class="[!head ? 'pt-2' : '']"
-  >
-    <v-card-actions v-if="head">
-      <span class="text-button font-weight-bold ml-1">
-        {{ head }}
-      </span>
-    </v-card-actions>
-
-    <!-- FORM -->
-    <v-form
-      class="mx-2 d-flex align-center"
-      @submit.prevent="submit()"
+  <span>
+    <v-text-field
+      v-model="state.name"
+      :label="t(label)"
+      :hint="t('item.name.hint')"
+      :error-messages="nameErrors"
+      :counter="config.max"
+      required
+      :max-length="config.max"
+      clearable
+      variant="plain"
+      @click:clear="state.name = ''"
+      @input="v$.name.touch()"
+      @change="nameLimiter()"
+      @blur="v$.name.touch()"
+      style="width:100%"
     >
-      <v-text-field
-        v-model="v$.name"
-        :label="t(label)"
-        :hint="t('item.name.hint')"
-        :error-messages="nameErrors"
-        :counter="config.max"
-        required
-        :max-length="config.max"
-        clearable
-        @click:clear="state.name = ''"
-        @input="v$.name.touch()"
-        @change="nameLimiter()"
-        @blur="v$.name.touch()"
-      >
-      </v-text-field>
-      <v-btn
-        icon
-        class="ml-1"
-        :color="color"
-        type="submit"
-      >
-        <v-icon x-large>
-          {{ icon }}
-        </v-icon>
-      </v-btn>
-    </v-form>
-  </v-card>
+    </v-text-field>
+  </span>
 </template>
 
 <script
@@ -56,33 +33,21 @@ import { onMounted } from 'vue'
 import { onUnmounted } from 'vue'
 
 const props = defineProps({
-  icon: {
-    type: String,
-    default: 'bx bxs-plus-circle'
-  },
-  color: {
-    type: String,
-    default: 'primary'
-  },
-  name: {
-    type: String,
-    default: ''
-  },
-  head: {
-    type: String,
-    default: ''
-  },
   label: {
     type: String,
     default: 'common.name'
+  },
+  name: {
+    type: String,
+    default: 'cs'
   }
 })
 
 onMounted(() => {
-  v$.$reset()
+  v$.value.$reset()
 })
 onUnmounted(() => {
-  v$.$reset()
+  v$.value.$reset()
 })
 
 /**
@@ -103,40 +68,42 @@ const rules = computed(() => ({
 
 const v$ = useVuelidate(rules, state)
 
+console.log(v$)
+
 const nameErrors = computed(() => {
 
   const errors: Array<string | readonly string[] | null | undefined> = []
 
-  if (!v$.name.$dirty) return errors
+  if (!v$.value.name.$dirty) return errors
 
-  !v$.name.maxLength && errors.push(t('common.validation.maxLength') + ' ' + config.max)
-  !v$.name.required && errors.push(t('common.validation.required'))
+  !v$.value.name.maxLength && errors.push(t('common.validation.maxLength') + ' ' + config.max)
+  !v$.value.name.required && errors.push(t('common.validation.required'))
 
   return errors
 })
 
 const nameLimiter = () => {
-  v$.name.touch()
+  v$.value.name.touch()
 
   if (state.name === null) return
   if (state.name.length > config.max) state.name = state.name.substring(0, config.max)
 }
 
-const submit = () => {
+const submit = (n: string) => {
 
-  v$.touch()
+  v$.value.touch()
 
-  if (v$.validationGroup.$error) {
+  if (v$.value.validationGroup.$error) {
     return false
   }
 
-  const name = name
+  const name = n
 
-  name = ''
+  // name = ''
 
-  v$.$reset()
+  // v$.value.$reset()
 
-  return $emit('submit', name)
+  // return $emit('submit', name)
 }
 
 </script>
