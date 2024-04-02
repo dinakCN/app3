@@ -227,6 +227,8 @@
 
       </v-col>
     </v-row>
+
+    <ReNameDialog ref="dialogRename" />
   </v-container>
 </template>
 
@@ -423,24 +425,6 @@ onMounted(() => {
 //   }
 // }
 
-const setReName = async (obj) => {
-
-  const { id, name } = obj
-  const update = await $refs.dialogReName.open(name)
-
-  if (update) {
-    projects.forEach((i) => {
-      if (String(i.id) === String(id)) i.name = update
-    })
-
-    if (String(project.id) === String(id)) changeProjectName(update)
-
-    loading = true
-    putProject({ id, name: update })
-      .then(() => removeProjectsStorage())
-      .finally(() => loading = false)
-  }
-}
 
 const scrollIntoView = (id: number) => {
 
@@ -601,6 +585,36 @@ const changeOrder = () => {
   if (order.value === 0) return order.value = 1
 
   return order.value = 0
+}
+
+/**
+ * Dialogs
+ */
+const dialogRename = ref<HTMLElement | null>(null)
+
+const setReName = async (obj: { name: string, id: number }) => {
+
+  const { id, name } = obj
+
+  console.log(dialogRename.value.test())
+
+  if (!dialogRename.value) return
+
+  const update = await dialogRename.value.open(name)
+
+  if (update) {
+    projects.forEach((i) => {
+      if (String(i.id) === String(id)) i.name = update
+    })
+
+    if (String(project.id) === String(id)) changeProjectName(update)
+
+    loading = true
+
+    putProject({ id, name: update })
+      .then(() => removeProjectsStorage())
+      .finally(() => loading = false)
+  }
 }
 
 /**

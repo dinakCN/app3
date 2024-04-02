@@ -23,7 +23,7 @@
         required
         :max-length="config.max"
         clearable
-        @click:clear="name = ''"
+        @click:clear="state.name = ''"
         @input="v$.name.touch()"
         @change="nameLimiter()"
         @blur="v$.name.touch()"

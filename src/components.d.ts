@@ -29,7 +29,7 @@ declare module 'vue' {
     NavMenuItem: typeof import('./components/navigation/NavMenuItem.vue')['default']
     PromoDialog: typeof import('./components/common/PromoDialog.vue')['default']
     ReName: typeof import('./components/common/ReName.vue')['default']
-    ReNameDialog: typeof import('./components/common/ReNameDialog.vue')['default']
+    ReNameDialog: typeof import('./components/dialogs/ReNameDialog.vue')['default']
     RouterLink: typeof import('vue-router')['RouterLink']
     RouterView: typeof import('vue-router')['RouterView']
     SceneDataLoads: typeof import('./components/cargo/SceneDataLoads.vue')['default']
