@@ -132,7 +132,8 @@
                     link
                     height="60px"
                     :id="item.id === project_id && 'project-active'"
-                    :class="item.id === project_id && 'primary lighten-4'"
+                    :active="item.id === project_id"
+                    color="light-blue-accent-3"
                     @click.stop="set(item.id)"
                   >
                     <template v-slot:prepend>
@@ -142,7 +143,6 @@
                         variant="text"
                         size="large"
                       >
-
                       </v-avatar>
                     </template>
 
@@ -170,7 +170,7 @@
                           size="small"
                           @click.stop="setReName({ name: item.name, id: item.id })"
                         >
-                          <v-icon size="20">mdi:mdi mdi-form-textbox</v-icon>
+                          <v-icon size="20" color="black">mdi:mdi mdi-form-textbox</v-icon>
                         </v-btn>
 
                         <!-- copy -->
@@ -180,7 +180,7 @@
                           size="small"
                           @click.stop="copy(item.id)"
                         >
-                          <v-icon size="20">mdi:mdi mdi-content-copy</v-icon>
+                          <v-icon size="20" color="black">mdi:mdi mdi-content-copy</v-icon>
                         </v-btn>
 
                         <!-- remove -->
@@ -190,7 +190,7 @@
                           size="small"
                           @click.stop="remove(item.id)"
                         >
-                          <v-icon size="20">mdi:mdi mdi-trash-can-outline</v-icon>
+                          <v-icon size="20" color="black">mdi:mdi mdi-trash-can-outline</v-icon>
                         </v-btn>
                       </div>
                     </template>
@@ -263,7 +263,7 @@ import HelpButton from "../components/brief/HelpButton.vue"
  */
 const { mobile, height } = useDisplay()
 
-const vh = computed(() => mobile.value ? height.value - 395 : height.value - 460)
+const vh = computed(() => mobile.value ? height.value - 405 : height.value - 410)
 
 /**
  * Lang

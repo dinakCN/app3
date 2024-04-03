@@ -14,7 +14,8 @@
         class="ma-2"
       >
         <ReName
-
+          :name="state.name"
+          :label="label"
         />
       </v-form>
 

@@ -1,19 +1,20 @@
 <template>
   <span>
     <v-text-field
-      v-model="state.name"
+      v-model="name"
       :label="t(label)"
       :hint="t('item.name.hint')"
       :error-messages="nameErrors"
       :counter="config.max"
-      required
       :max-length="config.max"
       clearable
-      variant="plain"
-      @click:clear="state.name = ''"
-      @input="v$.value.name.touch()"
-      @change="nameLimiter()"
-      @blur="v$.value.name.touch()"
+      required
+      variant="underlined"
+      type="text"
+      @click:clear="name = ''"
+      @change="nameLimiter"
+      @input="fieldTouch"
+      @blur="fieldTouch"
       style="width:100%"
     >
     </v-text-field>
@@ -24,7 +25,7 @@
   setup
   lang="ts"
 >
-import { reactive, computed } from 'vue'
+import { ref, computed } from 'vue'
 import { useI18n } from "vue-i18n"
 import { useVuelidate } from '@vuelidate/core'
 import { required, maxLength } from '@vuelidate/validators'
@@ -39,7 +40,7 @@ const props = defineProps({
   },
   name: {
     type: String,
-    default: 'cs'
+    default: ''
   }
 })
 
@@ -55,9 +56,7 @@ onUnmounted(() => {
  */
 const { t } = useI18n()
 
-const state = reactive({
-  name: ''
-})
+const name = ref(props.name)
 
 const rules = computed(() => ({
   name: {
@@ -66,13 +65,13 @@ const rules = computed(() => ({
   }
 }))
 
-const v$ = useVuelidate(rules, state)
+const v$ = useVuelidate(rules, { name })
 
 console.log(v$)
 
 const nameErrors = computed(() => {
 
-  const errors: Array<string | readonly string[] | null | undefined> = []
+  const errors: Array<string | null > = []
 
   if (!v$.value.name.$dirty) return errors
 
@@ -83,15 +82,22 @@ const nameErrors = computed(() => {
 })
 
 const nameLimiter = () => {
-  v$.value.name.touch()
+  fieldTouch()
 
-  if (state.name === null) return
-  if (state.name.length > config.max) state.name = state.name.substring(0, config.max)
+  if (name.value === null) return
+  if (name.value.length > config.max) name.value = name.value.substring(0, config.max)
+}
+
+const fieldTouch = () => {
+
+  console.log('fieldTouch')
+
+  v$.value.$touch()
 }
 
 const submit = (n: string) => {
 
-  v$.value.touch()
+  fieldTouch()
 
   if (v$.value.validationGroup.$error) {
     return false
