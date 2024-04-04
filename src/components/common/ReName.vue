@@ -1,20 +1,23 @@
 <template>
   <span>
     <v-text-field
-      v-model="name"
+      v-model="data"
+      ref="textfield"
       :label="t(label)"
-      :hint="t('item.name.hint')"
-      :error-messages="nameErrors"
+      :color="color"
+      :hint="t('item.nm.hint')"
+      :error-messages="dataErrors"
       :counter="config.max"
       :max-length="config.max"
       clearable
+      clear-icon="mdi:mdi mdi-close"
       required
       variant="underlined"
       type="text"
-      @click:clear="name = ''"
-      @change="nameLimiter"
-      @input="fieldTouch"
-      @blur="fieldTouch"
+      @click:clear="clear()"
+      @input="v$.$touch()"
+      @blur="v$.$touch()"
+      @update:modelValue="update()"
       style="width:100%"
     >
     </v-text-field>
@@ -28,7 +31,7 @@
 import { ref, computed } from 'vue'
 import { useI18n } from "vue-i18n"
 import { useVuelidate } from '@vuelidate/core'
-import { required, maxLength } from '@vuelidate/validators'
+import { required, maxLength } from '../../plugins/vuelidate'
 import { nm as config } from '../../configs/items.js'
 import { onMounted } from 'vue'
 import { onUnmounted } from 'vue'
@@ -38,7 +41,7 @@ const props = defineProps({
     type: String,
     default: 'common.name'
   },
-  name: {
+  color: {
     type: String,
     default: ''
   }
@@ -56,60 +59,66 @@ onUnmounted(() => {
  */
 const { t } = useI18n()
 
-const name = ref(props.name)
+/**
+ * Модель
+ */
+const data = defineModel<String>('name', { default: '' })
+const textfield = ref(null)
 
 const rules = computed(() => ({
-  name: {
+  data: {
     required,
     maxLength: maxLength(config.max)
   }
 }))
 
-const v$ = useVuelidate(rules, { name })
+/**
+ * Vuelidate
+ */
+const v$ = useVuelidate(rules, { data })
 
-console.log(v$)
+/**
+ * Обработка ошибок
+ */
+const dataErrors = computed(() => {
+  const errors: any = []
 
-const nameErrors = computed(() => {
+  if (!v$.value.$dirty) return errors
+  if (!v$.value.$errors.length) return errors
 
-  const errors: Array<string | null > = []
-
-  if (!v$.value.name.$dirty) return errors
-
-  !v$.value.name.maxLength && errors.push(t('common.validation.maxLength') + ' ' + config.max)
-  !v$.value.name.required && errors.push(t('common.validation.required'))
+  v$.value.$errors.forEach(e => {
+    errors.push(e.$message)
+  })
 
   return errors
 })
 
-const nameLimiter = () => {
-  fieldTouch()
+/**
+ * onUpdate
+ */
+const update = () => {
 
-  if (name.value === null) return
-  if (name.value.length > config.max) name.value = name.value.substring(0, config.max)
-}
-
-const fieldTouch = () => {
-
-  console.log('fieldTouch')
-
-  v$.value.$touch()
-}
-
-const submit = (n: string) => {
-
-  fieldTouch()
-
-  if (v$.value.validationGroup.$error) {
-    return false
+  /**
+   * Check lenght
+   */
+  if (data === null) return
+  if (data.length > config.max) {
+    data.value = data.value.substring(0, config.max)
   }
-
-  const name = n
-
-  // name = ''
-
-  // v$.value.$reset()
-
-  // return $emit('submit', name)
 }
+
+/**
+ * Очистка
+ */
+const clear = () => {
+  data.value = ''
+}
+
+/**
+ * Внещний доступ к методам
+ */
+defineExpose({
+  textfield,
+})
 
 </script>

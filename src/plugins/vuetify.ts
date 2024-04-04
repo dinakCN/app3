@@ -22,6 +22,10 @@ const myCustomLightTheme: ThemeDefinition = {
   colors: {
     background: '#F2F5F8',
     surface: '#FFFFFF',
+    error: '#ff5252',
+    primary: '#1976d2',
+    'primary-lighten-4': '#a8e0ff',
+    'primary-lighten-5': '#c7fdff',
 
     // 'surface-variant': '#ffff00',
     // 'on-surface-variant': '#ffffff',

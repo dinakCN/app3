@@ -4,38 +4,37 @@
     width="auto"
   >
     <v-card
-      max-width="560"
+      max-width="580"
       min-width="400"
-      prepend-icon="mdi:mdi mdi-update"
+      :prepend-icon="head ? 'mdi:mdi mdi-update' : ''"
       :title="head"
     >
-
-      <v-form
-        class="ma-2"
-      >
+      <v-form class="mx-3 mt-1">
         <ReName
-          :name="state.name"
+          ref="data"
+          v-model:name="state.name"
           :label="label"
+          color="primary"
         />
       </v-form>
-
       <template v-slot:actions>
         <v-spacer></v-spacer>
         <v-btn
-          text="Close"
+          :text="t('common.close')"
           variant="plain"
+          size="small"
           @click="close()"
         ></v-btn>
         <v-btn
           color="primary"
-          text="Save"
-          variant="tonal"
-          @click="submit(state.name)"
+          :text="t('common.save')"
+          variant="text"
+          size="small"
+          class="mr-1"
+          @click="submit()"
         ></v-btn>
       </template>
-
     </v-card>
-
   </v-dialog>
 </template>
 
@@ -44,7 +43,9 @@
   setup
   lang="ts"
 >
-import { reactive } from 'vue'
+import { reactive, ref } from 'vue'
+import { useI18n } from "vue-i18n"
+import { useVuelidate } from '@vuelidate/core'
 
 const props = defineProps({
   icon: {
@@ -65,6 +66,16 @@ const props = defineProps({
   }
 })
 
+/*
+* Lang
+*/
+const { t } = useI18n()
+
+/**
+ * Valid
+ */
+const v$ = useVuelidate()
+
 const state = reactive({
   dialog: false as boolean | undefined,
   name: '' as string,
@@ -72,14 +83,46 @@ const state = reactive({
   reject: null as any
 })
 
-const submit = (name: string) => {
+const data = ref<HTMLFormElement | null>(null)
+
+const submit = async () => {
+
+  v$.value.$touch()
+
+  const isFormCorrect = await v$.value.$validate()
+
+  if (!isFormCorrect) return false
+
   state.dialog = false
-  state.resolve(name)
+  state.resolve(state.name)
 }
+
+/**
+const submit = async (n: string) => {
+
+  const isFormCorrect = await v$.value.$validate()
+
+  if (!isFormCorrect) return false
+
+
+
+  const name = n
+
+  // name = ''
+
+  // v$.value.$reset()
+
+  // return $emit('submit', name)
+}
+ */
 
 const open = (name: string) => {
   state.dialog = true
   state.name = name
+
+  setTimeout(() => {
+    if (data?.value?.textfield) data.value.textfield.focus()
+  }, 200)
 
   return new Promise((resolve, reject) => {
     state.resolve = resolve
