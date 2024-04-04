@@ -10,15 +10,9 @@ import ru from '../translations/ru'
 const messages = {
   en: {
     ...en,
-    $vuetify: {
-      ...en,
-    },
   },
   ru: {
     ...ru,
-    $vuetify: {
-      ...ru,
-    },
   },
 }
 

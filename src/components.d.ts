@@ -25,6 +25,7 @@ declare module 'vue' {
     LoadsTemplates: typeof import('./components/templates/LoadsTemplates.vue')['default']
     MainMenu: typeof import('./components/navigation/MainMenu.vue')['default']
     MoveDialog: typeof import('./components/common/MoveDialog.vue')['default']
+    NameField: typeof import('./components/forms/NameField.vue')['default']
     NavMenu: typeof import('./components/navigation/NavMenu.vue')['default']
     NavMenuItem: typeof import('./components/navigation/NavMenuItem.vue')['default']
     PromoDialog: typeof import('./components/common/PromoDialog.vue')['default']

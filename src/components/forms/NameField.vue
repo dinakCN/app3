@@ -1,27 +1,25 @@
 <template>
-  <span>
-    <v-text-field
-      v-model="data"
-      ref="textfield"
-      :label="t(label)"
-      :color="color"
-      :hint="t('item.nm.hint')"
-      :error-messages="dataErrors"
-      :counter="config.max"
-      :max-length="config.max"
-      clearable
-      clear-icon="mdi:mdi mdi-close"
-      required
-      variant="underlined"
-      type="text"
-      @click:clear="clear()"
-      @input="v$.$touch()"
-      @blur="v$.$touch()"
-      @update:modelValue="update()"
-      style="width:100%"
-    >
-    </v-text-field>
-  </span>
+  <v-text-field
+    v-model="data"
+    ref="textfield"
+    :label="t(label)"
+    :color="color"
+    :hint="t('item.nm.hint')"
+    :error-messages="dataErrors"
+    :counter="config.max"
+    :max-length="config.max"
+    clearable
+    clear-icon="mdi:mdi mdi-close"
+    required
+    variant="underlined"
+    type="text"
+    @click:clear="clear()"
+    @input="v$.$touch()"
+    @blur="v$.$touch()"
+    @update:modelValue="update()"
+    style="width:100%"
+  >
+  </v-text-field>
 </template>
 
 <script

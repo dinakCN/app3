@@ -219,7 +219,7 @@
             size="default"
             color="primary"
             prepend-icon="mdi:mdi mdi-plus-box-multiple"
-            @click.stop="() => true"
+            @click.stop="create()"
           >
             {{ t('project.create') }}
           </v-btn>
@@ -594,14 +594,11 @@ const changeOrder = () => {
 /**
  * Dialogs
  */
-const dialogName = ref(null)
+const dialogName = ref<any>(null)
 
 const setReName = async (obj: { name: string, id: number }) => {
 
   const { id, name } = obj
-
-  if (!dialogName.value) return
-
   const update = await dialogName.value.open(name)
 
   console.log(update)
@@ -621,6 +618,34 @@ const setReName = async (obj: { name: string, id: number }) => {
       .finally(() => loading = false)
   }
 }
+
+const create = async () => {
+
+const n = await dialogName.value.open(t('project.val'))
+
+  if (!n) return false
+
+  return add(n)
+}
+
+// const add = (n) => {
+//   loading = true
+
+//   addProject(n)
+//     .then((r) => {
+
+//       getList(true, true, r.id)
+//       $metrika.reachGoal('add.project')
+
+//     }, (message) => {
+//       addError(message)
+//     })
+//     .finally(() => {
+//       loading = false
+//     })
+// }
+
+
 
 /**
  * Metrika

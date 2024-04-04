@@ -4,13 +4,12 @@
     width="auto"
   >
     <v-card
-      max-width="580"
-      min-width="400"
+      min-width="410"
       :prepend-icon="head ? 'mdi:mdi mdi-update' : ''"
       :title="head"
     >
       <v-form class="mx-3 mt-1">
-        <ReName
+        <NameField
           ref="data"
           v-model:name="state.name"
           :label="label"
@@ -87,34 +86,17 @@ const data = ref<HTMLFormElement | null>(null)
 
 const submit = async () => {
 
-  v$.value.$touch()
+  v$.value.$reset()
 
   const isFormCorrect = await v$.value.$validate()
 
   if (!isFormCorrect) return false
 
-  state.dialog = false
   state.resolve(state.name)
+  state.dialog = false
+
+  return true
 }
-
-/**
-const submit = async (n: string) => {
-
-  const isFormCorrect = await v$.value.$validate()
-
-  if (!isFormCorrect) return false
-
-
-
-  const name = n
-
-  // name = ''
-
-  // v$.value.$reset()
-
-  // return $emit('submit', name)
-}
- */
 
 const open = (name: string) => {
   state.dialog = true
