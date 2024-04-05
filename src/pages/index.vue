@@ -79,7 +79,6 @@
             selected-class="text-primary"
             mandatory
             variant="tonal"
-            :disabled="loading"
           >
             <template
               v-for="i in sortList"
@@ -102,7 +101,6 @@
             variant="tonal"
             color="primary"
             :append-icon="orderData.icon"
-            :disabled="loading"
             @click.stop="changeOrder"
           >
             {{ orderData.name }}
@@ -641,7 +639,6 @@ const n = await dialogName.value.open(t('project.val'))
 }
 
 const set = (id: number) => {
-
   /**
    * Проверка
    */

@@ -73,7 +73,6 @@ export const useProjectStore = defineStore('project', () => {
       project.loads = loads
     }
 
-    console.log(project.id)
   }
 
   function getProject(id: number = 0) {
@@ -98,11 +97,8 @@ export const useProjectStore = defineStore('project', () => {
       })
         .then((r) => {
           if (r.data.success) {
-
             // console.log(r.data.object)
-
             setProject(r.data.object)
-
             resolve(r.data.object)
           } else {
             reject(null)
