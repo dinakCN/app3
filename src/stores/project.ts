@@ -124,6 +124,12 @@ export const useProjectStore = defineStore('project', () => {
     return new Promise((resolve, reject) => {
 
       const appUser = useUserStore()
+      const storeApp = useAppStore()
+
+      /**
+       * Индикатор загрузки
+       */
+      storeApp.setLoading(true)
 
       const params = {
         user: appUser.user,
@@ -133,17 +139,18 @@ export const useProjectStore = defineStore('project', () => {
       axios.post('/project', params)
         .then((r) => {
 
-          // console.log(r)
+          console.log(r)
 
           if (r.data.success) {
 
-            setProjectLastModified()
+            // setProjectLastModified()
 
             resolve(r.data.object)
           } else {
             reject(r.data.message)
           }
         })
+        .finally(() => storeApp.setLoading(false))
     })
   }
 

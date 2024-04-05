@@ -19,11 +19,6 @@ export const useProjectsStore = defineStore('projects', () => {
       const storeApp = useAppStore()
 
       /**
-       * Очистить все проекты
-       */
-      store.projects = []
-
-      /**
        * Индикатор загрузки
        */
       storeApp.setLoading(true)
@@ -37,7 +32,7 @@ export const useProjectsStore = defineStore('projects', () => {
         .then((r) => {
           if (r.data.success) {
 
-            store.projects = [...r.data.object]
+            store.projects = r.data.object
             resolve(null)
 
           } else {

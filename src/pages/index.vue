@@ -115,7 +115,6 @@
           id="projects-list"
           ref="projectsList"
           :max-height="vh"
-          :disabled="loading"
           class="overflow-y-auto"
           style="min-height: 60px;"
         >
@@ -220,7 +219,6 @@
             size="default"
             color="primary"
             prepend-icon="mdi:mdi mdi-plus-box-multiple"
-            :disabled="loading"
             @click.stop="create()"
           >
             {{ t('project.create') }}
@@ -337,44 +335,6 @@ onMounted(() => {
       })
   }
 })
-
-// const set = (id) => {
-//   if (String(project.id) === String(id)) return $router.push('/cargo')
-
-//   loading = true
-
-//   return getProject(id)
-//     .then(() => {
-//       loading = false
-
-//       $router.push('/cargo')
-//     })
-// }
-
-// const add = (n) => {
-//   loading = true
-
-//   addProject(n)
-//     .then((r) => {
-
-//       getList(true, true, r.id)
-//       $metrika.reachGoal('add.project')
-
-//     }, (message) => {
-//       addError(message)
-//     })
-//     .finally(() => {
-//       loading = false
-//     })
-// }
-
-// const create = async () => {
-//   const n = await $refs.dialogName.open('')
-
-//   if (!n) return false
-
-//   return add(n)
-// }
 
 // const copy = (id) => {
 //   loading = true
@@ -636,6 +596,33 @@ const n = await dialogName.value.open(t('project.val'))
   if (!n) return false
 
   return add(n)
+}
+
+const add = (n: string) => {
+  return appProject.addProject(n)
+    .then((r) => {
+
+      /**
+       * Загрузить проекты
+       */
+      appProjects.getProjectsList()
+      .then(() => {
+
+        /**
+         * Плавная промотка до нового проекта
+         */
+        nextTick()
+        setTimeout(() => scrollIntoView(r?.id), 200)
+      })
+
+      /**
+       * Metrics
+       */
+       // $metrika.reachGoal('add.project')
+
+    }, (message) => {
+      addError(message)
+    })
 }
 
 const set = (id: number) => {
