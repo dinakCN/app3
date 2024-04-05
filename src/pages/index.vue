@@ -612,7 +612,7 @@ const add = (n: string) => {
          * Плавная промотка до нового проекта
          */
         nextTick()
-        setTimeout(() => scrollIntoView(r?.id), 200)
+        // setTimeout(() => scrollIntoView(r?.id), 200)
       })
 
       /**
