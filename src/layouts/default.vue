@@ -69,6 +69,6 @@ import { useAppStore } from '../stores/app'
 
 const drawer = ref(false)
 const appStore = useAppStore()
-const loading = computed(() => Boolean(appStore.loading.data))
+const loading = computed(() => Boolean(appStore.loading))
 
 </script>

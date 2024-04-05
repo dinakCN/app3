@@ -14,6 +14,7 @@
           <v-card
             v-if="projectsCount"
             class="rounded-lg"
+            :disabled="loading"
           >
             <!-- head -->
             <v-card-actions class="d-flex align-center pt-1">
@@ -78,6 +79,7 @@
             selected-class="text-primary"
             mandatory
             variant="tonal"
+            :disabled="loading"
           >
             <template
               v-for="i in sortList"
@@ -100,6 +102,7 @@
             variant="tonal"
             color="primary"
             :append-icon="orderData.icon"
+            :disabled="loading"
             @click.stop="changeOrder"
           >
             {{ orderData.name }}
@@ -114,11 +117,12 @@
           id="projects-list"
           ref="projectsList"
           :max-height="vh"
+          :disabled="loading"
           class="overflow-y-auto"
           style="min-height: 60px;"
         >
           <v-list
-            variant="flat"
+            variant="text"
             lines="one"
             class="py-0"
           >
@@ -133,13 +137,12 @@
                     height="60px"
                     :id="item.id === project_id && 'project-active'"
                     :active="item.id === project_id"
-                    color="light-blue-accent-3"
+                    color="primary"
                     @click.stop="set(item.id)"
                   >
                     <template v-slot:prepend>
                       <v-avatar
                         :icon="item.id === project_id ? 'mdi:mdi mdi-folder-open' : 'mdi:mdi mdi-folder-outline'"
-                        color="black"
                         variant="text"
                         size="large"
                       >
@@ -170,7 +173,7 @@
                           size="small"
                           @click.stop="setReName({ name: item.name, id: item.id })"
                         >
-                          <v-icon size="20" color="black">mdi:mdi mdi-form-textbox</v-icon>
+                          <v-icon size="20">mdi:mdi mdi-form-textbox</v-icon>
                         </v-btn>
 
                         <!-- copy -->
@@ -180,7 +183,7 @@
                           size="small"
                           @click.stop="copy(item.id)"
                         >
-                          <v-icon size="20" color="black">mdi:mdi mdi-content-copy</v-icon>
+                          <v-icon size="20">mdi:mdi mdi-content-copy</v-icon>
                         </v-btn>
 
                         <!-- remove -->
@@ -190,7 +193,7 @@
                           size="small"
                           @click.stop="remove(item.id)"
                         >
-                          <v-icon size="20" color="black">mdi:mdi mdi-trash-can-outline</v-icon>
+                          <v-icon size="20">mdi:mdi mdi-trash-can-outline</v-icon>
                         </v-btn>
                       </div>
                     </template>
@@ -219,6 +222,7 @@
             size="default"
             color="primary"
             prepend-icon="mdi:mdi mdi-plus-box-multiple"
+            :disabled="loading"
             @click.stop="create()"
           >
             {{ t('project.create') }}
@@ -253,17 +257,22 @@ import { useUserStore } from '../stores/user'
 import { useProjectStore } from '../stores/project'
 import { useProjectsStore } from '../stores/projects'
 import { useAppStore } from '../stores/app'
+import { useRoute, useRouter } from 'vue-router'
 import { useI18n } from "vue-i18n"
 import { useDisplay } from 'vuetify'
 import { ProjectInterface } from '../interfaces/ProjectInterface'
 import HelpButton from "../components/brief/HelpButton.vue"
 
 /**
- * Flag mobile
+ * Mobile, Height
  */
 const { mobile, height } = useDisplay()
-
 const vh = computed(() => mobile.value ? height.value - 405 : height.value - 410)
+
+/**
+ * Router
+ */
+const router = useRouter()
 
 /**
  * Lang
@@ -274,6 +283,9 @@ const { t } = useI18n()
  * App store
  */
 const storeApp = useAppStore()
+const loading = computed(() => {
+  return Boolean(storeApp.loading)
+})
 
 /**
  * User Store
@@ -286,7 +298,7 @@ const limit = toRef(appUser.config.limit)
  * Project store
  */
 const appProject = useProjectStore()
-const project_id = ref(appProject.project.id)
+const project_id = computed(() => appProject.project.id)
 
 /**
  * Projects store
@@ -626,6 +638,17 @@ const n = await dialogName.value.open(t('project.val'))
   if (!n) return false
 
   return add(n)
+}
+
+const set = (id: number) => {
+
+  /**
+   * Проверка
+   */
+  // if (String(project_id) === String(id)) return router.push('/cargo')
+
+  return appProject.getProject(id)
+    // .then(() =>  router.push('/cargo'))
 }
 
 // const add = (n) => {

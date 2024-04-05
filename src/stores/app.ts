@@ -1,6 +1,6 @@
 // Utilities
 import { defineStore } from 'pinia'
-import { reactive } from 'vue'
+import { reactive, ref } from 'vue'
 
 export const useAppStore = defineStore('app', () => {
 
@@ -12,12 +12,10 @@ export const useAppStore = defineStore('app', () => {
   /**
    * Loading
    */
-  const loading = reactive({
-    data: false as Boolean
-  })
+  const loading = ref<Boolean>(false)
 
   function setLoading(bool: Boolean = false) {
-    loading.data = bool
+    loading.value = bool
   }
 
   /**

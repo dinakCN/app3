@@ -2,6 +2,7 @@
 import { defineStore } from 'pinia'
 import { reactive, ref } from 'vue'
 import { useUserStore } from './user'
+import { useAppStore } from './app'
 import axios from '../plugins/axios'
 import { ProjectInterface } from '../interfaces/ProjectInterface'
 
@@ -71,12 +72,20 @@ export const useProjectStore = defineStore('project', () => {
     if (loads?.length) {
       project.loads = loads
     }
+
+    console.log(project.id)
   }
 
   function getProject(id: number = 0) {
     return new Promise<ProjectInterface>((resolve, reject) => {
 
       const appUser = useUserStore()
+      const storeApp = useAppStore()
+
+      /**
+       * Индикатор загрузки
+       */
+      storeApp.setLoading(true)
 
       const params = {
         user: appUser.user,
@@ -89,12 +98,17 @@ export const useProjectStore = defineStore('project', () => {
       })
         .then((r) => {
           if (r.data.success) {
+
+            // console.log(r.data.object)
+
             setProject(r.data.object)
+
             resolve(r.data.object)
           } else {
             reject(null)
           }
         })
+        .finally(() => storeApp.setLoading(false))
     })
   }
 
