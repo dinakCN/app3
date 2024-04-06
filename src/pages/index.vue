@@ -330,7 +330,7 @@ onMounted(() => {
          */
         if (project_id.value) {
           nextTick()
-          setTimeout(() => scrollIntoView(project_id.value), 300)
+          setTimeout(() => scrollIntoView(project_id.value, false), 300)
         }
       })
   }
@@ -555,19 +555,16 @@ const setReName = async (obj: { name: string, id: number }) => {
 
   console.log(update)
 
-  return
-
   if (update) {
 
-    projects.forEach((i) => {
-      if (String(i.id) === String(id)) i.name = update
+    projects.value.forEach((i: ProjectInterface) => {
+      if (i.id === id) i.name = update
     })
 
-    if (String(project.id) === String(id)) changeProjectName(update)
+    if (project_id.value === id) appProject.changeProjectName(update)
 
-    putProject({ id, name: update })
-      .then(() => removeProjectsStorage())
-      .finally(() => loading = false)
+    appProject.putProject({ id, name: update })
+      .then(() => appProjects.getProjectsList())
   }
 }
 
