@@ -132,7 +132,7 @@
                   <v-list-item
                     link
                     height="60px"
-                    :id="item.id === project_id && 'project-active'"
+                    :id="item.id"
                     :active="item.id === project_id"
                     color="primary"
                     @click.stop="set(item.id)"
@@ -399,24 +399,6 @@ onMounted(() => {
 //   }
 // }
 
-
-const scrollIntoView = (id: number) => {
-
-  const list = document.getElementById('projects-list')
-
-  if (!list) return
-
-  const find = filterList.value.findIndex((i) => String(i.id) === String(id))
-
-  if (find === -1) return
-
-  const offset = (find * 60) - Math.round(vh.value / 2)
-
-  if (offset > 0) return list.scrollTo(0, offset)
-
-  return list.scrollTo(0, 0)
-}
-
 /**
  * Filter
  */
@@ -591,14 +573,44 @@ const setReName = async (obj: { name: string, id: number }) => {
 
 const create = async () => {
 
-const n = await dialogName.value.open(t('project.val'))
+  const n = await dialogName.value.open(t('project.val'))
 
   if (!n) return false
 
   return add(n)
 }
 
-const add = (n: string) => {
+
+const scrollIntoView = (id: number, smooth: boolean = false) => {
+
+  const list = document.getElementById('projects-list')
+
+  if (!list) return
+
+  const find = filterList.value.findIndex((i) => String(i.id) === String(id))
+
+  if (find === -1) return
+
+  const offset = (find * 60) - Math.round(vh.value / 2)
+
+  if (offset > 0)
+
+    if (smooth) {
+
+      return list.scrollTo({
+        top: offset,
+        left: 0,
+        behavior: "smooth",
+      })
+
+    } else {
+      return list.scrollTo(0, offset)
+    }
+
+  return list.scrollTo(0, 0)
+}
+
+const add = async (n: string) => {
   return appProject.addProject(n)
     .then((r) => {
 
@@ -606,23 +618,24 @@ const add = (n: string) => {
        * Загрузить проекты
        */
       appProjects.getProjectsList()
-      .then(() => {
+        .then(() => {
 
-        /**
-         * Плавная промотка до нового проекта
-         */
-        nextTick()
-        // setTimeout(() => scrollIntoView(r?.id), 200)
-      })
+          /**
+           * Плавная промотка до нового проекта
+           */
+          nextTick()
+          setTimeout(() => {
+            scrollIntoView(r.id, true)
+          }, 100)
+        })
 
       /**
        * Metrics
        */
-       // $metrika.reachGoal('add.project')
+      // $metrika.reachGoal('add.project')
 
-    }, (message) => {
-      addError(message)
     })
+    .catch((message) => addError(message))
 }
 
 const set = (id: number) => {
@@ -632,7 +645,7 @@ const set = (id: number) => {
   // if (String(project_id) === String(id)) return router.push('/cargo')
 
   return appProject.getProject(id)
-    // .then(() =>  router.push('/cargo'))
+  // .then(() =>  router.push('/cargo'))
 }
 
 // const add = (n) => {

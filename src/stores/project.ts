@@ -5,6 +5,7 @@ import { useUserStore } from './user'
 import { useAppStore } from './app'
 import axios from '../plugins/axios'
 import { ProjectInterface } from '../interfaces/ProjectInterface'
+import { AxiosObjectReturn, AxiosAddProject, AxiosAddProjectObject } from '../interfaces/AxiosInterface'
 
 export const useProjectStore = defineStore('project', () => {
 
@@ -108,7 +109,7 @@ export const useProjectStore = defineStore('project', () => {
     })
   }
 
-  function setProjectLastModified(time) {
+  function setProjectLastModified(time: string) {
     project.last_modified = new Date(time)
   }
 
@@ -121,7 +122,7 @@ export const useProjectStore = defineStore('project', () => {
   }
 
   function addProject(name: string) {
-    return new Promise((resolve, reject) => {
+    return new Promise<AxiosAddProjectObject | string>((resolve, reject) => {
 
       const appUser = useUserStore()
       const storeApp = useAppStore()
@@ -139,12 +140,8 @@ export const useProjectStore = defineStore('project', () => {
       axios.post('/project', params)
         .then((r) => {
 
-          console.log(r)
-
           if (r.data.success) {
-
-            // setProjectLastModified()
-
+            // setProjectLastModified(r.data.object.last_modified)
             resolve(r.data.object)
           } else {
             reject(r.data.message)
