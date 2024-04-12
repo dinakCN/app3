@@ -2,6 +2,7 @@
   <v-btn
     icon
     size="40"
+    variant="text"
     @click.stop="open()"
   >
     <v-icon>mdi:mdi mdi-help-circle-outline</v-icon>
