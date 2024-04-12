@@ -174,13 +174,17 @@ onMounted(() => {
 /**
  * Drawer
  */
-const drawer = mobile ? false : true
+const drawer = ref(mobile ? false : true)
 const drawerMargin = 380 - 18
 const drawerStyle = computed(() => {
   if (mobile) return ''
-  if (drawer) return `max-width:calc(100% - ${drawerMargin}px)`
+  if (drawer.value) return `max-width:calc(100% - ${drawerMargin}px)`
   return ''
 })
+const setDrawer = () => {
+  drawer.value = !drawer.value
+}
+
 
 /**
  * Canvas
