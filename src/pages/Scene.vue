@@ -73,6 +73,56 @@
           </v-btn>
         </v-sheet>
 
+        <!-- TOP RIGHT -->
+        <v-sheet
+          v-if="!sceneMaxPage"
+          color="transparent"
+          class="d-flex align-center"
+          style="position: absolute; z-index: 1; right: 48px; top: 0;"
+        >
+
+          <v-btn
+            v-if="route.name === 'scene' && !mobile"
+            variant="text"
+            rounded
+            size="small"
+            color="primary"
+            prepend-icon="mdi:mdi mdi-cog"
+            :disabled="Boolean(step.value) || setting.value"
+            @click="setting.value = true"
+          >
+            Настройки
+          </v-btn>
+
+          <v-btn
+            variant="text"
+            rounded
+            size="small"
+            color="primary"
+            prepend-icon="mdi:mdi mdi-cog"
+            :disabled="Boolean(step.value) || setting.value"
+            @click="startStep()"
+          >
+            {{ t('scene.step.label') }}
+          </v-btn>
+
+        </v-sheet>
+
+        <!-- MENU BTN -->
+        <v-btn
+          v-show="!sceneMaxPage"
+          rounded="pill"
+          icon
+          size="40"
+          variant="text"
+          style="position: absolute; z-index: 1; right: 0; top: 0;"
+          @click="setDrawer()"
+        >
+          <v-icon>
+            mdi:mdi mdi-menu
+          </v-icon>
+        </v-btn>
+
       </div>
 
     </div>
@@ -116,6 +166,10 @@ const route = useRoute()
  * Lang
  */
 const { t } = useI18n()
+
+onMounted(() => {
+  console.log(route.name)
+})
 
 /**
  * Drawer
@@ -164,13 +218,44 @@ const project_id = computed(() => appProject.project.id)
  */
 const sceneMaxPage = ref(0)
 
-onMounted(() => {
-  console.log(route.name)
+/**
+ * Настройки сцены
+ */
+const setting = reactive({
+  value: false,
+  settingValue: [],
+  settingList: [{
+    value: 'snap',
+    text: t('scene.snap'),
+    desc: 'При перемешении места вручную, оно будет притягиваться к соседним местам или границам транспорта автоматически'
+  }, {
+    value: 'hang',
+    text: t('scene.hang'),
+    desc: ''
+  }]
 })
 
+/**
+ * Режим шагов загрузки
+ */
+const step = reactive({
+  value: 0,
+  stepMax: null,
+  stepType: 2,
+  stepTypeList: [
+    { value: 0, text: 'Верхняя загрузка' },
+    { value: 1, text: 'Боковая загрузка' },
+    { value: 2, text: 'Задняя загрузка' }
+  ]
+})
+
+const startStep = () => {
+  // this.step = 1
+  // this.makeStep()
+}
 
 /**
- * Toolbar
+ * Toolbar top
  */
 const reset = async () => {
 
