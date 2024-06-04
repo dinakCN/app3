@@ -28,7 +28,7 @@ declare module 'vue' {
     NameField: typeof import('./components/forms/NameField.vue')['default']
     NavMenu: typeof import('./components/navigation/NavMenu.vue')['default']
     NavMenuItem: typeof import('./components/navigation/NavMenuItem.vue')['default']
-    PromoDialog: typeof import('./components/common/PromoDialog.vue')['default']
+    PromoDialog: typeof import('./components/dialogs/PromoDialog.vue')['default']
     ReName: typeof import('./components/common/ReName.vue')['default']
     ReNameDialog: typeof import('./components/dialogs/ReNameDialog.vue')['default']
     RouterLink: typeof import('vue-router')['RouterLink']

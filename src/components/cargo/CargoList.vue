@@ -15,10 +15,10 @@
               <v-chip
                 v-show="order"
                 key="order"
-                :color="getPoint[clid].color"
+                :color="point[clid].color"
                 class="text-caption font-weight-medium"
               >
-                <span v-if="!$vuetify.breakpoint.mobile">{{ $t('cargolist.header') }} # </span>{{ order ? order : '...' }}
+                <span v-if="!mobile">{{ t('cargolist.header') }} # </span>{{ order ? order : '...' }}
               </v-chip>
               <v-chip
                 v-if="!order"
@@ -29,7 +29,7 @@
                 close-icon="mdi-close"
                 @click:close="changeView()"
               >
-                {{ this.$t('cargolist.disable') }}
+                {{ t('cargolist.disable') }}
               </v-chip>
             </v-scale-transition>
 
@@ -37,20 +37,20 @@
 
           <v-col class="flex-grow-1 d-flex align-center">
             <v-btn
-              text
+              variant="text"
               rounded
               class="ml-1"
-              :class="[order ? getPoint[clid].color : 'white']"
-              :style="(!order && $vuetify.breakpoint.mobile) && 'display:none;'"
+              :class="[order ? point[clid].color : 'white']"
+              :style="(!order && mobile) && 'display:none;'"
               @click="renamePoint()"
             >
               <span
                 class="text-truncate text-caption font-weight-medium"
-                :style="$vuetify.breakpoint.mobile && 'max-width:120px'"
+                :style="mobile && 'max-width:120px'"
               >
-                {{ getPoint[clid]['name'] }}
+                {{ point[clid]['name'] }}
               </span>
-              <v-icon v-if="!$vuetify.breakpoint.mobile" small right >bx-rename</v-icon>
+              <v-icon v-if="!mobile" small right >bx-rename</v-icon>
             </v-btn>
           </v-col>
 
@@ -82,18 +82,18 @@
 
       <!-- MINI -->
       <v-card-text
-        v-if="getPoint[clid].mini && item.length > 0"
+        v-if="point[clid].mini && item.length > 0"
         class="d-flex align-center caption black--text lighten-3"
       >
-        <div>{{ this.$t('cargolist.windoff') }}</div>
+        <div>{{ this.t('cargolist.windoff') }}</div>
         <v-btn
-          text
+          variant="text"
           small
           class="caption mx-1"
           color="primary"
           @click="changeMini()"
         >
-          {{ this.$t('cargolist.windon') }}
+          {{ t('cargolist.windon') }}
         </v-btn>
         <v-spacer></v-spacer>
         <div>
@@ -102,7 +102,7 @@
       </v-card-text>
 
       <!-- BODY -->
-      <div v-if="!getPoint[clid].mini">
+      <div v-if="!point[clid].mini">
 
         <v-card-text v-show="item.length" class="py-0">
           <v-row no-gutters>
@@ -115,9 +115,9 @@
               ></v-checkbox>
             </v-col>
 
-            <v-col v-if="selected.length == 0 && !$vuetify.breakpoint.mobile && item.length" cols="auto" class="d-flex align-center">
+            <v-col v-if="selected.length == 0 && !mobile && item.length" cols="auto" class="d-flex align-center">
               <div class="caption mx-1">
-                {{ $t('common.selectall') }}
+                {{ t('common.selectall') }}
               </div>
             </v-col>
 
@@ -131,40 +131,40 @@
                   @click="editItems()"
                 >
                   <v-icon left>bx-edit</v-icon>
-                  <span>{{ $t('common.edit') }}</span>
+                  <span>{{ t('common.edit') }}</span>
                 </v-btn>
 
                 <v-btn
-                  text
+                  variant="text"
                   small
                   color="primary"
                   class="font-weight-medium px-1"
                   @click="moveItems()"
                 >
                   <v-icon left>bx-repost</v-icon>
-                  <span>{{ $t('common.move') }}</span>
+                  <span>{{ t('common.move') }}</span>
                 </v-btn>
 
                 <v-btn
-                  text
+                  variant="text"
                   small
                   color="primary"
                   class="font-weight-medium px-1"
                   @click="setTemplate()"
                 >
                   <v-icon left>bx bx-save</v-icon>
-                  <span>{{ $t('templates.tempsave') }}</span>
+                  <span>{{ t('templates.tempsave') }}</span>
                 </v-btn>
 
                 <v-btn
-                  text
+                  variant="text"
                   small
                   color="primary"
                   class="font-weight-medium px-1"
                   @click="removeItemsSelected()"
                 >
                   <v-icon left>bx-trash</v-icon>
-                  <span >{{ $t('common.delete') }}</span>
+                  <span >{{ t('common.delete') }}</span>
                 </v-btn>
               </div>
             </v-col>
@@ -183,12 +183,12 @@
           <v-scale-transition group>
             <template
               v-for="(i) in item"
+              :key="i.id"
             >
 
               <v-list-item
-                :key="i.id"
                 :class="selectedById[i.id] && 'v-list-item--active primary--text'"
-                :link="!$vuetify.breakpoint.mobile"
+                :link="!mobile"
                 style="height:76px;"
               >
                 <v-lazy width="100%">
@@ -221,7 +221,7 @@
                         </v-list-item-title>
 
                         <v-list-item-subtitle :class="selectedById[i.id] && 'primary--text'">
-                          {{ i.tt }} {{ i.sz }}, {{ i.cn }} {{ $t('units.co') }}
+                          {{ i.tt }} {{ i.sz }}, {{ i.cn }} {{ t('units.co') }}
                         </v-list-item-subtitle>
 
                         <v-list-item-subtitle>
@@ -237,7 +237,7 @@
                             :class="i.st ? 'grey--text text-darken-3' : 'grey--text text-lighten-1'"
                             class="mr-1 font-weight-thin text-lowercase"
                            >
-                            {{ $t('item.st.label') }}: {{ i.attr.st }}
+                            {{ t('item.st.label') }}: {{ i.attr.st }}
                           </span>
 
                           <v-icon
@@ -251,7 +251,7 @@
                             :class="i.lm && i.st === 1 ? 'grey--text text-darken-3' : 'grey--text text-lighten-1'"
                             class="mr-1 font-weight-thin text-lowercase"
                            >
-                            {{ $t('item.lm.label') }}: {{ i.attr.lm }}
+                            {{ t('item.lm.label') }}: {{ i.attr.lm }}
                           </span>
 
                           <v-icon
@@ -265,7 +265,7 @@
                             :class="i?.rt ? 'grey--text text-darken-3' : 'grey--text text-lighten-1'"
                             class="mr-1 font-weight-thin text-lowercase"
                            >
-                            {{ $t('item.rt.label') }}: {{ i.attr.rt }}
+                            {{ t('item.rt.label') }}: {{ i.attr.rt }}
                           </span>
 
                           <v-icon
@@ -279,7 +279,7 @@
                             :class="i?.ov ? 'grey--text text-darken-3' : 'grey--text text-lighten-1'"
                             class="mr-1 font-weight-thin text-lowercase"
                            >
-                            {{ $t('item.ov.label') }}: {{ i.attr.ov }}
+                            {{ t('item.ov.label') }}: {{ i.attr.ov }}
                           </span>
 
                         </v-list-item-subtitle>
@@ -327,13 +327,13 @@
 
         <template v-if="item.length === 0">
           <div class="text-body-2 grey--text text-darken-2 mx-3 mt-4 mb-5 text-center">
-            <div class="font-weight-bold mb-1">... {{ $t('cargolist.no-items') }} ...</div>
+            <div class="font-weight-bold mb-1">... {{ t('cargolist.no-items') }} ...</div>
             <div class="d-flex justify-center font-weight-thin">
-              <div>{{ $t('cargolist.no-items-description-1') }}</div>
-              <div class="mx-1 teal--text font-weight-bold">{{ $t('common.or') }}</div>
-              <div>{{ $t('cargolist.no-items-description-2') }}</div>
-              <div class="mx-1 teal--text font-weight-bold">{{ $t('common.or') }}</div>
-              <div>{{ $t('cargolist.no-items-description-3') }}</div>
+              <div>{{ t('cargolist.no-items-description-1') }}</div>
+              <div class="mx-1 teal--text font-weight-bold">{{ t('common.or') }}</div>
+              <div>{{ t('cargolist.no-items-description-2') }}</div>
+              <div class="mx-1 teal--text font-weight-bold">{{ t('common.or') }}</div>
+              <div>{{ t('cargolist.no-items-description-3') }}</div>
             </div>
           </div>
         </template>
@@ -360,7 +360,7 @@
                     <v-icon left>
                       bx-file
                     </v-icon>
-                    <span>{{ $t('cargolist.addfromfile') }}</span>
+                    <span>{{ t('cargolist.addfromfile') }}</span>
                   </v-btn>
                 </v-hover>
 
@@ -386,7 +386,7 @@
                       bx bx-plus-circle
                     </v-icon>
                     <span>
-                      {{ $t('cargolist.addcargo') }}
+                      {{ t('cargolist.addcargo') }}
                     </span>
                   </v-btn>
                 </v-hover>
@@ -403,7 +403,7 @@
                 <v-icon left>
                   bx bxs-save
                 </v-icon>
-                <span>{{ $t('cargolist.addfromtemplate') }}</span>
+                <span>{{ t('cargolist.addfromtemplate') }}</span>
               </v-btn>
             </v-col>
 
@@ -416,205 +416,196 @@
   </div>
 </template>
 
-<script>
-/*
-|---------------------------------------------------------------------
-| CargoList Component
-|---------------------------------------------------------------------
-|
-*/
-
-import { mapGetters, mapState } from 'vuex'
+<script setup lang="ts">
 import { getDigits } from '@/configs/functions/getDigits.js'
+import {useI18n} from "vue-i18n";
+import {computed, ref, watch, nextTick} from "vue";
+import {useUserStore} from "../../stores/user";
+import {useCargoStore} from "../../stores/cargo";
+import {useDisplay} from "vuetify";
 
-export default {
-  name: 'CargoList',
-  props: {
-    item: {
-      type: Array,
-      default: () => []
-    },
-    clid: {
-      type: Number,
-      default: 0
-    },
-    order: {
-      type: Number,
-      default: 0
-    },
-    filter: {
-      type: String,
-      default: ''
-    }
-  },
-  data() {
-    return {
-      selectAll: false,
-      selectAlmostAll: false,
-      selected: [],
-      hover: {
-        custom: false,
-        file: false
-      }
-    }
-  },
-  computed: {
-    ...mapGetters('cargo', ['unitsCargo', 'getPoint']),
-    ...mapState('app', ['user']),
-
-    userPro() {
-      return Boolean(this.user.tarif.type)
-    },
-
-    logoMini() {
-      return this.getPoint[this.clid]?.mini ? Object.freeze('bx-window-alt') : Object.freeze('bx-minus')
-    },
-    logoView() {
-      return this.order ? Object.freeze('bx bxs-hide') : Object.freeze('bx bx-show-alt')
-    },
-    subResult() {
-
-      if (!this.item.length) return ''
-
-      let array = this.item
-
-      if (this.selected.length)  {
-        array = this.selected.map((i) => this.item.filter((item) => item.id === i)[0])
-      }
-
-      const result = array.reduce((o, i) => {
-
-        o['cn'] += Number(i.cn)
-        o['wg'] += Number(i.wf)
-        o['vl'] += Number(i.vl)
-
-        return o
-      }, { cn: 0, wg: 0, vl: 0 })
-
-      result.wg = getDigits(result.wg)
-      result.vl = getDigits(result.vl)
-
-      return Object.freeze(Number(result.cn) + ' ' + this.$t('units.co') + ', ' +
-      result.wg + ' ' + this.$t('units.wght.' + this.unitsCargo.wght) + ', ' +
-      result.vl + ' ' + this.$t('units.m3'))
-    },
-    selectedById() {
-      if (!this.selected.length) return {}
-
-      return this.selected.reduce((out, item) => {
-        out[item] = true
-
-        return out
-      }, {})
-    }
-
-  },
-  watch: {
-    selected(val) {
-      this.$nextTick(() => {
-        if (this.selectAll) {
-          if (val.length === 0) {
-            this.selectAll = false
-            this.selectAlmostAll = false
-          } else {
-            if (this.item.length === val.length) {
-              this.selectAlmostAll = false
-            } else {
-              this.selectAlmostAll = true
-            }
-          }
-        }
-      })
-    }
-  },
-  mounted() {
-
-  },
-  methods: {
-    // SELECTED COMMAND
-
-    onSelectAll() {
-      if (this.selectAll) {
-        this.selected = []
-      } else {
-        this.selected = this.item.map((i) => i.id)
-      }
-
-      this.selectAlmostAll = false
-      this.selectAll = !this.selectAll
-    },
-
-    selectedObject() {
-      return { clid: this.clid, selected: this.selected }
-    },
-
-    clearSelected() {
-      this.selected = []
-      this.selectAll = false
-      this.selectAlmostAll = false
-    },
-
-    // ITEMS
-
-    editItems() {
-      this.$emit('edititems', this.selectedObject())
-    },
-    moveItems() {
-      this.$emit('moveitems', this.selectedObject())
-    },
-    removeItemsSelected() {
-      this.$emit('removeitems', this.selectedObject())
-    },
-    removeItem(id) {
-      this.$emit('removeitem', id)
-      if (this.selected.includes(id)) this.selected = this.selected.filter((i) => i !== id)
-    },
-    copyItem(id) {
-      this.$emit('copyitem', id)
-    },
-    addItem() {
-      // if (this.userPro) return this.$emit('showlimitbuttons')
-
-      this.$emit('additem', this.clid)
-    },
-
-    // POINT
-
-    renamePoint() {
-      this.$emit('renamepoint', { clid: this.clid, name: this.getPoint[this.clid]['name']  })
-    },
-    removePoint() {
-      this.$emit('removepoint', { clid: this.clid, length: this.item.length })
-    },
-    changeMini() {
-      this.$emit('changepointmini', this.clid)
-    },
-    changeView() {
-      this.$emit('changepointview', this.clid)
-    },
-
-    // FILE
-
-    getFile() {
-      // if (this.userPro) return this.$emit('showlimitbuttons')
-
-      this.$emit('getfile', this.clid)
-    },
-
-    // TEMPLATES
-    getTemplates() {
-      this.$emit('gettemplate', this.clid)
-    },
-    setTemplate() {
-      this.$emit('settemplate', this.selectedObject())
-    },
-    setTemplateOne(id) {
-      this.$emit('settemplateone', id)
-    }
-
-  }
+type PropsType = {
+  item: any[],
+  clid: number,
+  order: number,
+  filter: string
 }
+
+  const {mobile} = useDisplay();
+
+  const props = withDefaults(defineProps<PropsType>(), {
+    item: [],
+    clid: 0,
+    order: 0,
+    filter: ''
+  })
+// Define Emits
+const emit = defineEmits([
+    'edititems', 'moveitems', 'removeitems', 'removeitem', 'copyitem',
+    'additem', 'renamepoint', 'removepoint', 'changepointmini',
+    'changepointview', 'getfile', 'gettemplate', 'settemplate', 'settemplateone'
+]);
+
+const { t } = useI18n();
+const userStore = useUserStore();
+const cargoStore = useCargoStore();
+
+const point = computed(() => cargoStore.point)
+
+const selectAll = ref(false);
+const selectAlmostAll = ref(false);
+const selected = ref<any[]>([]);
+const hover = ref({
+    custom: false,
+    file: false,
+});
+
+const userPro = computed(() => Boolean(userStore.user.tarif.type));
+
+const logoMini = computed(() => point.value[props.clid]?.mini ? 'bx-window-alt' : 'bx-minus');
+
+const logoView = computed(() => props.order ? 'bx bxs-hide' : 'bx bx-show-alt');
+
+const subResult = computed(() => {
+    if (!props.item.length) return '';
+
+    let array = props.item;
+
+    if (selected.value.length) {
+        array = selected.value.map((i) => props.item.find((item) => item.id === i));
+    }
+
+    const result = array.reduce(
+        (o, i) => {
+            o['cn'] += Number(i.cn);
+            o['wg'] += Number(i.wf);
+            o['vl'] += Number(i.vl);
+
+            return o;
+        },
+        { cn: 0, wg: 0, vl: 0 }
+    );
+
+    result.wg = getDigits(result.wg);
+    result.vl = getDigits(result.vl);
+
+    return `${result.cn} ${t('units.co')}, ${result.wg} ${t('units.wght.' + userStore.config.units.cargo.wght)}, ${result.vl} ${t('units.m3')}`;
+});
+
+const selectedById = computed(() => {
+    if (!selected.value.length) return {};
+
+    return selected.value.reduce((out, item) => {
+        out[item] = true;
+        return out;
+    }, {});
+});
+
+watch(selected, (val) => {
+    nextTick(() => {
+        if (selectAll.value) {
+            if (val.length === 0) {
+                selectAll.value = false;
+                selectAlmostAll.value = false;
+            } else {
+                if (props.item.length === val.length) {
+                    selectAlmostAll.value = false;
+                } else {
+                    selectAlmostAll.value = true;
+                }
+            }
+        }
+    });
+});
+
+const onSelectAll = () => {
+    if (selectAll.value) {
+        selected.value = [];
+    } else {
+        selected.value = props.item.map((i) => i.id);
+    }
+
+    selectAlmostAll.value = false;
+    selectAll.value = !selectAll.value;
+};
+
+const selectedObject = () => {
+    return { clid: props.clid, selected: selected.value };
+};
+
+const clearSelected = () => {
+    selected.value = [];
+    selectAll.value = false;
+    selectAlmostAll.value = false;
+};
+
+// ITEMS
+const editItems = () => {
+    emit('edititems', selectedObject());
+};
+
+const moveItems = () => {
+    emit('moveitems', selectedObject());
+};
+
+const removeItemsSelected = () => {
+    emit('removeitems', selectedObject());
+};
+
+const removeItem = (id: number) => {
+    emit('removeitem', id);
+    if (selected.value.includes(id)) {
+        selected.value = selected.value.filter((i) => i !== id);
+    }
+};
+
+const copyItem = (id: number) => {
+    emit('copyitem', id);
+};
+
+const addItem = () => {
+    emit('additem', props.clid);
+};
+
+// POINT
+const renamePoint = () => {
+    emit('renamepoint', {
+        clid: props.clid,
+        name: point.value[props.clid].name,
+    });
+};
+
+const removePoint = () => {
+    emit('removepoint', { clid: props.clid, length: props.item.length });
+};
+
+const changeMini = () => {
+    emit('changepointmini', props.clid);
+};
+
+const changeView = () => {
+    emit('changepointview', props.clid);
+};
+
+// FILE
+const getFile = () => {
+    emit('getfile', props.clid);
+};
+
+// TEMPLATES
+const getTemplates = () => {
+    emit('gettemplate', props.clid);
+};
+
+const setTemplate = () => {
+    emit('settemplate', selectedObject());
+};
+
+const setTemplateOne = (id: number) => {
+    emit('settemplateone', id);
+};
 </script>
+
 <style scoped>
 .scroller {
   height: 100%;
@@ -624,5 +615,3 @@ export default {
   height: 66px;
 }
 </style>
-
-// lang ok

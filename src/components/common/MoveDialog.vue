@@ -7,7 +7,7 @@
       class="rounded-lg"
     >
       <v-subheader>
-        {{ $t('cargo.move.header') }}
+        {{ t('cargo.move.header') }}
       </v-subheader>
 
       <v-form @submit.prevent="submit">
@@ -27,14 +27,14 @@
             text
             @click="close"
           >
-            {{ $t('common.cancel') }}
+            {{ t('common.cancel') }}
           </v-btn>
           <v-btn
             color="primary lighten-1"
             text
             type="submit"
           >
-            {{ $t('common.ok') }}
+            {{ t('common.ok') }}
           </v-btn>
         </v-card-actions>
       </v-form>
@@ -43,51 +43,37 @@
   </v-dialog>
 </template>
 
-<script>
-import { mapGetters } from 'vuex'
+<script setup lang="ts">
+    import {computed, ref} from "vue";
+    import {useCargoStore} from "../../stores/cargo";
+    import {useI18n} from "vue-i18n";
 
-export default {
-  name: 'MoveDialog',
-  data() {
-    return {
-      dialog: false,
-      select: null,
-      clid: null
-    }
-  },
-  computed: {
-    ...mapGetters('cargo', ['getPoints', 'getPointOrder']),
-    points() {
-      const pointsList = this.getPoints.map((i) => {
-        const order = this.getPointOrder[i.id] ? this.getPointOrder[i.id] + '.' : this.$t('common.off')
+    const cargoStore = useCargoStore()
+    const {t} = useI18n()
 
-        return { text: order + ': ' + i.name, value: i.id, disabled: Boolean(String(i.id) === String(this.clid)) }
+    const dialog = ref(false)
+    const select = ref(null)
+    const clid = ref(null)
+    const points = computed(() => {
+      const pointsList = cargoStore.points.map((i) => {
+        const order = cargoStore.pointOrder[i.id] ? cargoStore.pointOrder[i.id] + '.' : t('common.off')
+
+        return { text: order + ': ' + i.name, value: i.id, disabled: Boolean(String(i.id) === String(clid)) }
       })
 
-      pointsList.push({ text: '... ' + this.$t('cargo.move.new').toLowerCase(), value: 'new', disabled: false })
+      pointsList.push({ text: '... ' + t('cargo.move.new').toLowerCase(), value: 'new', disabled: false })
 
       return pointsList
+    })
+    const submit = () => {
+      dialog.value = false
     }
-  },
-  methods: {
-    submit() {
-      this.dialog = false
-      this.resolve(this.select)
-    },
-    open(clid) {
-      this.clid = clid
-      this.dialog = true
-
-      return new Promise((resolve, reject) => {
-        this.resolve = resolve
-        this.reject = reject
-      })
-    },
-    close() {
-      this.resolve(false)
-      this.dialog = false
+    const open = (clid) => {
+      clid.value = clid
+      dialog.value = true
     }
-  }
-}
+    const close = () => {
+      dialog.value = false
+    }
 </script>
 // lang ok

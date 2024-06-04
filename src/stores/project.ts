@@ -9,6 +9,7 @@ import { AxiosObjectReturn, AxiosAddProject, AxiosAddProjectObject } from '../in
 
 export const useProjectStore = defineStore('project', () => {
 
+  const userStore = useUserStore()
   /**
    * Project
    */
@@ -118,7 +119,7 @@ export const useProjectStore = defineStore('project', () => {
   }
 
   function changeProjectName(name: string = '') {
-    if (name) name = name
+    if (name) project.name = name
   }
 
   function addProject(name: string) {
@@ -200,14 +201,14 @@ export const useProjectStore = defineStore('project', () => {
     })
   }
 
-  function putProject(arr) {
+  function putProject(arr: {name?: string, id?: number, alias?: any}) {
     return new Promise((resolve, reject) => {
 
       const appUser = useUserStore()
 
       const param = {
         type: 'put',
-        id: arr?.id ? arr.id : id,
+        id: arr?.id ? arr.id : project.id,
         name: arr?.name ? arr.name : '',
         // data: arr?.alias ? state[arr.alias] : '',
         alias: arr?.alias ? arr.alias : '',
@@ -237,6 +238,69 @@ export const useProjectStore = defineStore('project', () => {
     })
   }
 
+  const addTemplate = (obj) => {
+    return new Promise((resolve, reject) => {
+      const param =  {
+        type:  'new',
+        alias: obj.type,
+        name:  obj.name,
+        user:  userStore.user.id,
+        data:  obj.data
+      }
+
+      // console.log(param)
+
+      axios.post('/templates', param)
+          .then((r) => {
+            // console.log(r)
+            r.data.success ? resolve(r.data.object) : reject(r.data.message)
+          })
+    })
+  }
+
+  const remTemplate = (obj) => {
+    return new Promise((resolve, reject) => {
+      const param =  {
+        type: 'rem',
+        alias: obj.type,
+        clid:  obj.clid,
+        user: userStore.user.id
+      }
+
+      axios.post('/templates', param)
+          .then((r) => {
+            if (r.data.success) {
+              resolve(r)
+            } else {
+              reject(r)
+            }
+          })
+    })
+  }
+
+  const getTemplateList = (alias) => {
+    return new Promise((resolve, reject) => {
+      const param =  {
+        user: userStore.user.id,
+        alias: alias,
+        status: 1
+      }
+
+      axios.get('/templates', {
+        params: param
+      })
+          .then((r) => {
+            // console.log(r)
+
+            if (r.data.success) {
+              resolve(r.data.object)
+            } else {
+              reject(r)
+            }
+          })
+    })
+  }
+
   return {
     project,
     sync,
@@ -244,10 +308,13 @@ export const useProjectStore = defineStore('project', () => {
     setProjectLastModified,
     changeProjectName,
     clearProject,
+    addTemplate,
     delProject,
     addProject,
     copyProject,
     putProject,
     getProject,
+    remTemplate,
+    getTemplateList
   }
 })

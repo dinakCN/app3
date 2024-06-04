@@ -15,7 +15,7 @@ import { aliases, fa } from 'vuetify/iconsets/fa'
 import { mdi } from 'vuetify/iconsets/mdi'
 import { createVueI18nAdapter } from 'vuetify/locale/adapters/vue-i18n'
 import { useI18n } from 'vue-i18n'
-import i18n from './vue-i18n.ts'
+import i18n from './vue-i18n'
 
 const myCustomLightTheme: ThemeDefinition = {
   dark: false,

@@ -233,6 +233,15 @@
       icon="bx bxs-check-circle"
       color="primary"
     />
+
+    <!-- promo -->
+    <PromoDialog
+        ref="promo"
+        :head="$t('message.loads.add.head')"
+        :text="$t('message.project.add.text')"
+        :call="$t('message.project.add.call')"
+    />
+
   </v-container>
 </template>
 
@@ -253,17 +262,30 @@ import { useUserStore } from '../stores/user'
 import { useProjectStore } from '../stores/project'
 import { useProjectsStore } from '../stores/projects'
 import { useAppStore } from '../stores/app'
-import { useRoute, useRouter } from 'vue-router'
+import { useRouter } from 'vue-router'
 import { useI18n } from "vue-i18n"
 import { useDisplay } from 'vuetify'
 import { ProjectInterface } from '../interfaces/ProjectInterface'
 import HelpButton from "../components/brief/HelpButton.vue"
+import PromoDialog from "../components/dialogs/PromoDialog.vue";
+import useMessages from "../hooks/useMessages";
+
+/**
+ * hooks
+ */
+
+const {getMessage} = useMessages()
 
 /**
  * Mobile, Height
  */
 const { mobile, height } = useDisplay()
 const vh = computed(() => mobile.value ? height.value - 405 : height.value - 410)
+
+/**
+ * Refs
+ */
+const promo: Ref<typeof PromoDialog | null> = ref(null)
 
 /**
  * Router
@@ -307,6 +329,20 @@ const projectsCount: Ref<number> = computed(() => {
   return projects.value.length
 })
 
+const getList = () => {
+  appProjects.getProjectsList()
+    .then(() => {
+
+      /**
+       * Промотка окна до активного проекта
+       */
+      if (project_id.value) {
+        nextTick()
+        setTimeout(() => scrollIntoView(project_id.value, false), 300)
+      }
+    })
+}
+
 onMounted(() => {
 
   /**
@@ -322,82 +358,50 @@ onMounted(() => {
     /**
      * Загрузить проекты
      */
-    appProjects.getProjectsList()
-      .then(() => {
-
-        /**
-         * Промотка окна до активного проекта
-         */
-        if (project_id.value) {
-          nextTick()
-          setTimeout(() => scrollIntoView(project_id.value, false), 300)
-        }
-      })
+    getList()
   }
 })
 
-// const copy = (id) => {
-//   loading = true
+const copy = (id: number) => {
+  storeApp.setLoading(true)
 
-//   copyProject(id)
-//     .then((r) => {
+  appProject.copyProject(id)
+    .then((_) => {
+      getList()
+    }, (message: string) => {
+      addError(message)
+    })
+    .finally(() => storeApp.setLoading(false))
+}
 
-//       getList(true, true, r.id)
-//       $metrika.reachGoal('add.project')
+const addError = (message: string) => {
+  if (message) {
+    const msg = JSON.parse(message)
 
-//     }, (message) => {
+    if (!user.tarif.type && msg.type === 'maxProjects') promo.value.open()
 
-//       addError(message)
-//     })
-//     .finally(() => loading = false)
-// }
+    storeApp.showError(getMessage(msg))
+  } else {
+    storeApp.showError(t('scene.valid.error'))
+  }
+}
 
-// const addError = (message) => {
-//   if (message) {
-//     message = JSON.parse(message)
+const remove = async (id: number) => {
+  const isApply = confirm(t('common.delete') + '?')
 
-//     if (!user.tarif.type && message.type === 'maxProjects') $refs.promo.open()
+  if (isApply) {
+    const index = projects.value.findIndex((i) => String(i.id) === String(id))
 
-//     message = getMessage(message)
+    if (index !== -1) {
+      projects.value.splice(index, 1)
+    }
 
-//   } else {
-//     message = $t('scene.valid.error')
-//   }
-
-//   showError(message)
-// }
-
-// const remove = async (id) => {
-//   const confirm = await $confirm($t('common.delete') + '?')
-
-//   if (confirm) {
-//     loading = true
-
-//     /**
-//      * Мгновенное удаление из массива
-//      *
-//      */
-
-//     const index = projects.findIndex((i) => String(i.id) === String(id))
-
-//     if (index !== -1) {
-//       projects.splice(index, 1)
-//     }
-
-//     /**
-//      * Удаление с базы данных и обновление
-//      *
-//      */
-
-//     delProject(id)
-//       .then(() => {
-
-//         getList(false, true)
-//         loading = false
-
-//       })
-//   }
-// }
+    appProject.delProject(id)
+      .then(() => {
+        getList()
+      })
+  }
+}
 
 /**
  * Filter
@@ -553,10 +557,7 @@ const setReName = async (obj: { name: string, id: number }) => {
   const { id, name } = obj
   const update = await dialogName.value.open(name)
 
-  console.log(update)
-
   if (update) {
-
     projects.value.forEach((i: ProjectInterface) => {
       if (i.id === id) i.name = update
     })
@@ -564,7 +565,7 @@ const setReName = async (obj: { name: string, id: number }) => {
     if (project_id.value === id) appProject.changeProjectName(update)
 
     appProject.putProject({ id, name: update })
-      .then(() => appProjects.getProjectsList())
+      .then(() => getList())
   }
 }
 
@@ -614,17 +615,7 @@ const add = async (n: string) => {
       /**
        * Загрузить проекты
        */
-      appProjects.getProjectsList()
-        .then(() => {
-
-          /**
-           * Плавная промотка до нового проекта
-           */
-          nextTick()
-          setTimeout(() => {
-            scrollIntoView(r.id, true)
-          }, 100)
-        })
+      getList()
 
       /**
        * Metrics
@@ -644,25 +635,6 @@ const set = (id: number) => {
   return appProject.getProject(id)
   // .then(() =>  router.push('/cargo'))
 }
-
-// const add = (n) => {
-//   loading = true
-
-//   addProject(n)
-//     .then((r) => {
-
-//       getList(true, true, r.id)
-//       $metrika.reachGoal('add.project')
-
-//     }, (message) => {
-//       addError(message)
-//     })
-//     .finally(() => {
-//       loading = false
-//     })
-// }
-
-
 
 /**
  * Metrika

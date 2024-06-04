@@ -7,7 +7,7 @@
       class="rounded-lg"
     >
       <v-subheader class="font-weight-regular text-body-2">
-        {{ $t('common.all_edit') }}
+        {{ t('common.all_edit') }}
       </v-subheader>
 
       <v-form class="mt-0" @submit.prevent="submit">
@@ -304,7 +304,7 @@
                 class="pl-3 text-body-2"
                 :class="color !== colorDefault ? 'primary--text' : 'text-secondary'"
               >
-                {{ $t('item.color') }} {{ colorText }}
+                {{ t('item.color') }} {{ colorText }}
               </div>
               <div>
                 <v-icon
@@ -368,14 +368,14 @@
             text
             @click="close"
           >
-            {{ $t('common.cancel') }}
+            {{ t('common.cancel') }}
           </v-btn>
 
           <v-btn
             color="primary"
             type="submit"
           >
-            {{ $t('common.ok') }}
+            {{ t('common.ok') }}
           </v-btn>
 
         </v-card-actions>
@@ -386,325 +386,212 @@
   </v-dialog>
 </template>
 
-<script>
-import { mapGetters } from 'vuex'
-
+<script setup lang="ts">
+import { ref, reactive, computed } from 'vue'
+import { useVuelidate } from '@vuelidate/core'
+import { required, decimal, maxValue, minValue, integer, maxLength } from '@vuelidate/validators'
 import { getWght, getSize } from '@/configs/functions/getunits.js'
 import { setWght, setSize } from '@/configs/functions/setunits.js'
 import { getCargoIcon } from '@/configs/functions/geticon.js'
-import { validationMixin } from 'vuelidate'
-import validMixin from '@/mixins/validItem.js'
-import { decimal, maxValue, minValue, integer, maxLength } from 'vuelidate/lib/validators'
+import {useUserStore} from "../../stores/user";
+import {useI18n} from "vue-i18n";
 
-export default {
-  name: 'EditDialog',
-  mixins: [validationMixin, validMixin],
-  data() {
-    return {
-      dialog: false,
+const {t} = useI18n()
 
-      colorMenu: false,
-      colorDefault: Object.freeze('#999999'),
+const userStore =useUserStore()
 
-      nm: null,
-      ln: null,
-      wd: null,
-      hg: null,
-      wg: null,
-      cn: null,
+const dialog = ref(false)
 
-      pg: null,
-      st: null,
-      lm: null,
-      rt: null,
-      ov: null,
+const colorMenu = ref(false)
+const colorDefault = Object.freeze('#999999')
 
-      color: '#000000'
-
-    }
+const start = reactive({
+  ln: {
+    min: 0,
+    max: 0,
   },
-  validations() {
-    return {
-      nm: {
-        maxLength: maxLength(this.start.nm.max)
-      },
-      ln: {
-        decimal,
-        minValue: minValue(getSize(this.start.ln.min, this.un.size)),
-        maxValue: maxValue(getSize(this.start.ln.max, this.un.size))
-      },
-      wd: {
-        decimal,
-        minValue: minValue(getSize(this.start.wd.min, this.un.size)),
-        maxValue: maxValue(getSize(this.start.wd.max, this.un.size))
-      },
-      hg: {
-        decimal,
-        minValue: minValue(getSize(this.start.hg.min, this.un.size)),
-        maxValue: maxValue(getSize(this.start.hg.max, this.un.size))
-      },
-      wg: {
-        decimal,
-        minValue: minValue(getWght(this.start.wg.min, this.un.wght)),
-        maxValue: maxValue(getWght(this.start.wg.max, this.un.wght))
-      },
-      cn: {
-        integer,
-        minValue: minValue(this.start.cn.min),
-        maxValue: maxValue(this.start.cn.max)
-      },
-      pg: {
-        includes: (value) => this.packingListValues.includes(value)
-      },
-      st: {
-        includes: (value) => this.stuckListValues.includes(value)
-      },
-      rt: {
-        includes: (value) => this.rotateListValues.includes(value)
-      },
-      ov: {
-        includes: (value) => this.overListValues.includes(value)
-      },
-      lm: this.limitValid,
-
-      validationGroup: ['nm', 'ln', 'wd', 'hg', 'wg', 'cn', 'lm', 'pg', 'st', 'rt', 'ov']
-    }
+  wd: {
+    min: 0,
+    max: 0,
   },
-  computed: {
-    ...mapGetters('cargo', ['unitsCargo']),
-
-    colorText() {
-      if (this.color !== this.colorDefault) return 'выбран'
-
-      return 'не выбран'
-    },
-
-    nmErrors () {
-      const errors = []
-
-      if (!this.$v.nm.$dirty) return errors
-      !this.$v.nm.maxLength && errors.push(this.$t('common.validation.maxLength') + ' ' + this.start.nm.max)
-
-      return errors
-    },
-
-    lnErrors () {
-      return this.dataErrors(this.$v.ln, this.lnValues['min'][this.un.size], this.lnValues['max'][this.un.size], this.$t('units.size.' + this.un.size))
-    },
-
-    wdErrors () {
-      return this.dataErrors(this.$v.wd, this.wdValues['min'][this.un.size], this.wdValues['max'][this.un.size], this.$t('units.size.' + this.un.size))
-    },
-
-    hgErrors () {
-      return this.dataErrors(this.$v.hg, this.hgValues['min'][this.un.size], this.hgValues['max'][this.un.size], this.$t('units.size.' + this.un.size))
-    },
-
-    cnErrors () {
-      return this.countErrors(this.$v.cn, this.start.cn['min'], this.start.cn['max'])
-    },
-
-    wgErrors () {
-      return this.dataErrors(this.$v.wg, this.wgValues['min'][this.un.wght], this.wgValues['max'][this.un.wght], this.$t('units.wght.' + this.un.wght))
-    },
-
-    pgErrors () {
-      return this.selectErrors (this.$v.pg)
-    },
-
-    stErrors () {
-      return this.selectErrors (this.$v.st)
-    },
-
-    rtErrors () {
-      return this.selectErrors (this.$v.rt)
-    },
-
-    ovErrors () {
-      return this.selectErrors (this.$v.ov)
-    },
-
-    lmErrors () {
-      return this.dataErrors(this.$v.lm, this.lmValues['min'][this.un.wght], this.lmValues['max'][this.un.wght], this.$t('units.wght.' + this.un.wght), false)
-    },
-
-    limitValid() {
-      if (this.st === 1) {
-
-        return {
-          decimal,
-          minValue: minValue(getWght(this.start.lm.min, this.un.wght)),
-          maxValue: maxValue(getWght(this.start.lm.max, this.un.wght))
-        }
-      }
-
-      return {}
-    },
-
-    packingList() {
-      return Object.freeze(this.list(this.start.pg.default, true))
-    },
-
-    packingListValues() {
-      return Object.freeze(this.list(this.start.pg.default))
-    },
-
-    stuckList() {
-      return Object.freeze(this.list(this.start.st.default, true))
-    },
-
-    stuckListValues() {
-      return Object.freeze(this.list(this.start.st.default))
-    },
-
-    rotateList() {
-      return Object.freeze(this.list(this.start.rt.default, true))
-    },
-
-    rotateListValues() {
-      return Object.freeze(this.list(this.start.rt.default))
-    },
-
-    overList() {
-      return Object.freeze(this.list(this.start.ov.default, true))
-    },
-
-    overListValues() {
-      return Object.freeze(this.list(this.start.ov.default))
-    },
-
-    pgIcon () {
-      return Object.freeze(getCargoIcon(this.pg))
-    }
-
+  hg: {
+    min: 0,
+    max: 0,
   },
-  methods: {
-
-    submit() {
-
-      /**
-       * валидация
-       *
-       */
-
-      this.$v.$touch()
-
-      if (this.$v.validationGroup.$error) return false
-
-      const cr_validation = new RegExp(/^#([A-Fa-f0-9]{6}|[A-Fa-f0-9]{3})$/)
-
-      const result = {
-        nm: this.nm !== null ? String(this.nm) : null,
-        ln: this.ln !== null ? setSize(this.ln, this.un.size) : null,
-        wd: this.wd !== null ? setSize(this.wd, this.un.size) : null,
-        hg: this.hg !== null ? setSize(this.hg, this.un.size) : null,
-        wg: this.wg !== null ? setWght(this.wg, this.un.wght) : null,
-        cn: this.cn !== null ? Number(this.cn) : null,
-
-        pg: this.pg !== null ? Number(this.pg) : null,
-        st: this.st !== null ? Number(this.st) : null,
-        lm: this.lm !== null && this.st === 1 ? setWght(this.lm, this.un.wght) : null,
-        rt: this.rt !== null ? Number(this.rt) : null,
-        ov: this.ov !== null ? Number(this.ov) : null,
-        cr: this.color !== this.colorDefault && cr_validation.test(this.color) ? this.color : null
-      }
-
-      this.dialog = false
-      this.resolve(result)
-    },
-
-    open() {
-
-      this.state()
-      this.dialog = true
-
-      return new Promise((resolve, reject) => {
-        this.resolve = resolve
-        this.reject = reject
-      })
-
-    },
-
-    close() {
-
-      this.resolve(false)
-      this.dialog = false
-
-    },
-
-    subFieldText (int, max) {
-      int = int ? int : 0
-
-      return `${int} / ${getSize(max, this.un.size)}`
-    },
-
-    dataErrors(data, min, max, unit = '') {
-      const errors = []
-
-      if (!data.$dirty) return errors
-      !data.decimal  && errors.push(this.$t('common.validation.decimal'))
-      !data.minValue && errors.push(this.$t('common.validation.minValue') + ' ' + min + ' ' + unit)
-      !data.maxValue && errors.push(this.$t('common.validation.maxValue') + ' ' + max + ' ' + unit)
-
-      return errors
-    },
-
-    countErrors(data, min, max) {
-      const errors = []
-
-      if (!data.$dirty) return errors
-      !data.integer  && errors.push(this.$t('common.validation.integer'))
-      !data.minValue && errors.push(this.$t('common.validation.minValue') + ' ' + min)
-      !data.maxValue && errors.push(this.$t('common.validation.maxValue') + ' ' + max)
-
-      return errors
-    },
-
-    selectErrors(data) {
-      const errors = []
-
-      if (!data.$dirty) return errors
-      !data.includes && errors.push(this.$t('common.validation.required'))
-
-      return errors
-    },
-
-    state () {
-
-      this.nm = null
-      this.ln = null
-      this.wd = null
-      this.hg = null
-      this.wg = null
-      this.cn = null
-
-      this.pg = null
-      this.st = null
-      this.lm = null
-      this.rt = null
-      this.ov = null
-
-      this.color = this.colorDefault
-
-      // un
-      this.un.size = String(this.unitsCargo.size)
-      this.un.wght = String(this.unitsCargo.wght)
-
-    },
-
-    list(array, bool = false) {
-
-      const list = [...array]
-
-      list.unshift({ text: 'common.null', value: null })
-
-      if (bool) return Object.freeze(list.map((item) => { return { text: this.$t(item.text), value: item.value }}))
-
-      return Object.freeze(list.map((item) => item.value))
-
-    }
-
+  wg: {
+    min: 0,
+    max: 0,
+  },
+  nm: {
+    min: 0,
+    max: 0,
+  },
+  cn: {
+    min: 0,
+    max: 0,
   }
+})
+
+const un = reactive({
+  size: 0,
+  wght: 0,
+})
+
+const form = reactive({
+  nm: null as string | null,
+  ln: null as number | null,
+  wd: null as number | null,
+  hg: null as number | null,
+  wg: null as number | null,
+  cn: null as number | null,
+  pg: null as number | null,
+  st: null as number | null,
+  lm: null as number | null,
+  rt: null as number | null,
+  ov: null as number | null,
+  color: '#000000'
+})
+
+const validationRules = {
+  nm: { maxLength: maxLength(start.nm.max) },
+  ln: { decimal, minValue: minValue(getSize(start.ln.min, un.size)), maxValue: maxValue(getSize(start.ln.max, un.size)) },
+  wd: { decimal, minValue: minValue(getSize(start.wd.min, un.size)), maxValue: maxValue(getSize(start.wd.max, un.size)) },
+  hg: { decimal, minValue: minValue(getSize(start.hg.min, un.size)), maxValue: maxValue(getSize(start.hg.max, un.size)) },
+  wg: { decimal, minValue: minValue(getWght(start.wg.min, un.wght)), maxValue: maxValue(getWght(start.wg.max, un.wght)) },
+  cn: { integer, minValue: minValue(start.cn.min), maxValue: maxValue(start.cn.max) },
+  pg: { required },
+  st: { required },
+  rt: { required },
+  ov: { required },
+  lm: {}
+}
+
+const v$ = useVuelidate(validationRules, form)
+
+const colorText = computed(() => {
+  return form.color !== colorDefault ? 'выбран' : 'не выбран'
+})
+
+const submit = () => {
+  v$.value.$touch()
+  if (v$.value.$invalid) return false
+
+  const cr_validation = new RegExp(/^#([A-Fa-f0-9]{6}|[A-Fa-f0-9]{3})$/)
+  const result = {
+    nm: form.nm !== null ? String(form.nm) : null,
+    ln: form.ln !== null ? setSize(form.ln, un.size) : null,
+    wd: form.wd !== null ? setSize(form.wd, un.size) : null,
+    hg: form.hg !== null ? setSize(form.hg, un.size) : null,
+    wg: form.wg !== null ? setWght(form.wg, un.wght) : null,
+    cn: form.cn !== null ? Number(form.cn) : null,
+    pg: form.pg !== null ? Number(form.pg) : null,
+    st: form.st !== null ? Number(form.st) : null,
+    lm: form.lm !== null && form.st === 1 ? setWght(form.lm, un.wght) : null,
+    rt: form.rt !== null ? Number(form.rt) : null,
+    ov: form.ov !== null ? Number(form.ov) : null,
+    cr: form.color !== colorDefault && cr_validation.test(form.color) ? form.color : null
+  }
+
+  dialog.value = false
+}
+
+const open = () => {
+  resetForm()
+  dialog.value = true
+}
+
+const close = () => {
+  dialog.value = false
+}
+
+const resetForm = () => {
+  form.nm = null
+  form.ln = null
+  form.wd = null
+  form.hg = null
+  form.wg = null
+  form.cn = null
+  form.pg = null
+  form.st = null
+  form.lm = null
+  form.rt = null
+  form.ov = null
+  form.color = colorDefault
+
+  un.size = userStore.config.units.cargo.size
+  un.wght = userStore.config.units.cargo.wght
+}
+
+const pgIcon = computed(() => {
+  return Object.freeze(getCargoIcon(form.pg))
+})
+
+const subFieldText = (int, max) => {
+  int = int ? int : 0
+      return `${int} / ${getSize(max, userStore.config.units.cargo.size)}`
+}
+
+const dataErrors = (data, min, max, unit = '') => {
+  const errors = []
+
+  if (!data.$dirty) return errors
+  !data.decimal  && errors.push(t('common.validation.decimal'))
+  !data.minValue && errors.push(t('common.validation.minValue') + ' ' + min + ' ' + unit)
+  !data.maxValue && errors.push(t('common.validation.maxValue') + ' ' + max + ' ' + unit)
+
+  return errors
+}
+
+const countErrors = (data, min, max) => {
+  const errors = []
+
+  if (!data.$dirty) return errors
+  !data.integer  && errors.push(t('common.validation.integer'))
+  !data.minValue && errors.push(t('common.validation.minValue') + ' ' + min)
+  !data.maxValue && errors.push(t('common.validation.maxValue') + ' ' + max)
+
+  return errors
+}
+
+const selectErrors = (data) => {
+  const errors = []
+
+  if (!data.$dirty) return errors
+  !data.includes && errors.push(t('common.validation.required'))
+
+  return errors
+}
+
+const state = () => {
+
+   form.nm = null
+   form.ln = null
+   form.wd = null
+   form.hg = null
+   form.wg = null
+   form.cn = null
+
+   form.pg = null
+   form.st = null
+   form.lm = null
+   form.rt = null
+   form.ov = null
+
+   form.color = colorDefault
+
+  un.size = userStore.config.units.cargo.size
+  un.wght = userStore.config.units.cargo.wght
+}
+
+const list = (array, bool = false) => {
+
+  const list = [...array]
+
+  list.unshift({ text: 'common.null', value: null })
+
+  if (bool) return Object.freeze(list.map((item) => { return { text: t(item.text), value: item.value }}))
+
+  return Object.freeze(list.map((item) => item.value))
+
 }
 </script>
-// lang ok
