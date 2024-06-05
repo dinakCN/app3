@@ -101,7 +101,6 @@ export const useProjectStore = defineStore('project', () => {
       })
         .then((r) => {
           if (r.data.success) {
-            // console.log(r.data.object)
             setProject(r.data.object)
             resolve(r.data.object)
           } else {
@@ -161,7 +160,7 @@ export const useProjectStore = defineStore('project', () => {
 
       const param = {
         type: 'copy',
-        user: appUser.user,
+        user: appUser.user.id,
         id: id
       }
 
@@ -219,7 +218,6 @@ export const useProjectStore = defineStore('project', () => {
 
       axios.post('/project', param)
         .then((r) => {
-          console.log(r)
           if (r?.data.success) {
             //setProjectLastModified(r.data.object)
             //resolve(r)

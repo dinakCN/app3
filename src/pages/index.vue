@@ -71,7 +71,6 @@
 
         <!-- sort & order-->
         <div
-          name="projects_sort"
           class="d-flex align-center my-2"
         >
           <v-chip-group
@@ -106,11 +105,17 @@
             {{ orderData.name }}
           </v-chip>
 
-        </div>
+          <div v-if="loading" class="text-center">
+            <v-progress-circular
+              color="primary"
+              indeterminate
+            ></v-progress-circular>
+          </div>
 
+        </div>
         <!-- list -->
         <v-card
-          v-if="filterList.length || isFilter"
+          v-if="!loading && (filterList.length || isFilter)"
           rounded="lg"
           id="projects-list"
           ref="projectsList"
@@ -120,7 +125,6 @@
         >
           <v-list
             variant="text"
-            lines="one"
             class="py-0"
           >
             <v-scale-transition group>
@@ -211,7 +215,6 @@
 
         <!-- create -->
         <div
-          name="projects_add"
           class="mt-4 d-flex justify-center"
         >
           <v-btn
@@ -330,6 +333,7 @@ const projectsCount: Ref<number> = computed(() => {
 })
 
 const getList = () => {
+  storeApp.setLoading(true)
   appProjects.getProjectsList()
     .then(() => {
 
@@ -340,6 +344,9 @@ const getList = () => {
         nextTick()
         setTimeout(() => scrollIntoView(project_id.value, false), 300)
       }
+    })
+    .finally(() => {
+      storeApp.setLoading(false)
     })
 }
 
@@ -629,10 +636,13 @@ const set = (id: number) => {
   /**
    * Проверка
    */
-  // if (String(project_id) === String(id)) return router.push('/cargo')
-
-  return appProject.getProject(id)
-  // .then(() =>  router.push('/cargo'))
+  if (String(project_id) === String(id)) return router.push('/cargo')
+  storeApp.setLoading(true)
+  return appProject.getProject(id).then(() => {
+    router.push('/cargo')
+  }).finally(() => {
+    storeApp.setLoading(false)
+  })
 }
 
 /**

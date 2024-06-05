@@ -17,7 +17,6 @@
         <v-btn
           v-if="toast.timeout === 0"
           color="white"
-          icon
           x-small
           @click="toast.show = false"
         >

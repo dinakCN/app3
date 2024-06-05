@@ -26,13 +26,11 @@ router.beforeEach(async (to, from, next) => {
   const mainPage = { name: 'main' };
   const storeUser = useUserStore();
   const storeProject = useProjectStore();
-  const storeProjects = useProjectsStore();
 
   try {
     if (!storeUser.user.id && to.meta.requiresAuth) {
       await storeUser.getConfig();
     } else {
-      await storeProjects.getProjectsList();
       const { last_project } = storeProject;
       if (!last_project) {
         return next(mainPage);
