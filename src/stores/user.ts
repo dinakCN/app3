@@ -1,13 +1,15 @@
 // Utilities
 import { defineStore } from 'pinia'
-import { reactive } from 'vue'
+import { reactive, ref } from 'vue'
 import { useAppStore } from './app'
 import axios from 'axios'
 import { User, Config  } from '../interfaces/UserInterface'
+import {useProjectStore} from "./project";
 
 
 export const useUserStore = defineStore('user', () => {
 
+  const projectStore = useProjectStore()
   /**
    * User
    * 0 - free
@@ -23,19 +25,20 @@ export const useUserStore = defineStore('user', () => {
       expir: '',
       count: 0
     },
-    discount: 0
+    discount: 0,
   } as User)
 
-  function setConfigUser(arr) {
+  function setConfigUser(arr: Config) {
 
     const { user:u } = arr
 
-    user.id = Object.freeze(u.id)
-    user.email = u?.email ? Object.freeze(u?.email) : Object.freeze('')
-    user.discount = u?.discount ? Object.freeze(Number(u.discount)) : Object.freeze(0)
+    user.id = u.id
+    user.name = u.name
+    user.email = u?.email ? u?.email : ''
+    user.discount = u?.discount ? Number(u.discount) : 0
   }
 
-  function setConfigLicense(arr) {
+  function setConfigLicense(arr: Config) {
 
     const { tarif } = arr
 
@@ -91,12 +94,8 @@ export const useUserStore = defineStore('user', () => {
 
       axios.post('/user_config', params)
         .then((r) => {
-
-          // console.log(r)
           if (r.data.success) {
-
             setConfigUnits(r.data.object)
-
             resolve(null)
           } else {
             reject(r.data.message)
@@ -158,8 +157,7 @@ export const useUserStore = defineStore('user', () => {
             setConfigLicense(config)
             setConfigLimits(config)
             setConfigUnits(config)
-
-            // return all object
+            projectStore.last_project = config.last_project
             resolve(config)
           }
 

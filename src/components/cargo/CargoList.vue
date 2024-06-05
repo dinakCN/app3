@@ -50,30 +50,27 @@
               >
                 {{ point[clid]['name'] }}
               </span>
-              <v-icon v-if="!mobile" small right >bx-rename</v-icon>
+              <v-icon v-if="!mobile" small right >mdi mdi-form-textbox</v-icon>
             </v-btn>
           </v-col>
 
           <v-col cols="auto">
             <v-btn
               :disabled="item.length === 0"
-              icon
               @click="changeMini()"
             >
               <v-icon small>{{ logoMini }}</v-icon>
             </v-btn>
             <v-btn
               :disabled="item.length === 0"
-              icon
               @click="changeView()"
             >
               <v-icon small>{{ logoView }}</v-icon>
             </v-btn>
             <v-btn
-              icon
+              icon="mdi:mdi-close"
               @click="removePoint()"
             >
-              <v-icon>mdi-close</v-icon>
             </v-btn>
           </v-col>
 
@@ -85,7 +82,7 @@
         v-if="point[clid].mini && item.length > 0"
         class="d-flex align-center caption black--text lighten-3"
       >
-        <div>{{ this.t('cargolist.windoff') }}</div>
+        <div>{{ t('cargolist.windoff') }}</div>
         <v-btn
           variant="text"
           small
@@ -124,13 +121,13 @@
             <v-col v-if="selected.length > 0" cols="auto" class="align-self-center">
               <div class="d-flex align-center">
                 <v-btn
-                  text
+                  variant="text"
                   small
                   color="primary"
                   class="font-weight-medium px-1"
                   @click="editItems()"
                 >
-                  <v-icon left>bx-edit</v-icon>
+                  <v-icon left>mdi mdi-square-edit-outline</v-icon>
                   <span>{{ t('common.edit') }}</span>
                 </v-btn>
 
@@ -141,7 +138,7 @@
                   class="font-weight-medium px-1"
                   @click="moveItems()"
                 >
-                  <v-icon left>bx-repost</v-icon>
+                  <v-icon left>mdi mdi-repeat</v-icon>
                   <span>{{ t('common.move') }}</span>
                 </v-btn>
 
@@ -152,7 +149,7 @@
                   class="font-weight-medium px-1"
                   @click="setTemplate()"
                 >
-                  <v-icon left>bx bx-save</v-icon>
+                  <v-icon left>mdi mdi-content-save-outline</v-icon>
                   <span>{{ t('templates.tempsave') }}</span>
                 </v-btn>
 
@@ -163,7 +160,7 @@
                   class="font-weight-medium px-1"
                   @click="removeItemsSelected()"
                 >
-                  <v-icon left>bx-trash</v-icon>
+                  <v-icon left>mdi mdi-trash-can-outline</v-icon>
                   <span >{{ t('common.delete') }}</span>
                 </v-btn>
               </div>
@@ -200,7 +197,7 @@
                       <v-list-item-avatar
                         class="mx-0"
                         :color="i.cr"
-                        @click.stop="$router.push(`/cargo/item/${clid}/${i.id}`)"
+                        @click.stop="router.push(`/cargo/item/${clid}/${i.id}`)"
                       >
                         <v-icon
                           color="grey darken-4"
@@ -230,7 +227,7 @@
                             :color="i.st ? 'grey darken-3' : 'grey lighten-1'"
                             small
                           >
-                            mdi-layers-outline
+                            mdi mdi-layers-outline
                           </v-icon>
 
                           <span
@@ -244,7 +241,7 @@
                             :color="i.lm && i.st === 1 ? 'grey darken-3' : 'grey lighten-1'"
                             small
                           >
-                            mdi-plus
+                            mdi mdi-plus
                           </v-icon>
 
                           <span
@@ -258,7 +255,7 @@
                             :color="i?.rt ? 'grey darken-3' : 'grey lighten-1'"
                             small
                           >
-                            mdi-swap-horizontal
+                            mdi mdi-swap-horizontal
                           </v-icon>
 
                           <span
@@ -272,7 +269,7 @@
                             :color="i?.ov ? 'grey darken-3' : 'grey lighten-1'"
                             small
                           >
-                            mdi-swap-vertical
+                            mdi mdi-swap-vertical
                           </v-icon>
 
                           <span
@@ -290,28 +287,24 @@
                       <v-list-item-action class="mr-0">
                         <div class="d-flex align-center">
                           <v-btn
-                            icon
-                            @click="$router.push(`/cargo/item/${clid}/${i.id}`)"
+                            icon="mdi:mdi-square-edit-outline"
+                            @click="router.push(`/cargo/item/${clid}/${i.id}`)"
                           >
-                            <v-icon>bx-edit-alt</v-icon>
                           </v-btn>
                           <v-btn
-                            icon
+                            icon="mdi:mdi-content-save-outline"
                             @click.stop="setTemplateOne(i.id)"
                           >
-                            <v-icon>bx-save</v-icon>
                           </v-btn>
                           <v-btn
-                            icon
+                            icon="mdi:mdi-content-copy"
                             @click.stop="copyItem(i.id)"
                           >
-                            <v-icon>bx-copy</v-icon>
                           </v-btn>
                           <v-btn
-                            icon
+                            icon="mdi:mdi-trash-can-outline"
                             @click.stop="removeItem(i.id)"
                           >
-                            <v-icon>bx-trash</v-icon>
                           </v-btn>
                         </div>
                       </v-list-item-action>
@@ -330,9 +323,9 @@
             <div class="font-weight-bold mb-1">... {{ t('cargolist.no-items') }} ...</div>
             <div class="d-flex justify-center font-weight-thin">
               <div>{{ t('cargolist.no-items-description-1') }}</div>
-              <div class="mx-1 teal--text font-weight-bold">{{ t('common.or') }}</div>
+              <div class="mx-1 text-teal font-weight-bold">{{ t('common.or') }}</div>
               <div>{{ t('cargolist.no-items-description-2') }}</div>
-              <div class="mx-1 teal--text font-weight-bold">{{ t('common.or') }}</div>
+              <div class="mx-1 text-teal font-weight-bold">{{ t('common.or') }}</div>
               <div>{{ t('cargolist.no-items-description-3') }}</div>
             </div>
           </div>
@@ -353,12 +346,12 @@
                 <v-hover v-model="hover.file">
                   <v-btn
                     rounded
-                    text
+                    variant="text"
                     class="text-caption text-uppercase"
                     @click="getFile()"
                   >
                     <v-icon left>
-                      bx-file
+                      mdi mdi-file-table-outline
                     </v-icon>
                     <span>{{ t('cargolist.addfromfile') }}</span>
                   </v-btn>
@@ -379,11 +372,12 @@
                   <v-btn
                     rounded
                     class="px-2 font-weight-regular"
+                    variant="flat"
                     color="primary"
                     @click="addItem()"
                   >
                     <v-icon left>
-                      bx bx-plus-circle
+                      mdi mdi-plus-circle-outline
                     </v-icon>
                     <span>
                       {{ t('cargolist.addcargo') }}
@@ -396,12 +390,12 @@
             <v-col class="text-left">
               <v-btn
                 rounded
-                text
+                variant="text"
                 class="text-caption text-uppercase"
                 @click="getTemplates()"
               >
                 <v-icon left>
-                  bx bxs-save
+                  mdi mdi-content-save-outline
                 </v-icon>
                 <span>{{ t('cargolist.addfromtemplate') }}</span>
               </v-btn>
@@ -423,6 +417,7 @@ import {computed, ref, watch, nextTick} from "vue";
 import {useUserStore} from "../../stores/user";
 import {useCargoStore} from "../../stores/cargo";
 import {useDisplay} from "vuetify";
+import {useRouter} from "vue-router";
 
 type PropsType = {
   item: any[],
@@ -432,6 +427,7 @@ type PropsType = {
 }
 
   const {mobile} = useDisplay();
+  const router = useRouter();
 
   const props = withDefaults(defineProps<PropsType>(), {
     item: [],
@@ -462,9 +458,9 @@ const hover = ref({
 
 const userPro = computed(() => Boolean(userStore.user.tarif.type));
 
-const logoMini = computed(() => point.value[props.clid]?.mini ? 'bx-window-alt' : 'bx-minus');
+const logoMini = computed(() => point.value[props.clid]?.mini ? 'mdi mdi-window-maximize' : 'mdi mdi-window-minimize');
 
-const logoView = computed(() => props.order ? 'bx bxs-hide' : 'bx bx-show-alt');
+const logoView = computed(() => props.order ? 'mdi mdi-eye-off' : 'mdi mdi-eye-outline');
 
 const subResult = computed(() => {
     if (!props.item.length) return '';

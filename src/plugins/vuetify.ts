@@ -13,6 +13,8 @@ import 'vuetify/styles'
 import { createVuetify, type ThemeDefinition } from 'vuetify'
 import { aliases, fa } from 'vuetify/iconsets/fa'
 import { mdi } from 'vuetify/iconsets/mdi'
+import * as components from 'vuetify/components'
+import * as directives from 'vuetify/directives'
 import { createVueI18nAdapter } from 'vuetify/locale/adapters/vue-i18n'
 import { useI18n } from 'vue-i18n'
 import i18n from './vue-i18n'
@@ -26,14 +28,13 @@ const myCustomLightTheme: ThemeDefinition = {
     primary: '#1976d2',
     'primary-lighten-4': '#a8e0ff',
     'primary-lighten-5': '#c7fdff',
-
-    // 'surface-variant': '#ffff00',
-    // 'on-surface-variant': '#ffffff',
   },
 }
 
 // https://vuetifyjs.com/en/introduction/why-vuetify/#feature-guides
 export default createVuetify({
+  components,
+  directives,
   theme: {
     defaultTheme: 'myCustomLightTheme',
     themes: {

@@ -4,11 +4,11 @@
  * Automatic routes for `./src/pages/*.vue`
  */
 
-// Composables
 import { createRouter, createWebHistory } from 'vue-router/auto'
 import { setupLayouts } from 'virtual:generated-layouts'
 import { useUserStore } from '../stores/user'
 import { useProjectStore } from '../stores/project'
+import {useProjectsStore} from "../stores/projects";
 
 const router = createRouter({
   history: createWebHistory(process.env.BASE_URL),
@@ -18,50 +18,34 @@ const router = createRouter({
 /**
  * Before each route update
  */
-router.beforeEach(async (to, from) => {
-
+router.beforeEach(async (to, from, next) => {
   if (to.meta?.redirect) {
-    return window.location.href = to.meta.redirect
+    return next({ path: to.meta.redirect });
   }
 
-  /**
-   * MainPage
-   */
-  const mainPage = { name: 'main' }
+  const mainPage = { name: 'main' };
+  const storeUser = useUserStore();
+  const storeProject = useProjectStore();
+  const storeProjects = useProjectsStore();
 
-  /**
-   * Store
-   */
-  const storeUser = useUserStore()
-  const storeProject = useProjectStore()
-
-  /**
-   * Auth?
-   */
-  if (!storeUser.user.id && to.meta.requiresAuth) {
-
-    return storeUser.getConfig()
-      .then((obj) => {
-
-        // console.log(obj)
-
-        const { last_project } = obj
-
-        if (!last_project) return mainPage
-
-        return storeProject.getProject(last_project)
-          .then(() => true)
-          .catch(() => {
-            return mainPage
-          })
-
-      })
-      .catch(() => {
-        return mainPage
-      })
+  try {
+    if (!storeUser.user.id && to.meta.requiresAuth) {
+      await storeUser.getConfig();
+    } else {
+      await storeProjects.getProjectsList();
+      const { last_project } = storeProject;
+      if (!last_project) {
+        return next(mainPage);
+      }
+      await storeProject.getProject(last_project);
+      return next();
+    }
+  } catch (error) {
+    console.error('Routing error:', error);
+    return next(mainPage);
   }
 
-  return true
-})
+  return next();
+});
 
 export default router

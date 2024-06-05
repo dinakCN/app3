@@ -12,7 +12,7 @@
 
       <div class="d-flex">
 
-        <div :class="$vuetify.breakpoint.mobile ? 'd-none' : 'd-block'">
+        <div :class="mobile ? 'd-none' : 'd-block'">
           <!--Icon -->
           <v-img
             :src="require('@/assets/images/jets/error.svg')"
@@ -32,7 +32,7 @@
             <div v-show="call" class="mt-1 font-weight-bold">{{ call }}</div>
 
             <div class="mt-1">
-              <router-link to="/user#user-tarif">{{ $t('common.needlicense') }}</router-link>
+              <router-link to="/user#user-tarif">{{ t('common.needlicense') }}</router-link>
             </div>
           </v-card-text>
 
@@ -44,11 +44,11 @@
 
         <v-btn
           color="grey darken-3"
-          text
+          variant="text"
           class="font-weight-medium"
           @click="close"
         >
-          {{ this.$t('$vuetify.close') }}
+          {{ t('$vuetify.close') }}
         </v-btn>
 
         <v-btn
@@ -57,7 +57,7 @@
           to="/user#user-tarif"
           class="px-2 font-weight-medium"
         >
-          {{ this.$t('common.getlicense') }}
+          {{ t('common.getlicense') }}
         </v-btn>
 
       </v-card-actions>
@@ -66,36 +66,35 @@
   </v-dialog>
 </template>
 
-<script>
-export default {
-  name: 'PromoDialog',
-  props: {
-    text: {
-      type: String,
-      default: ''
-    },
-    call: {
-      type: String,
-      default: ''
-    },
-    head: {
-      type: String,
-      default: ''
-    }
-  },
-  data() {
-    return {
-      dialog: false
-    }
-  },
-  methods: {
-    open() {
-      this.dialog = true
-    },
+<script setup lang="ts">
 
-    close() {
-      this.dialog = false
-    }
-  }
+import {useDisplay} from "vuetify";
+import {ref} from "vue"
+import {useI18n} from "vue-i18n";
+
+const {mobile} = useDisplay()
+const {t} = useI18n()
+
+const props = withDefaults(defineProps<{
+  text: string,
+  call: string,
+  head: string,
+}>(), {
+  text: '',
+  call: '',
+  head: '',
+});
+
+const dialog = ref(false)
+const open = () => {
+  dialog.value = true
 }
+const close = () => {
+  dialog.value = false
+}
+
+defineExpose({
+  open,
+  close
+})
 </script>

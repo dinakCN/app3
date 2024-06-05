@@ -28,6 +28,8 @@ export const useProjectStore = defineStore('project', () => {
     loads: []
   })
 
+  const last_project = ref(null)
+
   /**
    * Sync projects
    */
@@ -89,7 +91,7 @@ export const useProjectStore = defineStore('project', () => {
       storeApp.setLoading(true)
 
       const params = {
-        user: appUser.user,
+        user: appUser.user.id,
         id: id,
         status: 1
       }
@@ -140,12 +142,12 @@ export const useProjectStore = defineStore('project', () => {
 
       axios.post('/project', params)
         .then((r) => {
-
-          if (r.data.success) {
+          console.log(r)
+          if (r?.data.success) {
             // setProjectLastModified(r.data.object.last_modified)
             resolve(r.data.object)
           } else {
-            reject(r.data.message)
+            reject(r?.data.message)
           }
         })
         .finally(() => storeApp.setLoading(false))
@@ -165,7 +167,7 @@ export const useProjectStore = defineStore('project', () => {
 
       axios.post('/project', param)
         .then((r) => {
-          if (r.data.success) {
+          if (r?.data.success) {
             resolve(r.data.object)
           } else {
             reject(r.data.message)
@@ -189,7 +191,7 @@ export const useProjectStore = defineStore('project', () => {
       axios.post('/project', param)
         .then((r) => {
 
-          if (r.data.success) {
+          if (r?.data.success) {
 
             if (String(id) === String(id)) clearProject()
 
@@ -210,27 +212,17 @@ export const useProjectStore = defineStore('project', () => {
         type: 'put',
         id: arr?.id ? arr.id : project.id,
         name: arr?.name ? arr.name : '',
-        // data: arr?.alias ? state[arr.alias] : '',
         alias: arr?.alias ? arr.alias : '',
-        user: appUser.user,
+        user: appUser.user.id,
         status: 1
       }
 
-      /**
-       * sync false
-       *
-       */
-
-      // ('setSync', false)
-
       axios.post('/project', param)
         .then((r) => {
-
-          // console.log(r)
-
-          if (r.data.success) {
-            setProjectLastModified(r.data.object)
-            resolve(r)
+          console.log(r)
+          if (r?.data.success) {
+            //setProjectLastModified(r.data.object)
+            //resolve(r)
           } else {
             reject(r)
           }
@@ -304,6 +296,7 @@ export const useProjectStore = defineStore('project', () => {
   return {
     project,
     sync,
+    last_project,
     setProject,
     setProjectLastModified,
     changeProjectName,

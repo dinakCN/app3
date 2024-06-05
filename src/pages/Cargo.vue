@@ -42,7 +42,7 @@
           <v-text-field
             v-model="value"
             :placeholder="$t('common.search')"
-            prepend-inner-icon="mdi-magnify"
+            prepend-inner-icon="mdi:mdi-magnify"
             hide-details
             block
             clearable
@@ -57,11 +57,10 @@
 
       <div v-if="scrollView" class="d-flex justify-center align-center my-1 mt-2">
         <v-btn
-          icon
+          icon="mdi:mdi-chevron-down"
           color="primary"
           @click="scrollUpDown(false)"
         >
-          <v-icon>bx bx-chevrons-down</v-icon>
         </v-btn>
       </div>
 
@@ -81,7 +80,7 @@
         <v-scale-transition group hide-on-leave>
           <template v-for="(point, index) in points" :key="point.id">
             <CargoList
-              :ref="point.id"
+              :ref="() => point.id"
               :clid="Number(point.id)"
               :order="pointOrder[point.id]"
               :item="filterItems[point.id]"
@@ -112,10 +111,9 @@
                 class="d-flex justify-center list-item"
               >
                 <v-btn
-                  icon
+                  icon="mdi:mdi-repeat"
                   @click="pointRotate(point.id)"
                 >
-                  <v-icon>bx-repost</v-icon>
                 </v-btn>
               </div>
             </div>
@@ -125,11 +123,10 @@
 
       <div v-if="scrollView" class="d-flex justify-center align-center mt-2">
         <v-btn
-          icon
+          icon="mdi:mdi-chevron-up"
           color="primary"
           @click="scrollUpDown(true)"
         >
-          <v-icon>bx bx-chevrons-up</v-icon>
         </v-btn>
       </div>
 
@@ -139,13 +136,13 @@
           v-if="!filter"
           ref="addGroup"
           class="px-2 font-weight-medium"
-          outlined
+          variant="outlined"
           rounded
           color="primary"
           @click="pointAdd()"
         >
           <v-icon left>
-            bx-add-to-queue
+              mdi mdi-plus-box-multiple
           </v-icon>
           {{ t('cargo.new') }}
         </v-btn>
@@ -160,9 +157,9 @@
     <EditDialog ref="dialogEdit" />
 
     <!-- EDIT NAME -->
-    <ReName
+    <ReNameDialog
       ref="dialogReName"
-      icon="bx bxs-check-circle"
+      icon="mdi mdi-check-circle"
       color="primary"
     />
 
@@ -216,7 +213,6 @@
     const userStore = useUserStore()
     const projectStore = useProjectStore()
     const appStore = useAppStore()
-    const route = useRoute()
     const router = useRouter()
 
     /**
@@ -225,7 +221,7 @@
 
     const dialogReName: Ref<typeof ReNameDialog> = ref(null)
     const dialogMove: Ref<typeof MoveDialog> = ref(null)
-    const promo: Ref<typeof PromoDialog> = ref(null)
+    const promoRef: Ref<typeof PromoDialog> = ref(null)
     const dialogEdit: Ref<typeof EditDialog> = ref(null)
     const cargoList: Ref<typeof CargoList[]> = ref([])
     const addGroup = ref<HTMLElement | null>(null)
@@ -239,6 +235,7 @@
     const filter = ref('')
     const value = ref('')
     const call = ref('')
+    const promo = ref('')
 
     const points = computed(() => cargoStore.points)
     const pointOrder = computed(() => cargoStore.pointOrder)
@@ -303,7 +300,6 @@
 
     const pointAdd = () => {
       cargoStore.addPoint(`${t('point.new')} ${points.value.length + 1}...`)
-      sync()
         if (addGroup.value) {
             goTo(addGroup.value, { duration: 400 })
         }
@@ -341,8 +337,11 @@
     const pointRename = async (obj) => {
       const { clid, name } = obj
       const update = await dialogReName.value.open(name)
-      if (update) {
-        getPointsById.value[clid].name = update
+      if(update) {
+        getPointsById.value[clid] = {
+          ...getPointsById.value[clid],
+          name: update
+        }
         sync()
       }
     }
@@ -485,11 +484,11 @@
     const showLimitButtons = () => {
       promo.value = t('message.cargo.button.text')
       call.value = t('message.cargo.button.call')
-      promo.value.open()
+      promoRef.value.open()
     }
 
     const showPromo = () => {
-        promo.value.open()
+        promoRef.value.open()
     }
 
     const limitMessage = (n) => {
