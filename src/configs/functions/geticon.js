@@ -4,16 +4,16 @@ const getCargoIcon = (int) => {
 
   switch (int) {
   case 0:
-    icon = 'bx bx-cube'
+    icon = 'mdi mdi-cube-outline'
     break
   case 1:
-    icon = 'mdi-shipping-pallet'
+    icon = 'mdi mdi-shipping-pallet'
     break
   case 2:
-    icon = 'bx bx-package'
+    icon = 'mdi mdi-package-variant'
     break
   default:
-    icon = 'bx bx-cube'
+    icon = 'mdi mdi-cube-outline'
   }
 
   return icon

@@ -21,6 +21,8 @@ const i18n = createI18n({
   locale: 'ru',
   fallbackLocale: 'en',
   messages,
+  globalInjection: true,
+  warnHtmlInMessage: "off",
   pluralizationRules: {
 
     /**

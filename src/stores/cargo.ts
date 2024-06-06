@@ -324,10 +324,6 @@ export const useCargoStore = defineStore('cargo', () => {
         return list(ov.default)
     })
 
-    const pgIcon = computed(() => {
-        return getCargoIcon(pg)
-    })
-
     return {
         points,
         item,
@@ -339,7 +335,6 @@ export const useCargoStore = defineStore('cargo', () => {
         sync,
         loads,
         packingList,
-        pgIcon,
         overListValues,
         overList,
         rotateListValues,

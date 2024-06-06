@@ -14,7 +14,7 @@ const useMessages = () => {
       case 'numeric':
       case 'between':
       case 'max':
-        result = `${i18n.t('scene.valid.field')} \`${i18n.t(message.value)}\` ${t('scene.valid.pages')} \`${i18n.t(message.page)}\``;
+        result = `${i18n.t('scene.valid.field')} \`${i18n.t(message.value)}\` ${i18n.t('scene.valid.pages')} \`${i18n.t(message.page)}\``;
         break;
       case 'empty':
         result = i18n.t('scene.valid.empty', {'page': i18n.t(message.page)});

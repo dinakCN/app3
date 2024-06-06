@@ -131,8 +131,8 @@
                     dense
                     clearable
                     @click:clear="clearField"
-                    @input="touchFiels('nm')"
-                    @blur="touchFiels('nm')"
+                    @input="touchFields('nm')"
+                    @blur="touchFields('nm')"
                 ></v-text-field>
               </v-col>
               <v-col
@@ -152,8 +152,8 @@
                   required
                   type="number"
                   step="1"
-                  @input="touchFiels('cn')"
-                  @blur="touchFiels('cn')"
+                  @input="touchFields('cn')"
+                  @blur="touchFields('cn')"
                   @click:append-outer="increment"
                   @click:prepend="decrement"
                 ></v-text-field>
@@ -167,17 +167,16 @@
                 <v-text-field
                   v-model="lnVal"
                   :label="t('item.ln.label')"
-                  prefix="$"
                   :suffix="t('units.size.' + un.size)"
                   dense
                   counter
                   step="0.1"
-                  :counter-value="() => subFieldText(ln, start.ln.max)"
+                  :counter-value="() => subFieldText(lnVal, start.ln.max)"
                   :error-messages="errorMessages.ln"
                   required
                   type="number"
-                  @input="touchFiels('ln')"
-                  @blur="touchFiels('ln')"
+                  @input="touchFields('ln')"
+                  @blur="touchFields('ln')"
                 ></v-text-field>
               </v-col>
 
@@ -194,12 +193,12 @@
                   dense
                   counter
                   step="0.1"
-                  :counter-value="() => subFieldText(wd, start.wd.max)"
+                  :counter-value="() => subFieldText(wdVal, start.wd.max)"
                   :error-messages="errorMessages.wd"
                   required
                   type="number"
-                  @input="touchFiels('wd')"
-                  @blur="touchFiels('wd')"
+                  @input="touchFields('wd')"
+                  @blur="touchFields('wd')"
                 ></v-text-field>
               </v-col>
               <v-col
@@ -215,12 +214,12 @@
                   dense
                   counter
                   step="0.1"
-                  :counter-value="() => subFieldText (hg, start.hg.max)"
+                  :counter-value="() => subFieldText (hgVal, start.hg.max)"
                   :error-messages="errorMessages.hg"
                   required
                   type="number"
-                  @input="touchFiels('hg')"
-                  @blur="touchFiels('hg')"
+                  @input="touchFields('hg')"
+                  @blur="touchFields('hg')"
                 ></v-text-field>
               </v-col>
               <v-col
@@ -239,8 +238,8 @@
                   :error-messages="errorMessages.wg"
                   required
                   type="number"
-                  @input="touchFiels('wg')"
-                  @blur="touchFiels('wg')"
+                  @input="touchFields('wg')"
+                  @blur="touchFields('wg')"
                 ></v-text-field>
               </v-col>
               <v-col
@@ -285,7 +284,7 @@
                 </v-select>
               </v-col>
 
-              <!-- LIMIT -->
+<!--               LIMIT-->
               <v-fade-transition>
                 <v-col
                   v-if="stVal === 1"
@@ -304,8 +303,8 @@
                     persistent-hint
                     step="1"
                     type="number"
-                    @input="touchFiels('lm')"
-                    @blur="touchFiels('lm')"
+                    @input="touchFields('lm')"
+                    @blur="touchFields('lm')"
                   >
                     <template v-slot:prepend>
                       <v-icon small>mdi mdi-plus</v-icon>
@@ -313,7 +312,6 @@
                   </v-text-field>
                 </v-col>
               </v-fade-transition>
-
             </v-row>
             <v-row class="align-center">
 
@@ -413,18 +411,12 @@ import {useUserStore} from "../../../stores/user";
 import {useAppStore} from "../../../stores/app";
 import {useProjectStore} from "../../../stores/project";
 import {useI18n} from "vue-i18n";
-import {useRouter} from "vue-router";
-
-const props = withDefaults(defineProps<{
-  clid: string,
-  id: string,
-}>(),{
-  clid: '',
-  id: ''
-});
+import {useRoute, useRouter} from "vue-router";
 
 const {t} = useI18n();
 const router = useRouter();
+
+const rout = useRoute();
 
 const promoRef: Ref<PromoDialog> = ref(null)
 
@@ -463,6 +455,7 @@ const overList = computed(() => cargoStore.overList)
 const rotateList = computed(() => cargoStore.rotateList)
 const stuckList = computed(() => cargoStore.stuckList)
 const packingList = computed(() => cargoStore.packingList)
+const pgIcon = computed(() => getCargoIcon(pgVal.value));
 
 const rules = {
   nm: { required, maxLength: maxLength(start.nm.max) },
@@ -501,8 +494,9 @@ const errorMessages = computed(() => {
   };
 });
 
-const touchFiels = (field: string) =>{
-    v$.value[field].$touch()
+const touchFields = (field: string) =>{
+  console.log(v$.value.nm)
+    v$.value.$touch()
 };
 
 const clearField = () => {
@@ -528,7 +522,7 @@ const state = () => {
 };
 
 const rem = () => {
-  cargoStore.removeItem(+props.id)
+  cargoStore.removeItem(+rout.params.id)
   sync()
   back()
 }
@@ -559,7 +553,7 @@ const setData = (data) => {
 
 const getData = () => {
   return {
-    id: props.id ? Number(props.id) : null,
+    id: rout.params.id ? Number(rout.params.id) : null,
     nm: String(nmVal.value),
     ln: setSize(lnVal.value, un.size),
     wd: setSize(wdVal.value, un.size),
@@ -576,7 +570,7 @@ const getData = () => {
       size: String(un.size),
       wght: String(un.wght)
     },
-    point: Number(props.clid)
+    point: Number(rout.params.clid ?? '')
   };
 };
 
@@ -585,9 +579,9 @@ const clearForm = () => {
   appStore.showSuccess(t('item.message.clear'));
 };
 const subFieldText = (int: number, max: number) => {
-  int = int ? int : 0
+  const val = int ? int : 0
   const size = getSize(max, un.size)
-  return int/size
+  return `${val}/${size}`
 }
 
 const increment = () => {
@@ -611,7 +605,7 @@ const submit = () => {
   if (newItem.value) {
     addItems = cnVal.value;
   } else {
-    addItems = cargoStore.item[props.id];
+    addItems = cargoStore.item[+rout.params.id];
     addItems = cnVal.value - addItems.cn;
   }
 
@@ -642,12 +636,12 @@ const limitMessage = (n) => {
   const up = n - limit;
 
   if (!userStore.user.tarif.type) {
-    promo.value = t('message.cargo.add.text', up, { n: up });
+    promo.value = `${t('message.cargo.add.text')}, ${up}, { n: ${up} }`;
     // Assume promo dialog has a ref
     promoRef.value.open();
   }
 
-  return appStore.showError(t('message.cargo.add.text', up, { n: up }));
+  return appStore.showError(`${t('message.cargo.add.text')}, ${up}, { n: ${up} }`);
 };
 
 onMounted(() => {
@@ -655,20 +649,19 @@ onMounted(() => {
   appStore.hideToast();
 
   if (!newItem.value) {
-    setData(cargoStore.item[props.id]);
+    setData(cargoStore.item[+rout.params.id]);
   } else {
     color.value = getRandomColor();
     nmVal.value = t('item.new_nm');
   }
 });
 
-const newItem = computed(() => !props.clid && !props.id);
-
-const pgIcon = computed(() => getCargoIcon(pgVal.value));
+const newItem = computed(() => !rout.params.clid && !rout.params.id);
 
 watch(pgVal, (newVal) => {
   if (newVal === 1) ovVal.value = 0;
 });
+
 </script>
 
 <style>
