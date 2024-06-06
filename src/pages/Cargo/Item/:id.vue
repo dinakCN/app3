@@ -63,7 +63,7 @@
             </template>
 
             <!-- HELP -->
-            <HelpButton />
+            <HelpButton name="item"/>
           </div>
         </v-card-actions>
       </v-card>
@@ -624,7 +624,7 @@ const sync = () => {
 };
 
 const back = () => {
-  return router.push({ name: 'cargo' });
+  return router.replace('/cargo');
 };
 
 const limitMessage = (n) => {

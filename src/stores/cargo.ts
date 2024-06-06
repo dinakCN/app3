@@ -8,7 +8,7 @@ import { getText } from '@/configs/functions/gettext.js';
 import { getVolume } from '@/configs/functions/getvolume.js';
 import { getCargoIcon } from '@/configs/functions/geticon.js';
 import { getRandomColor } from '@/configs/getcolor.js';
-import { stByValue, rt, rtByValue, ov, ovByValue, nm, ln, wd, hg, wg, cn, pg, st, lm } from '@/configs/items.js';
+import { stByValue, rt, rtByValue, ov, ovByValue, pg, st, } from '@/configs/items.js';
 
 import { useUserStore } from './user';
 import { useProjectStore } from './project';

@@ -28,6 +28,7 @@ router.beforeEach(async (to, from, next) => {
     return;
   }
 
+  console.log(!storeUser.user.id && to.meta.auth)
   if (!storeUser.user.id && to.meta.auth) {
     try {
       const config = await storeUser.getConfig();

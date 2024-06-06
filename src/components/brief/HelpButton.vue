@@ -40,6 +40,10 @@ const route = useRoute()
  */
 const { t } = useI18n()
 
+const props = withDefaults(defineProps<{ name?: string }>(), {
+  name: ''
+})
+
 const v: Array<VideoInterface> = reactive([...links])
 
 const dialog = reactive({
@@ -47,7 +51,7 @@ const dialog = reactive({
 })
 
 const video_data = computed(() => {
-  const current = v.find((i) => i.page.includes(String(route.name)))
+  const current = v.find((i) => i.page.includes(String(route.name)) || (props.name && i.page.includes(String(props.name))))
 
   if (current?.key) return current
 
