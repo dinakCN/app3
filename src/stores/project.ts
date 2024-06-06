@@ -215,12 +215,12 @@ export const useProjectStore = defineStore('project', () => {
         user: appUser.user.id,
         status: 1
       }
-
+      console.log(param)
       axios.post('/project', param)
         .then((r) => {
           if (r?.data.success) {
-            //setProjectLastModified(r.data.object)
-            //resolve(r)
+            setProjectLastModified(r.data.object)
+            resolve(r)
           } else {
             reject(r)
           }

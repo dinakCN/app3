@@ -93,7 +93,7 @@ export default {
   mounted() {
     this.$v.$reset()
   },
-  beforeDestroy() {
+  beforeUnmount() {
     this.$v.$reset()
   },
   methods: {

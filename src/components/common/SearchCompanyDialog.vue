@@ -26,7 +26,7 @@
           :rules="[rules.required]"
           :hint="$t('autocomplete.hint')"
           :items="entries"
-          :search-input.sync="search"
+          v-model:search-input="search"
           :loading="loading"
           persistent-hint
           hide-no-data

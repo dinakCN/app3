@@ -273,13 +273,6 @@
       }, {})
     })
 
-    const getPointsById = computed(() => {
-      return points.value.reduce((out, itm) => {
-        out[itm.id] = Object.freeze(itm)
-        return out
-      }, {})
-    })
-
     const scrollView = computed(() => {
       return !filter.value && points.value.length > 2
     })
@@ -347,11 +340,14 @@
       const { clid, name } = obj
       const update = await dialogReName.value.open(name)
       if(update) {
-        getPointsById.value[clid] = {
-          ...getPointsById.value[clid],
+        const idx = points.value.findIndex(p => p.id === clid)
+        cargoStore.points[idx] = {
+          ...points.value[idx],
           name: update
         }
-        sync()
+        sync({
+          name: update
+        })
       }
     }
 
@@ -364,7 +360,6 @@
     }
 
     const itemAdd = (id: number) => {
-      console.log(userStore.config.limit, cargoStore.itemsRowCount)
       if (!cargoStore.checkCountRow(1)) return false
       if (!cargoStore.checkCountCargo(1)) return limitMessage(1)
       router.push(`/cargo/item/${id}`)
@@ -409,8 +404,8 @@
       sync()
     }
 
-    const sync = () => {
-      projectStore.putProject({ alias: 'cargo' })
+    const sync = (arr?: {name?: string, id?: number}) => {
+      projectStore.putProject({ ...arr, alias: 'cargo' })
     }
 
     const templateSet = async (obj) => {

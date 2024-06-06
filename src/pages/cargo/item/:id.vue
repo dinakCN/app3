@@ -1,5 +1,5 @@
 <template>
-  <v-row justify="center" no-gutters>
+  <v-row class="mt-4" justify="center" no-gutters>
     <v-col
       col="12"
       lg="8"
@@ -124,15 +124,15 @@
                     v-model="nmVal"
                     :label="t('item.nm.label')"
                     :hint="t('item.nm.hint')"
-                    :error-messages="errorMessages.nm"
+                    :error-messages="errorMessages.nmVal"
                     :counter="start.nm.max"
                     :maxlength="start.nm.max"
-                    required
                     dense
                     clearable
+                    variant="underlined"
                     @click:clear="clearField"
-                    @input="touchFields('nm')"
-                    @blur="touchFields('nm')"
+                    @input="touchFields('nmVal')"
+                    @blur="touchFields('nmVal')"
                 ></v-text-field>
               </v-col>
               <v-col
@@ -148,12 +148,12 @@
                   dense
                   prepend-icon="bx-minus-circle"
                   append-outer-icon="bx-plus-circle"
-                  :error-messages="errorMessages.cn"
-                  required
+                  :error-messages="errorMessages.cnVal"
                   type="number"
                   step="1"
-                  @input="touchFields('cn')"
-                  @blur="touchFields('cn')"
+                  variant="underlined"
+                  @input="touchFields('cnVal')"
+                  @blur="touchFields('cnVal')"
                   @click:append-outer="increment"
                   @click:prepend="decrement"
                 ></v-text-field>
@@ -171,12 +171,12 @@
                   dense
                   counter
                   step="0.1"
+                  variant="underlined"
                   :counter-value="() => subFieldText(lnVal, start.ln.max)"
-                  :error-messages="errorMessages.ln"
-                  required
+                  :error-messages="errorMessages.lnVal"
                   type="number"
-                  @input="touchFields('ln')"
-                  @blur="touchFields('ln')"
+                  @input="touchFields('lnVal')"
+                  @blur="touchFields('lnVal')"
                 ></v-text-field>
               </v-col>
 
@@ -193,12 +193,12 @@
                   dense
                   counter
                   step="0.1"
+                  variant="underlined"
                   :counter-value="() => subFieldText(wdVal, start.wd.max)"
-                  :error-messages="errorMessages.wd"
-                  required
+                  :error-messages="errorMessages.wdVal"
                   type="number"
-                  @input="touchFields('wd')"
-                  @blur="touchFields('wd')"
+                  @input="touchFields('wdVal')"
+                  @blur="touchFields('wdVal')"
                 ></v-text-field>
               </v-col>
               <v-col
@@ -214,12 +214,12 @@
                   dense
                   counter
                   step="0.1"
+                  variant="underlined"
                   :counter-value="() => subFieldText (hgVal, start.hg.max)"
-                  :error-messages="errorMessages.hg"
-                  required
+                  :error-messages="errorMessages.hgVal"
                   type="number"
-                  @input="touchFields('hg')"
-                  @blur="touchFields('hg')"
+                  @input="touchFields('hgVal')"
+                  @blur="touchFields('hgVal')"
                 ></v-text-field>
               </v-col>
               <v-col
@@ -235,11 +235,11 @@
                   dense
                   :item-title="'text'"
                   step="0.1"
-                  :error-messages="errorMessages.wg"
-                  required
+                  :error-messages="errorMessages.wgVal"
+                  variant="underlined"
                   type="number"
-                  @input="touchFields('wg')"
-                  @blur="touchFields('wg')"
+                  @input="touchFields('wgVal')"
+                  @blur="touchFields('wgVal')"
                 ></v-text-field>
               </v-col>
               <v-col
@@ -251,11 +251,11 @@
                 <v-select
                   v-model="pgVal"
                   dense
+                  variant="underlined"
                   :item-title="'text'"
                   :items="packingList"
                   :label="t('item.pg.label')"
-                  :error-messages="errorMessages.pg"
-                  required
+                  :error-messages="errorMessages.pgVal"
                 >
                   <template v-slot:prepend>
                     <v-icon small>{{ pgIcon }}</v-icon>
@@ -272,11 +272,11 @@
                 <v-select
                   v-model="stVal"
                   dense
+                  variant="underlined"
                   :item-title="'text'"
                   :label="t('item.st.label')"
                   :items="stuckList"
-                  :error-messages="errorMessages.st"
-                  required
+                  :error-messages="errorMessages.stVal"
                 >
                   <template v-slot:prepend>
                     <v-icon small>mdi mdi-layers-outline</v-icon>
@@ -296,9 +296,10 @@
                   <v-text-field
                     v-model="lmVal"
                     dense
+                    variant="underlined"
                     :label="t('item.lm.label')"
                     :suffix="t('units.wght.' + un.wght)"
-                    :error-messages="errorMessages.lm"
+                    :error-messages="errorMessages.lmVal"
                     :hint="t('item.lm.hint')"
                     persistent-hint
                     step="1"
@@ -324,10 +325,10 @@
                 <v-select
                   v-model="rtVal"
                   dense
+                  variant="underlined"
                   :item-title="'text'"
                   :label="t('item.rt.label')"
                   :items="rotateList"
-                  required
                 >
                   <template v-slot:prepend>
                     <v-icon small>mdi mdi-swap-horizontal</v-icon>
@@ -345,10 +346,10 @@
                   v-model="ovVal"
                   :disabled="pg.value === 1"
                   dense
+                  variant="underlined"
                   :item-title="'text'"
                   :label="t('item.ov.label')"
                   :items="overList"
-                  required
                 >
                   <template v-slot:prepend>
                     <v-icon small>mdi mdi-swap-vertical</v-icon>
@@ -362,7 +363,7 @@
       </v-card>
 
       <!-- BUTTONS -->
-      <div class="d-flex alig-center mt-1">
+      <div class="d-flex alig-center mt-4">
         <v-btn
           rounded
           class="button grey--text text--darken-3 px-2"
@@ -457,16 +458,16 @@ const stuckList = computed(() => cargoStore.stuckList)
 const packingList = computed(() => cargoStore.packingList)
 const pgIcon = computed(() => getCargoIcon(pgVal.value));
 
-const rules = {
-  nm: { required, maxLength: maxLength(start.nm.max) },
-  ln: { required, decimal, minValue: minValue(getSize(start.ln.min, un.size)), maxValue: maxValue(getSize(start.ln.max, un.size)) },
-  wd: { required, decimal, minValue: minValue(getSize(start.wd.min, un.size)), maxValue: maxValue(getSize(start.wd.max, un.size)) },
-  hg: { required, decimal, minValue: minValue(getSize(start.hg.min, un.size)), maxValue: maxValue(getSize(start.hg.max, un.size)) },
-  wg: { required, decimal, minValue: minValue(getWght(start.wg.min, un.wght)), maxValue: maxValue(getWght(start.wg.max, un.wght)) },
-  cn: { required, integer, minValue: minValue(start.cn.min), maxValue: maxValue(start.cn.max) },
-  pg: { required },
-  st: { required },
-  lm: computed(() => {
+const rules: any = {
+  nmVal: { required, maxLength: maxLength(start.nm.max) },
+  lnVal: { required, decimal, minValue: minValue(getSize(start.ln.min, un.size)), maxValue: maxValue(getSize(start.ln.max, un.size)) },
+  wdVal: { required, decimal, minValue: minValue(getSize(start.wd.min, un.size)), maxValue: maxValue(getSize(start.wd.max, un.size)) },
+  hgVal: { required, decimal, minValue: minValue(getSize(start.hg.min, un.size)), maxValue: maxValue(getSize(start.hg.max, un.size)) },
+  wgVal: { required, decimal, minValue: minValue(getWght(start.wg.min, un.wght)), maxValue: maxValue(getWght(start.wg.max, un.wght)) },
+  cnVal: { required, integer, minValue: minValue(start.cn.min), maxValue: maxValue(start.cn.max) },
+  pgVal: { required },
+  stVal: { required },
+  lmVal: computed(() => {
     if (stVal.value === 1) {
       return {
         decimal,
@@ -478,30 +479,29 @@ const rules = {
   })
 };
 
-const v$ = useVuelidate({ rules }, { nm, lm, ln, wd, hg, wg, cn, pg, st }, { $lazy: true });
+const v$ = useVuelidate(rules, { nmVal, lmVal, lnVal, wdVal, hgVal, wgVal, cnVal, pgVal, stVal }, { $lazy: true });
 
 const errorMessages = computed(() => {
   return {
-    nm: v$.value.nm?.$error ? v$.value.nm.$errors.map(e => e.$message) : [],
-    ln: v$.value.nm?.$error ? v$.value.ln.$errors.map(e => e.$message) : [],
-    lm: v$.value.nm?.$error ? v$.value.lm.$errors.map(e => e.$message) : [],
-    wd: v$.value.nm?.$error ? v$.value.wd.$errors.map(e => e.$message) : [],
-    hg: v$.value.nm?.$error ? v$.value.hg.$errors.map(e => e.$message) : [],
-    wg: v$.value.nm?.$error ? v$.value.wg.$errors.map(e => e.$message) : [],
-    cn: v$.value.nm?.$error ? v$.value.cn.$errors.map(e => e.$message) : [],
-    pg: v$.value.nm?.$error ? v$.value.pg.$errors.map(e => e.$message) : [],
-    st: v$.value.nm?.$error ? v$.value.st.$errors.map(e => e.$message) : [],
+    nmVal: v$.value?.nmVal?.$error ? v$.value?.nmVal.$errors.map(e => e.$message) : [],
+    lnVal: v$.value?.lnVal?.$error ? v$.value?.lnVal.$errors.map(e => e.$message) : [],
+    lmVal: v$.value?.lmVal?.$error ? v$.value?.lmVal.$errors.map(e => e.$message) : [],
+    wdVal: v$.value?.wdVal?.$error ? v$.value?.wdVal.$errors.map(e => e.$message) : [],
+    hgVal: v$.value?.hgVal?.$error ? v$.value?.hgVal.$errors.map(e => e.$message) : [],
+    wgVal: v$.value?.wgVal?.$error ? v$.value?.wgVal.$errors.map(e => e.$message) : [],
+    cnVal: v$.value?.cnVal?.$error ? v$.value?.cnVal.$errors.map(e => e.$message) : [],
+    pgVal: v$.value?.pgVal?.$error ? v$.value?.pgVal.$errors.map(e => e.$message) : [],
+    stVal: v$.value?.stVal?.$error ? v$.value?.stVal.$errors.map(e => e.$message) : [],
   };
 });
 
 const touchFields = (field: string) =>{
-  console.log(v$.value.nm)
-    v$.value.$touch()
+  v$.value[field].$touch()
 };
 
 const clearField = () => {
   nmVal.value = '';
-  v$.value.nm.$reset();
+  v$.value.nmVal.$reset();
 };
 
 const state = () => {
@@ -616,7 +616,7 @@ const submit = () => {
   cargoStore.addItem(data);
   sync();
 
-  return back();
+  back();
 };
 
 const sync = () => {
@@ -656,7 +656,7 @@ onMounted(() => {
   }
 });
 
-const newItem = computed(() => !rout.params.clid && !rout.params.id);
+const newItem = computed(() => !rout.params.clid || !rout.params.id);
 
 watch(pgVal, (newVal) => {
   if (newVal === 1) ovVal.value = 0;

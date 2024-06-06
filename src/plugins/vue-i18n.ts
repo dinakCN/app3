@@ -7,20 +7,18 @@ import { createI18n } from 'vue-i18n'
 import en from '../translations/en'
 import ru from '../translations/ru'
 
-const messages = {
-  en: {
-    ...en,
-  },
-  ru: {
-    ...ru,
-  },
-}
-
 const i18n = createI18n({
-  legacy: false, // Vuetify does not support the legacy mode of vue-i18n
+  legacy: false,
   locale: 'ru',
   fallbackLocale: 'en',
-  messages,
+  messages: {
+    'en': {
+      ...en,
+    },
+    'ru': {
+      ...ru,
+    },
+  },
   globalInjection: true,
   warnHtmlInMessage: "off",
   pluralizationRules: {
@@ -56,4 +54,3 @@ const i18n = createI18n({
 })
 
 export default i18n
-

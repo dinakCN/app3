@@ -32,13 +32,10 @@
   lang="ts"
   setup
 >
-import { computed, onMounted } from 'vue';
+import { computed } from 'vue';
 import { useAppStore } from './stores/app'
 
 const storeApp = useAppStore()
 const toast = computed(() => storeApp.toast)
 
-// onMounted(() => {
-//   storeApp.showError('test')
-// })
 </script>

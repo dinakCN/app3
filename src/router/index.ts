@@ -8,7 +8,6 @@ import { createRouter, createWebHistory } from 'vue-router/auto'
 import { setupLayouts } from 'virtual:generated-layouts'
 import { useUserStore } from '../stores/user'
 import { useProjectStore } from '../stores/project'
-import {useProjectsStore} from "../stores/projects";
 
 const router = createRouter({
   history: createWebHistory(process.env.BASE_URL),
@@ -28,8 +27,7 @@ router.beforeEach(async (to, from, next) => {
     return;
   }
 
-  console.log(!storeUser.user.id && to.meta.auth)
-  if (!storeUser.user.id && to.meta.auth) {
+  if (!storeUser.user.id) {
     try {
       const config = await storeUser.getConfig();
 

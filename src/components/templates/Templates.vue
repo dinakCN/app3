@@ -19,9 +19,9 @@
 
     <v-data-iterator
       :items="filterData"
-      :page.sync="page"
+      v-model:page="page"
       :search="search"
-      :items-per-page.sync="itemsPerPage"
+      v-model:items-per-page="itemsPerPage"
       disable-sort
       group-by="gr"
       group-desc
@@ -140,7 +140,7 @@ import PromoDialog from "../dialogs/PromoDialog.vue";
 
 const {t} = useI18n()
   const props = withDefaults(defineProps<{data: string[]}>(), {
-    data: []
+    data: () => []
   })
   const templates  = ref([])
   const filter  = ref([

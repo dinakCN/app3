@@ -43,7 +43,7 @@ export default {
       timeout: null
     }
   },
-  beforeDestroy() {
+  beforeUnmount() {
     if (this.timeout) clearTimeout(this.timeout)
   },
   methods: {

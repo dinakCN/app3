@@ -45,12 +45,12 @@ export const useCargoStore = defineStore('cargo', () => {
     const sync: Ref<boolean> = ref(false);
 
     const points = computed(() => {
-        return cargo.value.point.map((i) => Object.freeze(i));
+        return cargo.value.point;
     });
 
     const point = computed(() => {
         return cargo.value.point.reduce((o, i) => {
-            o[i.id] = Object.freeze(i);
+            o[i.id] = i;
             return o;
         }, {} as Record<number, PointInterface>);
     });

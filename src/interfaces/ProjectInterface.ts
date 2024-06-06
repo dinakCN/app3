@@ -9,21 +9,21 @@ interface PointInterface {
 }
 
 interface ItemInterface {
-  id: number,
-  nm: string,
-  ln: number,
-  wd: number,
-  hg: number,
-  wg: number,
-  cn: number,
-  pg: number,
-  st: number,
-  lm: number,
+  id?: number,
+  nm?: string,
+  ln?: number,
+  wd?: number,
+  hg?: number,
+  wg?: number,
+  cn?: number,
+  pg?: number,
+  st?: number,
+  lm?: number,
   rt?: number,
   ov?: number,
-  cr: string,
-  un: Units,
-  point: number
+  cr?: string,
+  un?: Units,
+  point?: number
   icon?: string;
   vl?: number;
   wf?: string;
