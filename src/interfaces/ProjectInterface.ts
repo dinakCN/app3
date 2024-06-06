@@ -24,6 +24,17 @@ interface ItemInterface {
   cr: string,
   un: Units,
   point: number
+  icon?: string;
+  vl?: number;
+  wf?: string;
+  tt?: string;
+  sz?: string;
+  attr?: {
+    st?: string;
+    lm?: string;
+    rt?: string;
+    ov?: string;
+  };
 }
 
 interface LoadInterface {

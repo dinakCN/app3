@@ -17,7 +17,7 @@ export const useUserStore = defineStore('user', () => {
    * 2 - PRO безлимитный
    */
   const user = reactive({
-    id: 0,
+    id: null,
     name: '',
     email: '',
     tarif: {

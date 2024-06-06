@@ -12,6 +12,8 @@ import { defineConfig } from 'vite'
 import { fileURLToPath, URL } from 'node:url'
 
 // https://vitejs.dev/config/
+
+const warningVuetifyComponents = ['v-subheader', 'v-list-item-avatar', 'v-list-item-content']
 export default defineConfig({
   plugins: [
     VueRouter({
@@ -35,7 +37,11 @@ export default defineConfig({
       dts: 'src/components.d.ts',
     }),
     Vue({
-      template: { transformAssetUrls },
+      template: {
+        transformAssetUrls,
+        compilerOptions: {
+          isCustomElement: (tag) => warningVuetifyComponents.includes(tag)
+        }},
     }),
     // https://github.com/vuetifyjs/vuetify-loader/tree/master/packages/vite-plugin#readme
     Vuetify({

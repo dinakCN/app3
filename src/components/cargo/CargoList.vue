@@ -430,7 +430,7 @@ type PropsType = {
   const router = useRouter();
 
   const props = withDefaults(defineProps<PropsType>(), {
-    item: [],
+    item: () => [],
     clid: 0,
     order: 0,
     filter: ''

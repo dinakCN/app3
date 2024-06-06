@@ -69,8 +69,17 @@
           <div>{{ t('project.no-projects-description-2') }}</div>
         </div>
 
+        <!-- spinner -->
+        <div v-if="loading" class="text-center mt-4">
+          <v-progress-circular
+            color="primary"
+            indeterminate
+          ></v-progress-circular>
+        </div>
+
         <!-- sort & order-->
         <div
+          v-if="!loading"
           class="d-flex align-center my-2"
         >
           <v-chip-group
@@ -104,14 +113,6 @@
           >
             {{ orderData.name }}
           </v-chip>
-
-          <div v-if="loading" class="text-center">
-            <v-progress-circular
-              color="primary"
-              indeterminate
-            ></v-progress-circular>
-          </div>
-
         </div>
         <!-- list -->
         <v-card
@@ -169,7 +170,6 @@
 
                         <!-- rename -->
                         <v-btn
-                          icon
                           variant="text"
                           size="small"
                           @click.stop="setReName({ name: item.name, id: item.id })"
@@ -179,7 +179,6 @@
 
                         <!-- copy -->
                         <v-btn
-                          icon
                           variant="text"
                           size="small"
                           @click.stop="copy(item.id)"
@@ -189,7 +188,6 @@
 
                         <!-- remove -->
                         <v-btn
-                          icon
                           variant="text"
                           size="small"
                           @click.stop="remove(item.id)"
@@ -239,7 +237,7 @@
 
     <!-- promo -->
     <PromoDialog
-        ref="promo"
+        ref="promoRef"
         :head="$t('message.loads.add.head')"
         :text="$t('message.project.add.text')"
         :call="$t('message.project.add.call')"
@@ -288,7 +286,7 @@ const vh = computed(() => mobile.value ? height.value - 405 : height.value - 410
 /**
  * Refs
  */
-const promo: Ref<typeof PromoDialog | null> = ref(null)
+const promoRef: Ref<typeof PromoDialog | null> = ref(null)
 
 /**
  * Router
@@ -384,7 +382,7 @@ const addError = (message: string) => {
   if (message) {
     const msg = JSON.parse(message)
 
-    if (!user.tarif.type && msg.type === 'maxProjects') promo.value.open()
+    if (!user.tarif.type && msg.type === 'maxProjects') promoRef.value.open()
 
     storeApp.showError(getMessage(msg))
   } else {
@@ -636,7 +634,7 @@ const set = (id: number) => {
   /**
    * Проверка
    */
-  if (String(project_id) === String(id)) return router.push('/cargo')
+  // if (String(project_id) === String(id)) return router.push('/cargo')
   storeApp.setLoading(true)
   return appProject.getProject(id).then(() => {
     router.push('/cargo')

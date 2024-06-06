@@ -18,32 +18,38 @@ const router = createRouter({
 /**
  * Before each route update
  */
-router.beforeEach(async (to, from, next) => {
-  if (to.meta?.redirect) {
-    return next({ path: to.meta.redirect });
-  }
 
-  const mainPage = { name: 'main' };
+router.beforeEach(async (to, from, next) => {
   const storeUser = useUserStore();
   const storeProject = useProjectStore();
 
-  try {
-    if (!storeUser.user.id && to.meta.requiresAuth) {
-      await storeUser.getConfig();
-    } else {
-      const { last_project } = storeProject;
-      if (!last_project) {
-        return next(mainPage);
-      }
-      await storeProject.getProject(last_project);
-      return next();
-    }
-  } catch (error) {
-    console.error('Routing error:', error);
-    return next(mainPage);
+  if (to.meta?.redirect) {
+    window.location.href = to.meta.redirect;
+    return;
   }
 
-  return next();
+  if (!storeUser.user.id && to.meta.auth) {
+    try {
+      const config = await storeUser.getConfig();
+
+      if (!config?.last_project) {
+        next({ name: 'main' });
+        return;
+      }
+
+      try {
+        await storeProject.getProject(config.last_project);
+        next();
+      } catch (error) {
+        next({ name: 'main' });
+      }
+    } catch (error) {
+      next({ name: 'main' });
+    }
+    return;
+  }
+
+  next();
 });
 
 export default router

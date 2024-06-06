@@ -99,8 +99,8 @@ const update = () => {
   /**
    * Check lenght
    */
-  if (data === null) return
-  if (data.length > config.max) {
+  if (data.value === null) return
+  if (data.value.length > config.max) {
     data.value = data.value.substring(0, config.max)
   }
 }

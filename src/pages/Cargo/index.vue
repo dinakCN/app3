@@ -1,5 +1,12 @@
 <template>
-  <v-row justify="center" no-gutters>
+  <!-- spinner -->
+  <div v-if="loading" class="text-center mt-4">
+    <v-progress-circular
+        color="primary"
+        indeterminate
+    ></v-progress-circular>
+  </div>
+  <v-row v-else justify="center" no-gutters>
     <v-col
       cols="12"
       lg="8"
@@ -167,7 +174,7 @@
 
     <!-- PROMO -->
     <PromoDialog
-      ref="promo"
+      ref="promoRef"
       :head="$t('message.cargo.add.head')"
       :text="promo"
       :call="call"
@@ -182,19 +189,19 @@
     import {ref, computed, watch, onMounted, onBeforeUnmount, Ref} from 'vue'
     import { useRoute, useRouter } from 'vue-router'
     import _debounce from 'lodash/debounce'
-    import {useCargoStore} from "../stores/cargo";
-    import {useUserStore} from "../stores/user";
+    import {useCargoStore} from "../../stores/cargo";
+    import {useUserStore} from "../../stores/user";
     import {useI18n} from "vue-i18n";
-    import {useProjectStore} from "../stores/project";
-    import {useAppStore} from "../stores/app";
-    import useMessages, {IMessage} from "../hooks/useMessages";
+    import {useProjectStore} from "../../stores/project";
+    import {useAppStore} from "../../stores/app";
+    import useMessages, {IMessage} from "../../hooks/useMessages";
     import { useGoTo } from 'vuetify'
-    import ReNameDialog from "../components/dialogs/ReNameDialog.vue";
-    import PromoDialog from "../components/dialogs/PromoDialog.vue";
-    import MoveDialog from "../components/common/MoveDialog.vue";
-    import EditDialog from "../components/common/EditDialog.vue";
-    import CargoList from "../components/cargo/CargoList.vue";
-    import CargoTemplates from "../components/templates/CargoTemplates.vue";
+    import ReNameDialog from "../../components/dialogs/ReNameDialog.vue";
+    import PromoDialog from "../../components/dialogs/PromoDialog.vue";
+    import MoveDialog from "../../components/common/MoveDialog.vue";
+    import EditDialog from "../../components/common/EditDialog.vue";
+    import CargoList from "../../components/cargo/CargoList.vue";
+    import CargoTemplates from "../../components/templates/CargoTemplates.vue";
 
     /**
      * hooks
@@ -231,6 +238,8 @@
     /**
      * data
      */
+
+    const loading = computed(() => appStore.loading)
 
     const filter = ref('')
     const value = ref('')
@@ -355,6 +364,7 @@
     }
 
     const itemAdd = (id: number) => {
+      console.log(userStore.config.limit, cargoStore.itemsRowCount)
       if (!cargoStore.checkCountRow(1)) return false
       if (!cargoStore.checkCountCargo(1)) return limitMessage(1)
       router.push(`/cargo/item/${id}`)
@@ -440,7 +450,7 @@
       return appStore.showError(message)
     }
 
-    const templateGet = async (clid) => {
+    const templateGet = async (clid: number) => {
       const data = await templates.value.open()
       if (!data) return false
 
@@ -491,7 +501,7 @@
         promoRef.value.open()
     }
 
-    const limitMessage = (n) => {
+    const limitMessage = (n: number) => {
       let limit = Number(userStore.config.limit.items) - Number(itemsCount.value)
       if (limit < 0) limit += n
       if (n < 0 || !limit) n = 0

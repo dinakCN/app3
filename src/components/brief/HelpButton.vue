@@ -1,6 +1,5 @@
 <template>
   <v-btn
-    icon
     size="40"
     variant="text"
     @click.stop="open()"

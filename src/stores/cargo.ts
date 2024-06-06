@@ -8,51 +8,16 @@ import { getText } from '@/configs/functions/gettext.js';
 import { getVolume } from '@/configs/functions/getvolume.js';
 import { getCargoIcon } from '@/configs/functions/geticon.js';
 import { getRandomColor } from '@/configs/getcolor.js';
-import { stByValue, rt, rtByValue, ov, ovByValue } from '@/configs/items.js';
+import { stByValue, rt, rtByValue, ov, ovByValue, nm, ln, wd, hg, wg, cn, pg, st, lm } from '@/configs/items.js';
 
 import { useUserStore } from './user';
 import { useProjectStore } from './project';
 import {useAppStore} from "./app";
-
-export interface ICargoPoint {
-    id: number;
-    view: boolean;
-    mini: boolean;
-    color: string;
-    name: string;
-}
-
-interface ICargoItem {
-    id: number;
-    point: number;
-    nm: number;
-    ln: number;
-    wd?: number;
-    hg?: number;
-    wg?: number;
-    cn?: number;
-    pg?: number;
-    st?: number;
-    lm?: number;
-    rt?: number;
-    ov?: number;
-    cr?: string;
-    icon?: string;
-    vl?: number;
-    wf?: string;
-    tt?: string;
-    sz?: string;
-    attr?: {
-        st: string;
-        lm: string;
-        rt: string;
-        ov: string;
-    };
-}
+import {ItemInterface, PointInterface} from "../interfaces/ProjectInterface";
 
 export interface ICargo {
-    point: ICargoPoint[];
-    items: ICargoItem[];
+    point: PointInterface[];
+    items: ItemInterface[];
 }
 
 export const useCargoStore = defineStore('cargo', () => {
@@ -87,7 +52,7 @@ export const useCargoStore = defineStore('cargo', () => {
         return cargo.value.point.reduce((o, i) => {
             o[i.id] = Object.freeze(i);
             return o;
-        }, {} as Record<number, ICargoPoint>);
+        }, {} as Record<number, PointInterface>);
     });
 
     const pointOrder = computed(() => {
@@ -142,7 +107,7 @@ export const useCargoStore = defineStore('cargo', () => {
         return cargo.value.items.length;
     });
 
-    const checkID = (id: number, arr: ICargoPoint[] | ICargoItem[]) => {
+    const checkID = (id: number, arr: PointInterface[] | ItemInterface[]) => {
         return arr.find((i) => String(i.id) === String(id));
     };
 
@@ -172,7 +137,7 @@ export const useCargoStore = defineStore('cargo', () => {
         const index = cargo.value.point.findIndex((p) => String(p.id) === String(id));
         cargo.value.point.splice(index, 1);
 
-        const filter = cargo.value.items.filter((i) => String(i.point.id) === String(id));
+        const filter = cargo.value.items.filter((i) => String(i.point) === String(id));
 
         if (filter.length) setProjectLastModified();
 
@@ -243,7 +208,7 @@ export const useCargoStore = defineStore('cargo', () => {
         return false;
     };
 
-    const editItem = (obj: { id: number; data: Partial<ICargoItem> }) => {
+    const editItem = (obj: { id: number; data: Partial<ItemInterface> }) => {
         const { id, data } = obj;
 
         if (id && data) {
@@ -274,7 +239,7 @@ export const useCargoStore = defineStore('cargo', () => {
         }
     };
 
-    const addItem = (item: ICargoItem) => {
+    const addItem = (item: ItemInterface) => {
         for (const p of Object.keys(item)) item[p] = Object.freeze(item[p])
 
         if (!item.id) {
@@ -296,14 +261,16 @@ export const useCargoStore = defineStore('cargo', () => {
     }
 
     const checkCountCargo =(n = 0) => {
-        return Number(itemsCount) + Number(n) <= userStore.config.limit.items;
-
-
+        if(Number(itemsCount.value) + Number(n) > userStore.config.limit.items) {
+            // this.$metrika.reachGoal('error.limit.cargo')
+            return false
+        }
+        return true
     }
     const checkCountRow =(n = 0) =>{
         if (Number(itemsRowCount.value) + Number(n) > userStore.config.limit.irows)  {
-
             appStore.showError(`${t('cargo.valid.rows')} ${Number(userStore.config.limit.irows)} { n: ${Number(userStore.config.limit.irows)} })`)
+            // this.$metrika.reachGoal('error.limit.row')
             return false
         }
 
@@ -312,6 +279,54 @@ export const useCargoStore = defineStore('cargo', () => {
     const checkCountLoads = () => {
         return Number(loads.value.length + 1) <= userStore.config.limit.loads;
     }
+
+    const list = (array, bool = false) => {
+
+        const list = [...array]
+
+        list.unshift({ text: 'common.null', value: null })
+
+        if (bool) return Object.freeze(list.map((item) => { return { text: t(item.text), value: item.value }}))
+
+        return Object.freeze(list.map((item) => item.value))
+
+    }
+
+    const packingList = computed(() => {
+        return list(pg.default, true)
+    })
+
+    const packingListValues = computed(() => {
+        return list(pg.default)
+    })
+
+    const stuckList = computed(() => {
+        return list(st.default, true)
+    })
+
+    const stuckListValues = computed(() =>{
+        return list(st.default)
+    })
+
+    const rotateList = computed(() => {
+        return list(rt.default, true)
+    })
+
+    const rotateListValues = computed(() => {
+        return list(rt.default)
+    })
+
+    const overList = computed(() => {
+        return list(ov.default, true)
+    })
+
+    const overListValues = computed(() => {
+        return list(ov.default)
+    })
+
+    const pgIcon = computed(() => {
+        return getCargoIcon(pg)
+    })
 
     return {
         points,
@@ -323,6 +338,15 @@ export const useCargoStore = defineStore('cargo', () => {
         cargo,
         sync,
         loads,
+        packingList,
+        pgIcon,
+        overListValues,
+        overList,
+        rotateListValues,
+        rotateList,
+        stuckListValues,
+        stuckList,
+        packingListValues,
         setSync,
         removePoint,
         addPoint,
