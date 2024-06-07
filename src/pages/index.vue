@@ -120,6 +120,7 @@
           rounded="lg"
           :max-height="vh"
           class="overflow-y-auto"
+          id="project-list"
           style="min-height: 60px;"
         >
           <v-list
@@ -264,7 +265,7 @@ import { useProjectsStore } from '../stores/projects'
 import { useAppStore } from '../stores/app'
 import { useRouter } from 'vue-router'
 import { useI18n } from "vue-i18n"
-import {useDisplay, useGoTo} from 'vuetify'
+import {useDisplay} from 'vuetify'
 import { ProjectInterface } from '../interfaces/ProjectInterface'
 import HelpButton from "../components/brief/HelpButton.vue"
 import PromoDialog from "../components/dialogs/PromoDialog.vue";
@@ -275,7 +276,6 @@ import useMessages from "../hooks/useMessages";
  */
 
 const {getMessage} = useMessages()
-const goTo = useGoTo()
 
 /**
  * Mobile, Height
@@ -345,8 +345,8 @@ const getList = async () => {
        * Промотка окна до активного проекта
        */
       if (project_id.value) {
-        return nextTick().then(() => {
-          scrollIntoView(project_id.value)
+        return nextTick(() => {
+          scrollIntoView(project_id.value, true)
         })
       }
     })
@@ -590,15 +590,32 @@ const create = async () => {
 }
 
 
-const scrollIntoView = (id: number) => {
+const scrollIntoView = (id: number, smooth: boolean = false) => {
 
-  if (!projectsListRef.length) return
+  const list = document.getElementById('project-list')
+
+  if (!list) return
 
   const find = filterList.value.findIndex((i) => String(i.id) === String(id))
 
   if (find === -1) return
+  const offset = (find * 60) - Math.round(vh.value / 2)
 
-  goTo(projectsListRef[find], { duration: 400 })
+  if (offset > 0) {
+    if (smooth) {
+
+      return list.scrollTo({
+        top: offset,
+        left: 0,
+        behavior: "smooth",
+      })
+
+    } else {
+      return list.scrollTo(0, offset)
+    }
+  }
+
+  return list.scrollTo(0, 0)
 }
 
 const add = async (n: string) => {
