@@ -9,7 +9,7 @@
     :counter="config.max"
     :max-length="config.max"
     clearable
-    clear-icon="mdi:mdi mdi-close"
+    :clear-icon="icons.close"
     required
     variant="underlined"
     type="text"
@@ -33,6 +33,7 @@ import { required, maxLength } from '../../plugins/vuelidate'
 import { nm as config } from '../../configs/items.js'
 import { onMounted } from 'vue'
 import { onUnmounted } from 'vue'
+import icons from "../../configs/constants/icons";
 
 defineProps({
   label: {

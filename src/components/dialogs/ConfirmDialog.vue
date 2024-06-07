@@ -2,6 +2,7 @@
 import {ref} from "vue"
 import {useI18n} from "vue-i18n";
 import {reactive} from "vue";
+import icons from "../../configs/constants/icons";
 
 const {t} = useI18n();
 
@@ -51,7 +52,7 @@ defineExpose({
     persistent
   >
     <v-card
-      prepend-icon="mdi:mdi-head-question-outline"
+      :prepend-icon="icons.questionHead"
       :text=" text ? `${t(text)}?` : ''"
     >
       <template v-slot:actions>

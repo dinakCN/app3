@@ -9,8 +9,8 @@
       class="centered-input"
       dense
       :hide-spin-buttons="withIcons"
-      :prepend-inner-icon="withIcons ? 'mdi:mdi-minus-circle' : ''"
-      :append-inner-icon="withIcons ? 'mdi:mdi-plus-circle' : ''"
+      :prepend-inner-icon="withIcons ? icons.minusCircle : ''"
+      :append-inner-icon="withIcons ? icons.plusCircle : ''"
       :variant="'underlined'"
       type="number"
       :counter-value="() => subFieldText"
@@ -38,6 +38,7 @@ import {required} from "../../plugins/vuelidate";
 import {useVuelidate} from "@vuelidate/core";
 import {useI18n} from "vue-i18n";
 import {decimal, maxValue, minValue} from "@vuelidate/validators";
+import icons from "../../configs/constants/icons";
 
 interface IConfig {
     max: number;

@@ -68,7 +68,7 @@
               <v-icon small>{{ logoView }}</v-icon>
             </v-btn>
             <v-btn
-              icon="mdi:mdi-close"
+              :icon="icons.close"
               @click="removePoint()"
             >
             </v-btn>
@@ -287,22 +287,22 @@
                       <v-list-item-action class="mr-0">
                         <div class="d-flex align-center">
                           <v-btn
-                            icon="mdi:mdi-square-edit-outline"
+                            :icon="icons.editOutline"
                             @click="router.push(`/cargo/item/${clid}/${i.id}`)"
                           >
                           </v-btn>
                           <v-btn
-                            icon="mdi:mdi-content-save-outline"
+                            :icon="icons.saveOutline"
                             @click.stop="setTemplateOne(i.id)"
                           >
                           </v-btn>
                           <v-btn
-                            icon="mdi:mdi-content-copy"
+                            :icon="icons.copyContent"
                             @click.stop="copyItem(i.id)"
                           >
                           </v-btn>
                           <v-btn
-                            icon="mdi:mdi-trash-can-outline"
+                            :icon="icons.trashCan"
                             @click.stop="removeItem(i.id)"
                           >
                           </v-btn>
@@ -418,6 +418,7 @@ import {useUserStore} from "../../stores/user";
 import {useCargoStore} from "../../stores/cargo";
 import {useDisplay} from "vuetify";
 import {useRouter} from "vue-router";
+import icons from "../../configs/constants/icons";
 
 type PropsType = {
   item: any[],

@@ -49,7 +49,7 @@
           <v-text-field
             v-model="value"
             :placeholder="$t('common.search')"
-            prepend-inner-icon="mdi:mdi-magnify"
+            :prepend-inner-icon="icons.magnify"
             hide-details
             block
             clearable
@@ -64,7 +64,7 @@
 
       <div v-if="scrollView" class="d-flex justify-center align-center my-1 mt-2">
         <v-btn
-          icon="mdi:mdi-chevron-down"
+          :icon="icons.chevronDown"
           color="primary"
           @click="scrollUpDown(false)"
         >
@@ -118,7 +118,7 @@
                 class="d-flex justify-center list-item"
               >
                 <v-btn
-                  icon="mdi:mdi-repeat"
+                  :icon="icons.repeat"
                   @click="pointRotate(point.id)"
                 >
                 </v-btn>
@@ -130,7 +130,7 @@
 
       <div v-if="scrollView" class="d-flex justify-center align-center mt-2">
         <v-btn
-          icon="mdi:mdi-chevron-up"
+          :icon="icons.chevronDown"
           color="primary"
           @click="scrollUpDown(true)"
         >
@@ -149,7 +149,7 @@
           @click="pointAdd()"
         >
           <v-icon left>
-              mdi mdi-plus-box-multiple
+              {{ icons.plusBoxMultiply }}
           </v-icon>
           {{ t('cargo.new') }}
         </v-btn>
@@ -166,7 +166,7 @@
     <!-- EDIT NAME -->
     <ReNameDialog
       ref="dialogReName"
-      icon="mdi mdi-check-circle"
+      :icon="icons.checkCircle"
       color="primary"
     />
 
@@ -206,6 +206,7 @@
     import CargoList from "../../components/cargo/CargoList.vue";
     import CargoTemplates from "../../components/templates/CargoTemplates.vue";
     import ConfirmDialog from "../../components/dialogs/ConfirmDialog.vue";
+    import icons from "../../configs/constants/icons";
 
     /**
      * hooks

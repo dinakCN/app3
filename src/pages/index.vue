@@ -44,7 +44,7 @@
               v-model="filter"
               :placeholder="t('common.search')"
               :max-length="35"
-              clear-icon="mdi:mdi mdi-close"
+              :clear-icon="icons.close"
               density="default"
               hide-details
               clearable
@@ -53,7 +53,7 @@
               single-line
             >
               <template #prepend-inner>
-                <v-icon color="black">mdi:mdi mdi-magnify</v-icon>
+                <v-icon color="black">{{ icons.magnify }}</v-icon>
               </template>
             </v-text-field>
           </v-card>
@@ -144,7 +144,7 @@
                   >
                     <template v-slot:prepend>
                       <v-avatar
-                        :icon="item.id === project_id ? 'mdi:mdi mdi-folder-open' : 'mdi:mdi mdi-folder-outline'"
+                        :icon="item.id === project_id ? icons.folderOpen : icons.folderOutline"
                         variant="text"
                         size="large"
                       >
@@ -174,7 +174,7 @@
                           size="small"
                           @click.stop="setReName({ name: item.name, id: item.id })"
                         >
-                          <v-icon size="20">mdi:mdi mdi-form-textbox</v-icon>
+                          <v-icon size="20">{{ icons.textbox}}</v-icon>
                         </v-btn>
 
                         <!-- copy -->
@@ -183,7 +183,7 @@
                           size="small"
                           @click.stop="copy(item.id)"
                         >
-                          <v-icon size="20">mdi:mdi mdi-content-copy</v-icon>
+                          <v-icon size="20">{{ icons.copyContent }}</v-icon>
                         </v-btn>
 
                         <!-- remove -->
@@ -192,7 +192,7 @@
                           size="small"
                           @click.stop="remove(item.id)"
                         >
-                          <v-icon size="20">mdi:mdi mdi-trash-can-outline</v-icon>
+                          <v-icon size="20">{{ icons.trashCan }}</v-icon>
                         </v-btn>
                       </div>
                     </template>
@@ -219,7 +219,7 @@
             rounded
             size="default"
             color="primary"
-            prepend-icon="mdi:mdi mdi-plus-box-multiple"
+            :prepend-icon="icons.plusBoxMultiply"
             @click.stop="create()"
           >
             {{ t('project.create') }}
@@ -270,6 +270,7 @@ import { ProjectInterface } from '../interfaces/ProjectInterface'
 import HelpButton from "../components/brief/HelpButton.vue"
 import PromoDialog from "../components/dialogs/PromoDialog.vue";
 import useMessages from "../hooks/useMessages";
+import icons from "../configs/constants/icons";
 
 /**
  * hooks
@@ -542,8 +543,8 @@ const sortList = reactive([
  */
 const order: Ref<number> = ref(0);
 const orderList = reactive([
-  { name: t('project.order.false'), value: 0, icon: 'mdi:mdi mdi-chevron-down' },
-  { name: t('project.order.true'), value: 1, icon: 'mdi:mdi mdi-chevron-up' }
+  { name: t('project.order.false'), value: 0, icon: icons.chevronDown },
+  { name: t('project.order.true'), value: 1, icon: icons.chevronUp }
 ]);
 const orderData = computed(() => {
   if (order.value > orderList.length) {

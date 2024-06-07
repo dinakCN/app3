@@ -5,7 +5,7 @@
   >
     <v-card
       min-width="410"
-      :prepend-icon="head ? 'mdi:mdi mdi-update' : ''"
+      :prepend-icon="head ? icons.update : ''"
       :title="head"
     >
       <v-form class="mx-3 mt-1">
@@ -45,6 +45,7 @@
 import { reactive, ref } from 'vue'
 import { useI18n } from "vue-i18n"
 import { useVuelidate } from '@vuelidate/core'
+import icons from "../../configs/constants/icons";
 
 const props = defineProps({
   icon: {

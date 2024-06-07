@@ -6,13 +6,10 @@
       :hint="t(hint)"
       :color="color"
       :class="cls"
-      :clear-icon="clearable ? 'mdi:mdi mdi-close' : ''"
+      :clear-icon="clearable ? icons.close : ''"
       dense
-      :prepend-icon="prepend"
-      :append-outer-icon="append"
       :clearable="clearable"
       :variant="'underlined'"
-      :type="type"
       :error-messages="dataErrors"
       :counter="config.max"
       :max-length="config.max"
@@ -31,6 +28,7 @@ import {useI18n} from "vue-i18n";
 import {computed, onMounted, onUnmounted} from "vue";
 import {maxLength, required} from "../../plugins/vuelidate";
 import {useVuelidate} from "@vuelidate/core";
+import icons from "../../configs/constants/icons";
 
 interface IConfig {
     max: number;
@@ -42,14 +40,12 @@ const props = withDefaults(defineProps<{
   isNeedValidate?: boolean;
   clearable?: boolean;
   variant?: string,
-  type?: string
   config?: IConfig,
   color?: string,
   cls?: string
 }>(), {
   clearable: false,
   variant: 'underlined',
-  type: 'text',
   color: '#000000',
   cls: '',
   isNeedValidate: true
@@ -101,9 +97,6 @@ const dataErrors = computed(() => {
 
   return errors
 })
-
-const prepend = computed(() => props.type === 'number' ? "mdi:mdi-minus-circle" : '')
-const append = computed(() => props.type === 'number' ? "mdi:mdi-plus-circle" : '')
 
 /**
  * onUpdate
