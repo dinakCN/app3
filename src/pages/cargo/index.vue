@@ -87,7 +87,7 @@
         <v-scale-transition group hide-on-leave>
           <template v-for="(point, index) in points" :key="point.id">
             <CargoList
-              :ref="() => point.id"
+              :ref="setCargoListRef"
               :clid="Number(point.id)"
               :order="pointOrder[point.id]"
               :item="filterItems[point.id]"
@@ -180,14 +180,17 @@
       :call="call"
     />
 
-    <!-- UNSAFE -->
+    <!-- CONFIRM -->
+    <confirm-dialog
+        ref="dialogConfirm"
+    />
 
   </v-row>
 </template>
 
 <script setup lang="ts">
     import {ref, computed, watch, onMounted, onBeforeUnmount, Ref} from 'vue'
-    import { useRoute, useRouter } from 'vue-router'
+    import { useRouter } from 'vue-router'
     import _debounce from 'lodash/debounce'
     import {useCargoStore} from "../../stores/cargo";
     import {useUserStore} from "../../stores/user";
@@ -202,6 +205,7 @@
     import EditDialog from "../../components/common/EditDialog.vue";
     import CargoList from "../../components/cargo/CargoList.vue";
     import CargoTemplates from "../../components/templates/CargoTemplates.vue";
+    import ConfirmDialog from "../../components/dialogs/ConfirmDialog.vue";
 
     /**
      * hooks
@@ -230,9 +234,16 @@
     const dialogMove: Ref<typeof MoveDialog> = ref(null)
     const promoRef: Ref<typeof PromoDialog> = ref(null)
     const dialogEdit: Ref<typeof EditDialog> = ref(null)
-    const cargoList: Ref<typeof CargoList[]> = ref([])
+    const cargoListRef: Ref<typeof CargoList[]> = ref([])
     const addGroup = ref<HTMLElement | null>(null)
     const templates: Ref<typeof CargoTemplates> = ref([])
+    const dialogConfirm: Ref<typeof ConfirmDialog> = ref(null)
+
+    const setCargoListRef = (el: typeof CargoList) => {
+      if (el) {
+        cargoListRef.value.push(el)
+      }
+    }
 
 
     /**
@@ -325,7 +336,7 @@
     const pointRemove = async (obj) => {
       const { clid, length } = obj
       if (length) {
-        const isApply = confirm(`${t('common.delete')}?`)
+        const isApply = await dialogConfirm.value.open('common.delete')
         if (isApply) {
           cargoStore.removePoint(clid)
           sync()
@@ -371,11 +382,13 @@
     }
 
     const itemsRemove = async (obj) => {
-      const isApply = confirm(`${t('common.delete')}?`)
+      const isApply = await dialogConfirm.value.open('common.delete')
       if (isApply) {
         const { clid, selected } = obj
-        if (selected.length) selected.forEach((id: number) => cargoStore.removeItem(id))
-        cargoList.value[0].clearSelected()
+        if (selected.length) {
+          selected.forEach((id: number) => cargoStore.removeItem(id))
+        }
+        cargoListRef.value[0].clearSelected()
         sync()
       }
     }
@@ -392,7 +405,7 @@
 
       if (update && selected.length) selected.forEach((id: number) => cargoStore.moveItem({ id, clid: update }))
 
-      cargoList.value[0].clearSelected()
+      cargoListRef.value[0].clearSelected()
       sync()
     }
 
@@ -413,7 +426,7 @@
       if (!name) return
       const { clid, selected } = obj
       const data = selected.map((i) => item.value[i])
-      cargoList.value[0].clearSelected()
+      cargoListRef.value[0].clearSelected()
       projectStore.addTemplate({ type: 'c', name, data }).then(templateSetSuccess, templateSetError)
     }
 

@@ -1,28 +1,39 @@
 <script setup lang="ts">
 import {ref} from "vue"
 import {useI18n} from "vue-i18n";
-
-defineProps<{
-  text: string
-}>()
+import {reactive} from "vue";
 
 const {t} = useI18n();
 
 const isActive = ref(false)
+const text = ref('')
 
-const emit = defineEmits(['apply', 'close'])
+const state = reactive({
+  resolve: null as any,
+  reject: null as any
+})
+
 const close = () => {
   isActive.value = false
-  emit('close', false)
+  text.value = ''
+  state.resolve(false)
+  return false
 }
 
 const apply = () => {
   isActive.value = false
-  emit('apply', false)
+  text.value = ''
+  state.resolve(true)
+  return true
 }
 
-const open = () => {
+const open = (str: string) => {
+  text.value = str
   isActive.value = true
+  return new Promise((resolve, reject) => {
+    state.resolve = resolve
+    state.reject = reject
+  })
 }
 
 defineExpose({
@@ -40,18 +51,18 @@ defineExpose({
     persistent
   >
     <v-card
-      prepend-icon="mdi-map-marker"
-      :text="text"
+      prepend-icon="mdi:mdi-head-question-outline"
+      :text=" text ? `${t(text)}?` : ''"
     >
       <template v-slot:actions>
         <v-spacer></v-spacer>
 
         <v-btn @click="close">
-          {{ t('$vuetify.close)')}}
+          {{ t('$vuetify.close')}}
         </v-btn>
 
         <v-btn @click="apply">
-          {{ t('$vuetify.apply)')}}
+          {{ t('$vuetify.apply')}}
         </v-btn>
       </template>
     </v-card>

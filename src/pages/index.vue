@@ -118,8 +118,6 @@
         <v-card
           v-if="!loading && (filterList.length || isFilter)"
           rounded="lg"
-          id="projects-list"
-          ref="projectsList"
           :max-height="vh"
           class="overflow-y-auto"
           style="min-height: 60px;"
@@ -132,8 +130,9 @@
               <template
                 v-for="item in filterList"
                 :key="item.id"
+
               >
-                <v-lazy>
+                <v-lazy :ref="setProjectsListRef">
                   <v-list-item
                     link
                     height="60px"
@@ -257,7 +256,7 @@
   lang="ts"
   setup
 >
-import { ref, reactive, computed, toRefs, toRef, onMounted, nextTick } from "vue"
+import {ref, reactive, computed, toRefs, toRef, onMounted, nextTick} from "vue"
 import type { Ref } from 'vue'
 import { useUserStore } from '../stores/user'
 import { useProjectStore } from '../stores/project'
@@ -265,7 +264,7 @@ import { useProjectsStore } from '../stores/projects'
 import { useAppStore } from '../stores/app'
 import { useRouter } from 'vue-router'
 import { useI18n } from "vue-i18n"
-import { useDisplay } from 'vuetify'
+import {useDisplay, useGoTo} from 'vuetify'
 import { ProjectInterface } from '../interfaces/ProjectInterface'
 import HelpButton from "../components/brief/HelpButton.vue"
 import PromoDialog from "../components/dialogs/PromoDialog.vue";
@@ -276,6 +275,7 @@ import useMessages from "../hooks/useMessages";
  */
 
 const {getMessage} = useMessages()
+const goTo = useGoTo()
 
 /**
  * Mobile, Height
@@ -324,13 +324,19 @@ const project_id = computed(() => appProject.project.id)
  */
 const appProjects = useProjectsStore()
 const projects = computed(() => appProjects.store.projects)
-const projectsList = ref<HTMLElement | null>(null)
+const projectsListRef = []
+
+const setProjectsListRef = (el: HTMLElement) => {
+  if (el) {
+    projectsListRef.push(el)
+  }
+}
 
 const projectsCount: Ref<number> = computed(() => {
   return projects.value.length
 })
 
-const getList = () => {
+const getList = async () => {
   storeApp.setLoading(true)
   appProjects.getProjectsList()
     .then(() => {
@@ -339,8 +345,9 @@ const getList = () => {
        * Промотка окна до активного проекта
        */
       if (project_id.value) {
-        nextTick()
-        setTimeout(() => scrollIntoView(project_id.value, false), 300)
+        return nextTick().then(() => {
+          scrollIntoView(project_id.value)
+        })
       }
     })
     .finally(() => {
@@ -583,33 +590,15 @@ const create = async () => {
 }
 
 
-const scrollIntoView = (id: number, smooth: boolean = false) => {
+const scrollIntoView = (id: number) => {
 
-  const list = document.getElementById('projects-list')
-
-  if (!list) return
+  if (!projectsListRef.length) return
 
   const find = filterList.value.findIndex((i) => String(i.id) === String(id))
 
   if (find === -1) return
 
-  const offset = (find * 60) - Math.round(vh.value / 2)
-
-  if (offset > 0)
-
-    if (smooth) {
-
-      return list.scrollTo({
-        top: offset,
-        left: 0,
-        behavior: "smooth",
-      })
-
-    } else {
-      return list.scrollTo(0, offset)
-    }
-
-  return list.scrollTo(0, 0)
+  goTo(projectsListRef[find], { duration: 400 })
 }
 
 const add = async (n: string) => {
