@@ -596,7 +596,6 @@ const valid = () => {
   v$.value.$touch();
   return v$.value.$error;
 };
-
 const submit = () => {
   if (valid()) return appStore.showError(t('item.message.form_error'));
 
