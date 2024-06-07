@@ -826,6 +826,8 @@ export default {
     },
     'badge': 'Значок',
     'close': 'Закрыть',
+    'open': 'Открыть',
+    'apply': 'Да',
     'dataIterator': {
       'noResultsText': 'Совпадающих записей не найдено',
       'loadingText': 'Загрузка...'

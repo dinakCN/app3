@@ -190,7 +190,9 @@ export default {
   // Vuetify components translations
   $vuetify: {
     badge: 'Badge',
+    open: 'Open',
     close: 'Close',
+    apply: 'Apply',
     dataIterator: {
       noResultsText: 'No matching records found',
       loadingText: 'Loading items...'

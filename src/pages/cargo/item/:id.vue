@@ -120,20 +120,15 @@
                 md="6"
                 lg="9"
               >
-                <v-text-field
-                    v-model="nmVal"
-                    :label="t('item.nm.label')"
-                    :hint="t('item.nm.hint')"
-                    :error-messages="errorMessages.nmVal"
-                    :counter="start.nm.max"
-                    :maxlength="start.nm.max"
-                    dense
-                    clearable
-                    variant="underlined"
-                    @click:clear="clearField"
-                    @input="touchFields('nmVal')"
-                    @blur="touchFields('nmVal')"
-                ></v-text-field>
+                <text-field
+                  v-model:value="nmVal"
+                  label="item.nm.label"
+                  hint="item.nm.hint"
+                  :clearable="true"
+                  :config="{
+                      max: start.nm.max
+                  }"
+                />
               </v-col>
               <v-col
                 cols="12"
@@ -141,22 +136,17 @@
                 md="6"
                 lg="3"
               >
-                <v-text-field
-                  v-model="cnVal"
-                  :label="t('item.cn.label')"
-                  class="centered-input"
-                  dense
-                  prepend-icon="bx-minus-circle"
-                  append-outer-icon="bx-plus-circle"
-                  :error-messages="errorMessages.cnVal"
-                  type="number"
-                  step="1"
-                  variant="underlined"
-                  @input="touchFields('cnVal')"
-                  @blur="touchFields('cnVal')"
-                  @click:append-outer="increment"
-                  @click:prepend="decrement"
-                ></v-text-field>
+                  <number-field
+                        v-model:value="cnVal"
+                        label="item.cn.label"
+                        :type="'number'"
+                        :with-icons="true"
+                        :step="1"
+                        :config="{
+                            max: start.cn.max,
+                            min: start.cn.min
+                        }"
+                  />
               </v-col>
               <v-col
                 cols="6"
@@ -164,20 +154,17 @@
                 md="3"
                 lg="3"
               >
-                <v-text-field
-                  v-model="lnVal"
-                  :label="t('item.ln.label')"
-                  :suffix="t('units.size.' + un.size)"
-                  dense
-                  counter
-                  step="0.1"
-                  variant="underlined"
-                  :counter-value="() => subFieldText(lnVal, start.ln.max)"
-                  :error-messages="errorMessages.lnVal"
-                  type="number"
-                  @input="touchFields('lnVal')"
-                  @blur="touchFields('lnVal')"
-                ></v-text-field>
+                  <number-field
+                        v-model:value="lnVal"
+                        label="item.ln.label"
+                        suffix="units.size"
+                        :size="un.size"
+                        :step="0.1"
+                        :config="{
+                            max: start.ln.max,
+                            min: start.ln.min
+                        }"
+                  />
               </v-col>
 
               <v-col
@@ -186,20 +173,17 @@
                 md="3"
                 lg="3"
               >
-                <v-text-field
-                  v-model="wdVal"
-                  :label="t('item.wd.label')"
-                  :suffix="t('units.size.' + un.size)"
-                  dense
-                  counter
-                  step="0.1"
-                  variant="underlined"
-                  :counter-value="() => subFieldText(wdVal, start.wd.max)"
-                  :error-messages="errorMessages.wdVal"
-                  type="number"
-                  @input="touchFields('wdVal')"
-                  @blur="touchFields('wdVal')"
-                ></v-text-field>
+                  <number-field
+                        v-model:value="wdVal"
+                        label="item.wd.label"
+                        suffix="units.size"
+                        :size="un.size"
+                        :step="0.1"
+                        :config="{
+                            max: start.wd.max,
+                            min: start.wd.min
+                        }"
+                  />
               </v-col>
               <v-col
                 cols="6"
@@ -207,20 +191,17 @@
                 md="3"
                 lg="3"
               >
-                <v-text-field
-                  v-model="hgVal"
-                  :label="t('item.hg.label')"
-                  :suffix="t('units.size.' + un.size)"
-                  dense
-                  counter
-                  step="0.1"
-                  variant="underlined"
-                  :counter-value="() => subFieldText (hgVal, start.hg.max)"
-                  :error-messages="errorMessages.hgVal"
-                  type="number"
-                  @input="touchFields('hgVal')"
-                  @blur="touchFields('hgVal')"
-                ></v-text-field>
+                <number-field
+                  v-model:value="hgVal"
+                  label="item.hg.label"
+                  suffix="units.size"
+                  :size="un.size"
+                  :step="0.1"
+                  :config="{
+                            max: start.hg.max,
+                            min: start.hg.min
+                        }"
+                />
               </v-col>
               <v-col
                 cols="6"
@@ -228,19 +209,18 @@
                 md="3"
                 lg="3"
               >
-                <v-text-field
-                  v-model="wgVal"
-                  :label="t('item.wg.label')"
-                  :suffix="t('units.wght.' + un.wght)"
-                  dense
-                  :item-title="'text'"
-                  step="0.1"
-                  :error-messages="errorMessages.wgVal"
-                  variant="underlined"
-                  type="number"
-                  @input="touchFields('wgVal')"
-                  @blur="touchFields('wgVal')"
-                ></v-text-field>
+                <number-field
+                  v-model:value="wgVal"
+                  label="item.wg.label"
+                  suffix="units.wght"
+                  :size="un.wght"
+                  :step="0.1"
+                  :is-size="false"
+                  :config="{
+                            max: start.wg.max,
+                            min: start.wg.min
+                        }"
+                />
               </v-col>
               <v-col
                 cols="6"
@@ -248,19 +228,13 @@
                 md="3"
                 lg="3"
               >
-                <v-select
-                  v-model="pgVal"
-                  dense
-                  variant="underlined"
-                  :item-title="'text'"
-                  :items="packingList"
-                  :label="t('item.pg.label')"
-                  :error-messages="errorMessages.pgVal"
-                >
-                  <template v-slot:prepend>
-                    <v-icon small>{{ pgIcon }}</v-icon>
-                  </template>
-                </v-select>
+                <select-field
+                    v-model="pgVal"
+                    label="item.st.label"
+                    :items="packingList"
+                    :item-title="'text'"
+                    :icon="pgIcon"
+                />
               </v-col>
               <v-col
                 class="d-flex"
@@ -269,19 +243,13 @@
                 md="3"
                 lg="3"
               >
-                <v-select
-                  v-model="stVal"
-                  dense
-                  variant="underlined"
-                  :item-title="'text'"
-                  :label="t('item.st.label')"
-                  :items="stuckList"
-                  :error-messages="errorMessages.stVal"
-                >
-                  <template v-slot:prepend>
-                    <v-icon small>mdi mdi-layers-outline</v-icon>
-                  </template>
-                </v-select>
+                <select-field
+                    v-model="stVal"
+                    label="item.st.label"
+                    :items="stuckList"
+                    :item-title="'text'"
+                    icon="mdi mdi-layers-outline"
+                />
               </v-col>
 
 <!--               LIMIT-->
@@ -293,24 +261,20 @@
                   md="3"
                   lg="3"
                 >
-                  <v-text-field
-                    v-model="lmVal"
-                    dense
-                    variant="underlined"
-                    :label="t('item.lm.label')"
-                    :suffix="t('units.wght.' + un.wght)"
-                    :error-messages="errorMessages.lmVal"
-                    :hint="t('item.lm.hint')"
-                    persistent-hint
-                    step="1"
-                    type="number"
-                    @input="touchFields('lm')"
-                    @blur="touchFields('lm')"
-                  >
-                    <template v-slot:prepend>
-                      <v-icon small>mdi mdi-plus</v-icon>
-                    </template>
-                  </v-text-field>
+                  <number-field
+                      v-model:value="lmVal"
+                      label="item.lm.label"
+                      suffix="units.wght"
+                      :size="un.wght"
+                      :step="1"
+                      :is-size="false"
+                      :config="{
+                            max: start.wg.max,
+                            min: start.wg.min
+                        }"
+                      :prepend-icon="'mdi mdi-plus'"
+                      :is-custom-validate="lmValValidator"
+                  />
                 </v-col>
               </v-fade-transition>
             </v-row>
@@ -322,18 +286,13 @@
                 md="3"
                 lg="3"
               >
-                <v-select
-                  v-model="rtVal"
-                  dense
-                  variant="underlined"
-                  :item-title="'text'"
-                  :label="t('item.rt.label')"
-                  :items="rotateList"
-                >
-                  <template v-slot:prepend>
-                    <v-icon small>mdi mdi-swap-horizontal</v-icon>
-                  </template>
-                </v-select>
+                <select-field
+                    v-model="rtVal"
+                    label="item.rt.label"
+                    :items="rotateList"
+                    :item-title="'text'"
+                    icon="mdi mdi-swap-horizontal"
+                />
               </v-col>
 
               <v-col
@@ -342,19 +301,14 @@
                 md="3"
                 lg="3"
               >
-                <v-select
-                  v-model="ovVal"
-                  :disabled="pg.value === 1"
-                  dense
-                  variant="underlined"
-                  :item-title="'text'"
-                  :label="t('item.ov.label')"
-                  :items="overList"
-                >
-                  <template v-slot:prepend>
-                    <v-icon small>mdi mdi-swap-vertical</v-icon>
-                  </template>
-                </v-select>
+                <select-field
+                    v-model="ovVal"
+                    :disabled="pg.value === 1"
+                    label="item.ov.label"
+                    :items="overList"
+                    :item-title="'text'"
+                    icon="mdi mdi-swap-vertical"
+                />
               </v-col>
 
             </v-row>
@@ -413,6 +367,7 @@ import {useAppStore} from "../../../stores/app";
 import {useProjectStore} from "../../../stores/project";
 import {useI18n} from "vue-i18n";
 import {useRoute, useRouter} from "vue-router";
+import SelectField from "../../../components/forms/SelectField.vue";
 
 const {t} = useI18n();
 const router = useRouter();
@@ -448,8 +403,8 @@ const start = {
 };
 
 const un = reactive({
-  size: '',
-  wght: ''
+  size: 0,
+  wght: 0
 });
 
 const overList = computed(() => cargoStore.overList)
@@ -457,6 +412,17 @@ const rotateList = computed(() => cargoStore.rotateList)
 const stuckList = computed(() => cargoStore.stuckList)
 const packingList = computed(() => cargoStore.packingList)
 const pgIcon = computed(() => getCargoIcon(pgVal.value));
+
+const lmValValidator = computed(() => {
+  if (stVal.value === 1) {
+    return {
+      decimal,
+      minValue: minValue(getWght(start.lm.min, un.wght)),
+      maxValue: maxValue(getWght(start.lm.max, un.wght))
+    };
+  }
+  return {};
+})
 
 const rules: any = {
   nmVal: { required, maxLength: maxLength(start.nm.max) },
@@ -516,8 +482,8 @@ const state = () => {
   lmVal.value = start.lm.val;
   rtVal.value = start.rt.val;
   ovVal.value = start.ov.val;
-  un.size = String(userStore.config.units.cargo.size);
-  un.wght = String(userStore.config.units.cargo.wght);
+  un.size = userStore.config.units.cargo.size;
+  un.wght = userStore.config.units.cargo.wght;
   v$.value.$reset();
 };
 
@@ -567,8 +533,8 @@ const getData = () => {
     ov: Number(pgVal.value) !== 1 ? Number(ovVal.value) : Number(start.ov.val),
     cr: String(color.value),
     un: {
-      size: String(un.size),
-      wght: String(un.wght)
+      size: un.size,
+      wght: un.wght
     },
     point: Number(rout.params.clid ?? '')
   };

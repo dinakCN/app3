@@ -34,7 +34,7 @@ import { nm as config } from '../../configs/items.js'
 import { onMounted } from 'vue'
 import { onUnmounted } from 'vue'
 
-const props = defineProps({
+defineProps({
   label: {
     type: String,
     default: 'common.name'
