@@ -17,6 +17,11 @@ const icons = {
   update: 'mdi:mdi-update',
   editOutline: 'mdi:mdi-square-edit-outline',
   saveOutline: 'mdi:mdi-content-save-outline',
+  refresh: 'mdi:mdi-refresh',
+  layersOutline: 'mdi:mdi-layers-outline',
+  swapHorizontal: 'mdi:mdi-swap-horizontal',
+  swapVertical: 'mdi:mdi-swap-vertical',
+  circle: 'mdi:mdi-circle'
 };
 
 type IIcons = {

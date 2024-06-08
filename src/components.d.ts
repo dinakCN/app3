@@ -31,6 +31,7 @@ declare module 'vue' {
     NavMenuItem: typeof import('./components/navigation/NavMenuItem.vue')['default']
     NumberField: typeof import('./components/forms/NumberField.vue')['default']
     PromoDialog: typeof import('./components/dialogs/PromoDialog.vue')['default']
+    RadioGroup: typeof import('./components/forms/RadioGroup.vue')['default']
     ReName: typeof import('./components/common/ReName.vue')['default']
     ReNameDialog: typeof import('./components/dialogs/ReNameDialog.vue')['default']
     RouterLink: typeof import('vue-router')['RouterLink']

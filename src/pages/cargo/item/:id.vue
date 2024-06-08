@@ -27,7 +27,7 @@
               <template #activator="{ props }">
                 <v-btn v-bind="props">
                   <v-icon :color="color">
-                    mdi mdi-circle
+                    {{icons.circle}}
                   </v-icon>
                 </v-btn>
               </template>
@@ -44,7 +44,7 @@
             <v-tooltip location="bottom">
               <template #activator="{ props }">
                 <v-btn v-bind="props" @click="clearForm">
-                  <v-icon>mdi mdi-refresh</v-icon>
+                  <v-icon>{{ icons.refresh }}</v-icon>
                 </v-btn>
               </template>
               <span>{{ t('common.refresh') }}</span>
@@ -55,7 +55,7 @@
               <v-tooltip location="bottom">
                 <template #activator="{ props }">
                   <v-btn v-bind="props" @click="rem">
-                    <v-icon>mdi mdi-trash-can-outline</v-icon>
+                    <v-icon>{{ icons.trashCan }}</v-icon>
                   </v-btn>
                 </template>
                 <span>{{ t('common.delete') }}</span>
@@ -72,43 +72,21 @@
         <v-card-text
           class="d-flex align-center py-0"
         >
-          <v-radio-group
-            v-model="un['size']"
-            class="mr-3"
-            mandatory
-            inline
-            hint="test"
-          >
-            <v-radio
-              :label="t('units.mm')"
-              value="0"
-            ></v-radio>
-            <v-radio
-              :label="t('units.sm')"
-              value="1"
-            ></v-radio>
-            <v-radio
-              :label="t('units.m')"
-              value="2"
-            ></v-radio>
-          </v-radio-group>
+          <radio-group
+              v-model="un['size']"
+              :items="unitSizeArray"
+              cls="mr-3"
+              mandatory
+              inline
+          />
+          <radio-group
+              v-model="un['wght']"
+              :items="unitWeightArray"
+              inline
+          />
+        </v-card-text>
 
           <v-spacer></v-spacer>
-
-          <v-radio-group
-            v-model="un['wght']"
-            inline
-          >
-            <v-radio
-              :label="t('units.kg')"
-              value="0"
-            ></v-radio>
-            <v-radio
-              :label="t('units.tn')"
-              value="1"
-            ></v-radio>
-          </v-radio-group>
-        </v-card-text>
 
         <!-- FORM -->
         <v-form class="pt-2">
@@ -248,7 +226,7 @@
                     label="item.st.label"
                     :items="stuckList"
                     :item-title="'text'"
-                    icon="mdi mdi-layers-outline"
+                    :icon="icons.layersOutline"
                 />
               </v-col>
 
@@ -272,7 +250,6 @@
                             max: start.wg.max,
                             min: start.wg.min
                         }"
-                      :prepend-icon="'mdi mdi-plus'"
                       :is-custom-validate="lmValValidator"
                   />
                 </v-col>
@@ -291,7 +268,7 @@
                     label="item.rt.label"
                     :items="rotateList"
                     :item-title="'text'"
-                    icon="mdi mdi-swap-horizontal"
+                    :icon="icons.swapHorizontal"
                 />
               </v-col>
 
@@ -307,7 +284,7 @@
                     label="item.ov.label"
                     :items="overList"
                     :item-title="'text'"
-                    icon="mdi mdi-swap-vertical"
+                    :icon="icons.swapVertical"
                 />
               </v-col>
 
@@ -368,6 +345,10 @@ import {useProjectStore} from "../../../stores/project";
 import {useI18n} from "vue-i18n";
 import {useRoute, useRouter} from "vue-router";
 import SelectField from "../../../components/forms/SelectField.vue";
+import icons from "../../../configs/constants/icons";
+
+const unitSizeArray = ['units.mm', 'units.sm', 'units.m']
+const unitWeightArray = ['units.kg', 'units.tn']
 
 const {t} = useI18n();
 const router = useRouter();
