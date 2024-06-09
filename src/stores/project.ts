@@ -39,7 +39,7 @@ export const useProjectStore = defineStore('project', () => {
    * Methods
    */
 
-  function setProject(obj: ProjectInterface) {
+  const setProject = (obj: ProjectInterface) => {
 
     const { id, name, add_time, last_modified, cargo, loads } = obj
     const { point, items } = cargo
@@ -79,7 +79,7 @@ export const useProjectStore = defineStore('project', () => {
 
   }
 
-  function getProject(id: number = 0) {
+  const getProject = (id: number = 0) => {
     return new Promise<ProjectInterface>((resolve, reject) => {
 
       const appUser = useUserStore()
@@ -111,19 +111,19 @@ export const useProjectStore = defineStore('project', () => {
     })
   }
 
-  function setProjectLastModified(time: string) {
-    project.last_modified = new Date(time)
+  const setProjectLastModified = (time?: string) => {
+    project.last_modified = time ? new Date(time) : new Date()
   }
 
-  function clearProject() {
+  const clearProject = () => {
     // this = Object.assign({}, { id: null, name: null, add_time: null, last_modified: null })
   }
 
-  function changeProjectName(name: string = '') {
+  const changeProjectName = (name: string = '') => {
     if (name) project.name = name
   }
 
-  function addProject(name: string) {
+  const addProject = (name: string) => {
     return new Promise<AxiosAddProjectObject | string>((resolve, reject) => {
 
       const appUser = useUserStore()
@@ -153,7 +153,7 @@ export const useProjectStore = defineStore('project', () => {
     })
   }
 
-  function copyProject(id: number) {
+  const copyProject = (id: number) => {
     return new Promise((resolve, reject) => {
 
       const appUser = useUserStore()
@@ -175,7 +175,7 @@ export const useProjectStore = defineStore('project', () => {
     })
   }
 
-  function delProject(id: number) {
+  const delProject = (id: number) => {
     return new Promise((resolve, reject) => {
 
       const appUser = useUserStore()
@@ -202,7 +202,7 @@ export const useProjectStore = defineStore('project', () => {
     })
   }
 
-  function putProject(arr: {name?: string, id?: number, alias?: any}) {
+  const putProject = (arr: {name?: string, id?: number, alias?: any}) => {
     return new Promise((resolve, reject) => {
 
       const appUser = useUserStore()

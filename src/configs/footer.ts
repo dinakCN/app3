@@ -1,27 +1,27 @@
 const footerNavigation = [
     {
-      text: 'Projects',
+      text: 'projects',
       key: 'footer.projects',
       icon: 'fa-solid fa-sheet-plastic',
       to: '/',
       disabled: false
     },
     {
-    text: 'Cargo',
+    text: 'cargo',
     key: 'footer.cargo',
     icon: 'fa-solid fa-box-open',
     to: '/cargo',
     disabled: false
   },
   {
-    text: 'Load',
+    text: 'load',
     key: 'footer.load',
     icon: 'fa-solid fa-truck-fast',
     to: '/load',
     disabled: false
   },
   {
-    text: 'Scene',
+    text: 'scene',
     key: 'footer.scene',
     icon: 'fa-solid fa-calculator',
     to: '/scene',

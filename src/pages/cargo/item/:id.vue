@@ -330,10 +330,9 @@
 
 <script setup lang='ts'>
 import {computed, ref, reactive, onMounted, watch, Ref} from 'vue';
-import { useVuelidate } from '@vuelidate/core';
-import { required, maxLength, integer, decimal, maxValue, minValue } from '@vuelidate/validators';
-import { nm, ln, wd, hg, wg, cn, pg, st, lm, rt, ov } from '@/configs/items.js';
-import { getRandomColor } from '@/configs/getcolor.js';
+import { decimal, maxValue, minValue } from '@vuelidate/validators';
+import { nm, ln, wd, hg, wg, cn, pg, st, lm, rt, ov } from '../../../configs/items.js';
+import { getRandomColor } from '../../../configs/getcolor.js';
 import { getWght, getSize } from '@/configs/functions/getunits.js';
 import { setWght, setSize } from '@/configs/functions/setunits.js';
 import { getCargoIcon } from '@/configs/functions/geticon.js';
@@ -346,9 +345,7 @@ import {useI18n} from "vue-i18n";
 import {useRoute, useRouter} from "vue-router";
 import SelectField from "../../../components/forms/SelectField.vue";
 import icons from "../../../configs/constants/icons";
-
-const unitSizeArray = ['units.mm', 'units.sm', 'units.m']
-const unitWeightArray = ['units.kg', 'units.tn']
+import {unitSizeArray, unitWeightArray} from "../../../configs/units";
 
 const {t} = useI18n();
 const router = useRouter();
@@ -405,51 +402,6 @@ const lmValValidator = computed(() => {
   return {};
 })
 
-const rules: any = {
-  nmVal: { required, maxLength: maxLength(start.nm.max) },
-  lnVal: { required, decimal, minValue: minValue(getSize(start.ln.min, un.size)), maxValue: maxValue(getSize(start.ln.max, un.size)) },
-  wdVal: { required, decimal, minValue: minValue(getSize(start.wd.min, un.size)), maxValue: maxValue(getSize(start.wd.max, un.size)) },
-  hgVal: { required, decimal, minValue: minValue(getSize(start.hg.min, un.size)), maxValue: maxValue(getSize(start.hg.max, un.size)) },
-  wgVal: { required, decimal, minValue: minValue(getWght(start.wg.min, un.wght)), maxValue: maxValue(getWght(start.wg.max, un.wght)) },
-  cnVal: { required, integer, minValue: minValue(start.cn.min), maxValue: maxValue(start.cn.max) },
-  pgVal: { required },
-  stVal: { required },
-  lmVal: computed(() => {
-    if (stVal.value === 1) {
-      return {
-        decimal,
-        minValue: minValue(getWght(start.lm.min, un.wght)),
-        maxValue: maxValue(getWght(start.lm.max, un.wght))
-      };
-    }
-    return {};
-  })
-};
-
-const v$ = useVuelidate(rules, { nmVal, lmVal, lnVal, wdVal, hgVal, wgVal, cnVal, pgVal, stVal }, { $lazy: true });
-
-const errorMessages = computed(() => {
-  return {
-    nmVal: v$.value?.nmVal?.$error ? v$.value?.nmVal.$errors.map(e => e.$message) : [],
-    lnVal: v$.value?.lnVal?.$error ? v$.value?.lnVal.$errors.map(e => e.$message) : [],
-    lmVal: v$.value?.lmVal?.$error ? v$.value?.lmVal.$errors.map(e => e.$message) : [],
-    wdVal: v$.value?.wdVal?.$error ? v$.value?.wdVal.$errors.map(e => e.$message) : [],
-    hgVal: v$.value?.hgVal?.$error ? v$.value?.hgVal.$errors.map(e => e.$message) : [],
-    wgVal: v$.value?.wgVal?.$error ? v$.value?.wgVal.$errors.map(e => e.$message) : [],
-    cnVal: v$.value?.cnVal?.$error ? v$.value?.cnVal.$errors.map(e => e.$message) : [],
-    pgVal: v$.value?.pgVal?.$error ? v$.value?.pgVal.$errors.map(e => e.$message) : [],
-    stVal: v$.value?.stVal?.$error ? v$.value?.stVal.$errors.map(e => e.$message) : [],
-  };
-});
-
-const touchFields = (field: string) =>{
-  v$.value[field].$touch()
-};
-
-const clearField = () => {
-  nmVal.value = '';
-  v$.value.nmVal.$reset();
-};
 
 const state = () => {
   nmVal.value = start.nm.val;
@@ -465,7 +417,6 @@ const state = () => {
   ovVal.value = start.ov.val;
   un.size = userStore.config.units.cargo.size;
   un.wght = userStore.config.units.cargo.wght;
-  v$.value.$reset();
 };
 
 const rem = () => {
@@ -524,24 +475,6 @@ const getData = () => {
 const clearForm = () => {
   state();
   appStore.showSuccess(t('item.message.clear'));
-};
-const subFieldText = (int: number, max: number) => {
-  const val = int ? int : 0
-  const size = getSize(max, un.size)
-  return `${val}/${size}`
-}
-
-const increment = () => {
-  if (cnVal.value < start.cn.max) cnVal.value++;
-};
-
-const decrement = () => {
-  if (cnVal.value > start.cn.min) cnVal.value--;
-};
-
-const valid = () => {
-  v$.value.$touch();
-  return v$.value.$error;
 };
 const submit = () => {
   if (valid()) return appStore.showError(t('item.message.form_error'));

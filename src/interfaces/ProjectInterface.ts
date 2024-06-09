@@ -44,10 +44,51 @@ interface LoadInterface {
   un: Units,
   ax: boolean,
   ex: number,
-  base?:{},
-  size?:{},
-  adds?:{},
-  as?:{}
+  icon?: string,
+  tt?: string,
+  vl?: number,
+  wf?: number,
+  sz?: string,
+  base?:{
+    wg: number,
+    ln: number,
+    hg: number,
+    wd: number,
+  },
+  size?:{
+
+  },
+  adds?:{
+    wg: number,
+    ln: number,
+    hg: number,
+    wd: number,
+  },
+  as?:{
+    base?:{
+      tt?: {
+        a?: number,
+        l?: number,
+        wg?: number,
+        l1?: number,
+        n1?: number,
+        n2?: number,
+        n1max?: number,
+        n2max?: number,
+      },
+      pp?: {
+        a?: number,
+        l?: number,
+        wg?: number,
+        l1?: number,
+        l2?: number,
+        l3?: number,
+        n2?: number,
+        n1max?: number,
+        n2max?: number,
+      },
+    },
+  },
 }
 
 interface ProjectInterface {

@@ -187,6 +187,19 @@ export default {
     landingPage: 'Landing Page',
     pricingPage: 'Pricing Page'
   },
+  load: {
+    compare: {
+      description: 'Add one or more vehicles, such as a standard truck, a container, and a flatbed. Thus, it is possible to evaluate how efficiently cargo will be placed in various types of transport and choose the best option for transportation.',
+      title: 'Compare cargo placement in different modes of transport'
+    },
+    header: 'Transport list',
+    add: 'Add transport manually',
+    addFrom: 'Add from templates',
+    nodata: 'Add transport',
+    'nodata-description': 'Add transport manually by specifying dimensions or select a ready-made option from templates',
+    'select-transport': 'To compare cargo loading patterns, select several modes of transport'
+
+  },
   // Vuetify components translations
   $vuetify: {
     badge: 'Badge',

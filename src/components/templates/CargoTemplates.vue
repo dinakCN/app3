@@ -15,7 +15,7 @@
 </template>
 
 <script setup lang="ts">
-import { rt, ov } from '@/configs/items.js';
+import { rt, ov } from '../../configs/items.js';
 import { pallet } from '@/configs/templates/cargo.js';
 import { getText } from '@/configs/functions/gettext.js';
 import { getDigits } from '@/configs/functions/getDigits.js';

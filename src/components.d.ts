@@ -41,6 +41,7 @@ declare module 'vue' {
     SceneDrawerTop: typeof import('./components/cargo/SceneDrawerTop.vue')['default']
     SceneItems: typeof import('./components/cargo/SceneItems.vue')['default']
     SearchCompanyDialog: typeof import('./components/common/SearchCompanyDialog.vue')['default']
+    SearchField: typeof import('./components/forms/SearchField.vue')['default']
     SelectField: typeof import('./components/forms/SelectField.vue')['default']
     StepComponent: typeof import('./components/common/StepComponent.vue')['default']
     Templates: typeof import('./components/templates/Templates.vue')['default']

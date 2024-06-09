@@ -9,7 +9,7 @@
       :label="t(label)"
       :items="items"
   >
-    <template v-slot:prepend>
+    <template v-if="icon" v-slot:prepend>
       <v-icon small>{{ icon }}</v-icon>
     </template>
   </v-select>
@@ -24,13 +24,14 @@ withDefaults(defineProps<{
   disabled?: boolean,
   itemTitle?: string,
   items: readonly any[],
-  variant?: string,
+  variant?: "outlined" | "plain" | "underlined" | "filled" | "solo" | "solo-inverted" | "solo-filled",
   icon?: string,
   color?: string,
   cls?: string
 }>(), {
   variant: 'underlined',
   disabled: false,
+  itemTitle: 'text',
   color: '#000000',
   cls: '',
   items: () => [],

@@ -38,10 +38,10 @@ defineExpose({
       :mandatory="mandatory"
       :inline="inline"
   >
-    <template v-for="(item, index) in items">
+    <template v-for="(item) in items">
       <v-radio
-          :label="t(item)"
-          :value="index"
+          :label="t(item.text)"
+          :value="item.value"
       ></v-radio>
     </template>
   </v-radio-group>

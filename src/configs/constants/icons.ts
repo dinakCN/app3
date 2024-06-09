@@ -21,7 +21,12 @@ const icons = {
   layersOutline: 'mdi:mdi-layers-outline',
   swapHorizontal: 'mdi:mdi-swap-horizontal',
   swapVertical: 'mdi:mdi-swap-vertical',
-  circle: 'mdi:mdi-circle'
+  circle: 'mdi:mdi-circle',
+  download: 'mdi:mdi-download',
+  share: 'mdi:mdi-share',
+  menu: 'mdi:mdi-menu',
+  cog: 'mdi:mdi-cog',
+  rightArrowCircle: 'mdi:mdi-right-arrow-circle',
 };
 
 type IIcons = {

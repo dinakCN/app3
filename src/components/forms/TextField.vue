@@ -19,6 +19,9 @@
       @blur="v$.$touch()"
       style="width:100%"
   >
+    <template #prepend>
+      <slot></slot>
+    </template>
   </v-text-field>
 </template>
 

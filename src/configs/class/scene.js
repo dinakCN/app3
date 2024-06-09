@@ -51,8 +51,8 @@ const planeHeight = 0.03
 const gridY = - 1.34
 
 /**
- * metr 
- * 
+ * metr
+ *
  */
 
 const metrFontSize = 0.2
@@ -71,9 +71,9 @@ const metrParams = {
     name: 'length',
     rotation: {
       x: -0.5 * Math.PI,
-      z: -0.5 * Math.PI  
+      z: -0.5 * Math.PI
     }
-  }, 
+  },
   width: {
     name: 'width',
     rotation: {
@@ -85,7 +85,7 @@ const metrParams = {
 
 /**
  * custom classes
- * 
+ *
  */
 
 const Item = new SceneItems(gridY)
@@ -94,7 +94,7 @@ const Step = new SceneStep()
 
 /**
  * three classes
- * 
+ *
  */
 
 const pointer = new Vector2()
@@ -109,7 +109,7 @@ class SceneCreate extends EventDispatcher {
 
   /**
    * loader models
-   * 
+   *
    */
 
   FBX = null
@@ -138,7 +138,7 @@ class SceneCreate extends EventDispatcher {
   camera    = null
   renderer  = null
   controls  = null
-  
+
   /** флаг выполнения orbit controls */
   orbits = null
 
@@ -155,7 +155,7 @@ class SceneCreate extends EventDispatcher {
 
   /**
    * metr group
-   * 
+   *
    */
 
   metrtext  = null
@@ -163,25 +163,25 @@ class SceneCreate extends EventDispatcher {
 
   /**
    * axis annotate group
-   * 
+   *
    */
 
   annotate = null
 
   /**
    * meshes group
-   * 
+   *
    */
 
   allMeshGroup = null
 
   /**
    * make three
-   * 
+   *
    */
 
   constructor(dragging = true) {
-    
+
     super()
 
     /** init */
@@ -189,8 +189,8 @@ class SceneCreate extends EventDispatcher {
     this.init()
 
     /**
-     * switch dragging move 
-     * 
+     * switch dragging move
+     *
      */
 
     this.dragging = dragging
@@ -198,9 +198,9 @@ class SceneCreate extends EventDispatcher {
   }
 
   /**
-   * 
+   *
    * init
-   * 
+   *
    */
 
   init()  {
@@ -209,18 +209,18 @@ class SceneCreate extends EventDispatcher {
 
     /**
      * add scene
-     * 
+     *
      */
 
     this.addScene()
 
     /**
      * make all items group
-     * 
+     *
      */
 
     this.allMeshGroup = new Group()
-    
+
     this.allMeshGroup.name = 'all'
     this.allMeshGroup.updateMatrix()
     this.allMeshGroup.matrixAutoUpdate = false
@@ -243,7 +243,7 @@ class SceneCreate extends EventDispatcher {
 
     /**
      * annotate axis
-     * 
+     *
      */
 
     this.annotate = new Group()
@@ -254,7 +254,7 @@ class SceneCreate extends EventDispatcher {
 
     /**
      * hover group
-     * 
+     *
      */
 
     this.hover = new Group()
@@ -266,7 +266,7 @@ class SceneCreate extends EventDispatcher {
 
     /**
      * floor & plane
-     * 
+     *
      */
 
     this.addFloor()
@@ -274,42 +274,42 @@ class SceneCreate extends EventDispatcher {
 
     /**
      * FBX
-     * 
+     *
      */
- 
+
     this.FBX = new FBXLoader()
 
     /**
      * Drag init
-     * 
+     *
      */
 
     Drag.init(this.scene)
 
     /**
      * addHoverBorder
-     * 
+     *
      */
 
     this.addHoverBorder()
 
     /**
      * render
-     * 
+     *
      */
-    
+
     this.addRenderer()
 
     /**
-     * camera 
-     * 
+     * camera
+     *
      */
 
     this.addCamera()
 
     /**
      * controls
-     * 
+     *
      */
 
     this.addControls()
@@ -317,28 +317,28 @@ class SceneCreate extends EventDispatcher {
 
     /**
      * camera setting
-     * 
+     *
      */
 
     this.resizeRendererToDisplaySize()
 
     /**
      * only for dev
-     * 
+     *
      */
 
     if (process.env.NODE_ENV !== 'production') this.makeStats()
 
     /**
      * add events
-     * 
+     *
      */
 
     this.events()
 
     /**
      * flag
-     * 
+     *
      */
 
     this.setup = true
@@ -351,17 +351,17 @@ class SceneCreate extends EventDispatcher {
 
     /**
      * data
-     * 
+     *
      */
 
     if (!object?.size) return
 
     /**
      * set freightsize
-     * 
+     *
      */
 
-    // console.log(object) 
+    // console.log(object)
 
     this.fr = {
       w: SMath.floor(object.size.base.wd / 1000),
@@ -374,9 +374,9 @@ class SceneCreate extends EventDispatcher {
       axis: object?.axis ? object.axis : false,
       w2: 0,
       l2: 0,
-      h2: 0        
+      h2: 0
     }
-    
+
     this.fr.w2 = SMath.floor(this.fr.w / 2)
     this.fr.l2 = SMath.floor(this.fr.l / 2)
     this.fr.h2 = SMath.floor(this.fr.h / 2)
@@ -385,21 +385,21 @@ class SceneCreate extends EventDispatcher {
 
     /**
      * set transport to item
-     * 
+     *
      */
 
     Item.setTransportData(this.fr)
 
     /**
      * floor in transport
-     * 
+     *
      */
-        
+
     this.setPlane()
 
     /**
      * floor on ground
-     * 
+     *
      */
 
     this.setFloor()
@@ -407,14 +407,14 @@ class SceneCreate extends EventDispatcher {
     /**
      * borders
      * parent of models
-     * 
+     *
      */
 
     this.setFrame()
 
     /**
      * Drag set loads attr
-     * 
+     *
      */
 
     Drag.setFrameAttr(this.loads)
@@ -422,55 +422,55 @@ class SceneCreate extends EventDispatcher {
     /**
      * models
      * child of frame
-     * 
+     *
      */
 
     this._models()
 
     /**
      * set zoom
-     * 
+     *
      */
 
     this.zoomCameraToSelection()
 
   }
-  
+
   addItems(scene_id, object)  {
 
     // console.log('addItems')
 
     /**
      * data
-     * 
+     *
      */
 
     if (!object?.size) return
 
     /**
      * get recieviers
-     * 
+     *
      */
 
-    const receivers = object.step[scene_id].base 
+    const receivers = object.step[scene_id].base
 
-    /** 
+    /**
      *  добавяляем item
-     * 
+     *
      */
-    
+
     for (let x = 0; x < receivers.item.length; x++) {
 
       /**
        * make history
-       * 
+       *
        */
 
       Item.setInstanceHistory(receivers.item[x])
 
-      /** 
+      /**
        * add group
-       * 
+       *
        */
 
       const group = new Group()
@@ -481,36 +481,36 @@ class SceneCreate extends EventDispatcher {
 
       /**
        * add
-       * 
+       *
        */
 
       for (let a = 0; a < receivers.item[x].data.length; a++) {
 
-        /** 
+        /**
          * создать item
-         * 
+         *
          */
 
         const item = Item.addItems(receivers.item[x].data[a], group)
 
-        /** 
+        /**
          * добавить в массив inloads
-         * 
+         *
          */
 
         Item.inloads.push(item)
 
         // if (Drag.detectCollisions(item, Item.inloads)) console.log('collision  true')
-      
+
       }
 
       this.allMeshGroup.add(group)
 
     }
 
-    /** 
+    /**
      *  добавяляем floor
-     * 
+     *
      */
 
     if (Array.isArray(object.floor)) {
@@ -519,7 +519,7 @@ class SceneCreate extends EventDispatcher {
 
         /**
          * make history
-         * 
+         *
          */
 
         Item.setInstanceHistory(object.floor[x])
@@ -548,11 +548,11 @@ class SceneCreate extends EventDispatcher {
 
         /**
          * add item
-         * 
+         *
          */
 
         for (let a = 0; a < object.floor[x].data.length; a++) {
-          
+
           Item.unloads.push(Item.addItems(object.floor[x].data[a], group))
 
         }
@@ -567,14 +567,14 @@ class SceneCreate extends EventDispatcher {
 
     /**
      * add exist
-     * 
+     *
      */
 
     if (object.exist.length) {
 
       /**
-       * exist group 
-       * 
+       * exist group
+       *
        */
 
       const existGroup = new Group()
@@ -583,40 +583,40 @@ class SceneCreate extends EventDispatcher {
 
       /**
        * base offset
-       * 
+       *
        */
 
       let z = this.fr.w * 2.5
 
       /**
        * add exist item
-       * 
+       *
        */
 
       object.exist.forEach((i) => {
 
         /**
          * add in history item
-         * 
+         *
          */
 
         const listID = i.id
 
         if (Item.instance.history.list[listID] === undefined) {
-  
+
           const list = {
             [listID]: Object.assign({}, i)
           }
-  
+
           delete list[listID].count
-  
+
           Item.instance.history.list = Object.assign(Item.instance.history.list, list)
-  
+
         }
 
         /**
          * add item
-         * 
+         *
          */
 
         Item.exloads.push(Item.addExist(i, existGroup, z))
@@ -626,9 +626,9 @@ class SceneCreate extends EventDispatcher {
 
       /**
        * add exist group
-       * 
+       *
        */
-      
+
       existGroup.updateMatrix()
       existGroup.matrixAutoUpdate = false
 
@@ -639,7 +639,7 @@ class SceneCreate extends EventDispatcher {
 
       /**
        * найти родителей по вертикали вниз
-       * 
+       *
        */
 
       Item.inloads[x].userData._touch = Drag.findTouchArray(Item.inloads[x], Item.inloads, 'bottom')
@@ -650,7 +650,7 @@ class SceneCreate extends EventDispatcher {
 
       /**
        * установить нагрузку родителям по вертикали
-       * 
+       *
        */
 
       if (Item.inloads[x].userData._touch) Item.countPressLimit(Item.inloads[x].userData, Item.inloads[x].userData.weight, true)
@@ -659,49 +659,49 @@ class SceneCreate extends EventDispatcher {
 
     /**
      * операции для перемещаемых объектов
-     * 
+     *
      */
 
     const draggable = [...Item.inloads, ...Item.unloads]
 
     /**
      * вычисляемые параметры userData
-     * 
+     *
      */
-    
+
     for (let x = 0; x < draggable.length; x ++) {
 
       /**
        * top cover auto
-       * 
+       *
        */
 
       const { _isCover, _isCoverFull } = Drag.getIsCover(draggable[x], Item.inloads)
 
       /**
        *  любое перекрытие
-       * 
+       *
        */
 
       draggable[x].userData._isCover = _isCover
 
-      /** 
+      /**
        * частичное перекрытие
-       * 
+       *
        */
 
       draggable[x].userData._isCoverFull = _isCoverFull
 
       /**
        * top text visible auto
-       * 
+       *
        */
 
       Item.textTopVisibleAuto([draggable[x]])
 
       /**
        * inFrame
-       * 
+       *
        */
 
       draggable[x].userData._inFrame = Drag.detectInFrame(draggable[x], this.loads)
@@ -713,19 +713,19 @@ class SceneCreate extends EventDispatcher {
 
     /**
      * counted parametres
-     * 
+     *
      */
 
     Item.countPlus()
     Item.countMaxn()
 
     if (this.fr.ax && this.fr.tp === 0) {
-      
+
       Item.countAxis()
 
       /**
        * смена текста на сцене
-       * 
+       *
        */
 
       Item.axis['tt'].forEach((i, x) => {
@@ -743,10 +743,10 @@ class SceneCreate extends EventDispatcher {
     }
 
     /**
-     * 
+     *
      * animate
-     * 
-     * 
+     *
+     *
      */
 
     this.animate()
@@ -755,7 +755,7 @@ class SceneCreate extends EventDispatcher {
 
   /**
    * clear
-   * 
+   *
    */
 
   clearTransport() {
@@ -764,16 +764,16 @@ class SceneCreate extends EventDispatcher {
 
     /**
      * clear frame
-     * 
+     *
      */
 
-    while (this.frame?.children.length) Item.removeMesh(this.frame.children[0])    
+    while (this.frame?.children.length) Item.removeMesh(this.frame.children[0])
     while (this.loads?.children.length) Item.removeMesh(this.loads.children[0])
     while (this.panel?.children.length) Item.removeMesh(this.panel.children[0])
 
     /**
      * remove from scene
-     * 
+     *
      */
 
     Item.removeMesh(this.frame)
@@ -781,7 +781,7 @@ class SceneCreate extends EventDispatcher {
 
     /**
      * clear metr
-     * 
+     *
      */
 
     while (this.metrtext?.children.length) Item.removeMesh(this.metrtext.children[0])
@@ -789,10 +789,10 @@ class SceneCreate extends EventDispatcher {
 
     /**
      * clear annotate
-     * 
+     *
      */
 
-    while (this.annotate?.children.length) Item.removeMesh(this.annotate.children[0]) 
+    while (this.annotate?.children.length) Item.removeMesh(this.annotate.children[0])
 
   }
 
@@ -804,37 +804,37 @@ class SceneCreate extends EventDispatcher {
 
     /**
      * remove all hovers
-     * 
+     *
      */
 
     this.removeHoverMeshes()
 
     /**
      * remove all meshes from scene
-     * 
+     *
      */
 
     for (let x = 0; x < this.allMeshGroup.children.length; x ++) {
 
       /**
        * удаляем меши из групп получателей
-       * 
+       *
        */
 
       while (this.allMeshGroup.children[x].children.length) Item.removeMesh(this.allMeshGroup.children[x].children[0])
-      
+
     }
 
     /**
      * удаляем группы получателей
-     * 
+     *
      */
 
     while (this.allMeshGroup.children.length) this.allMeshGroup.remove(this.allMeshGroup.children[0])
 
     /**
      * dragable
-     * 
+     *
      */
 
     this.dragable.length = 0
@@ -842,34 +842,34 @@ class SceneCreate extends EventDispatcher {
 
     /**
      * remove groups
-     * 
+     *
      */
 
     this.hovered = null
 
     /**
      * drag clear
-     * 
+     *
      */
 
     Drag.clear()
 
     /**
      * item dispose
-     * 
+     *
      */
 
     Item.clear()
 
     /**
      * renderLists dispose
-     * 
+     *
      */
 
     this.renderer.renderLists.dispose()
 
   }
-  
+
   dispose() {
 
     // console.log('dispose()')
@@ -878,7 +878,7 @@ class SceneCreate extends EventDispatcher {
 
     /**
      * clear
-     * 
+     *
      */
 
     this.clearItems()
@@ -886,32 +886,32 @@ class SceneCreate extends EventDispatcher {
 
     /**
      * drag clear
-     * 
+     *
      */
 
     Drag.dispose()
 
     /**
      * item dispose
-     * 
+     *
      */
 
     Item.dispose()
 
     /**
      * remove orbit controls events
-     * 
+     *
      */
-    
+
     this.controls.removeEventListener( 'start', () => this.onOrbitStart())
     this.controls.removeEventListener( 'end', () => this.onOrbitEnd())
 
     /**
      * remove controls
-     * 
+     *
      */
 
-    if (this.camera) this.camera.clear()    
+    if (this.camera) this.camera.clear()
     if (this.controls) this.controls.dispose()
 
     /** remove drag events */
@@ -924,16 +924,16 @@ class SceneCreate extends EventDispatcher {
 
     /**
      * solo meshes
-     * 
+     *
      */
 
     Item.removeMesh(this.hover)
-    this.scene.remove(this.hover) 
+    this.scene.remove(this.hover)
 
     Item.removeMesh(this.metrtext)
     this.scene.remove(this.metrtext)
 
-    Item.removeMesh(this.metrline)    
+    Item.removeMesh(this.metrline)
     this.scene.remove(this.metrline)
 
     Item.removeMesh(this.loads)
@@ -946,18 +946,18 @@ class SceneCreate extends EventDispatcher {
     this.scene.remove(this.borders)
 
     Item.removeMesh(this.annotate)
-    this.scene.remove(this.annotate) 
+    this.scene.remove(this.annotate)
 
     /**
      * remove grid
-     * 
+     *
      */
 
-    if (this.grid?.isLineSegments) this.grid.dispose() 
+    if (this.grid?.isLineSegments) this.grid.dispose()
 
     /**
      * dispose scene
-     * 
+     *
      */
 
     while (this.scene?.children.length) Item.removeMesh(this.scene.children[0])
@@ -965,9 +965,9 @@ class SceneCreate extends EventDispatcher {
     Item.removeMesh(this.scene)
 
     /**
-     * 
+     *
      * remove listeners
-     * 
+     *
      */
 
     if (this.renderer) {
@@ -982,30 +982,30 @@ class SceneCreate extends EventDispatcher {
     this.fr        = null
     this.scene     = null
 
-    /** 
+    /**
      * frame line & parent
-     * 
+     *
      */
 
     this.frame     = null
     this.panel     = null
 
-    /** 
+    /**
      * cube of transport
-     * 
+     *
      */
 
     this.loads     = null
 
-    /** 
+    /**
      * cube of warehouse
-     * 
+     *
      */
 
     this.floor     = null
 
     this.grid      = null
- 
+
     this.camera    = null
 
     this.controls  = null
@@ -1022,7 +1022,7 @@ class SceneCreate extends EventDispatcher {
 
     /**
      * metr
-     * 
+     *
      */
 
     this.metrtext  = null
@@ -1030,35 +1030,35 @@ class SceneCreate extends EventDispatcher {
 
     /**
      * drag dispoce
-     * 
+     *
      */
 
     Drag.dispose()
 
     /**
      * item dispose
-     * 
+     *
      */
 
     Item.dispose()
 
     /**
      * step
-     * 
+     *
      */
 
     Step.dispose()
 
     /**
      * loader
-     * 
+     *
      */
-    
+
     this.FBX = null
 
     /**
     * renderer
-    * 
+    *
     */
 
     this.renderer.dispose()
@@ -1066,7 +1066,7 @@ class SceneCreate extends EventDispatcher {
 
     /**
      * stats
-     * 
+     *
      */
 
     if (process.env.NODE_ENV !== 'production') {
@@ -1113,12 +1113,12 @@ class SceneCreate extends EventDispatcher {
 
     this.renderer.render(this.scene, this.camera)
 
-    // if (process.env.NODE_ENV !== 'production') this.cameraHelper()    
+    // if (process.env.NODE_ENV !== 'production') this.cameraHelper()
   }
 
   cameraHelper() {
     const camPositionSpan = document.getElementById('position')
-    
+
     camPositionSpan.innerHTML = `Position: (${this.camera.position.x.toFixed(1)}, ${this.camera.position.y.toFixed(1)}, ${this.camera.position.z.toFixed(1)})`
 
     // console.log(`Position: (${this.camera.position.x.toFixed(1)}, ${this.camera.position.y.toFixed(1)}, ${this.camera.position.z.toFixed(1)})`)
@@ -1155,7 +1155,7 @@ class SceneCreate extends EventDispatcher {
     this.camera.position.set( 21.3, 25.8, -19.0 )
     this.camera.updateProjectionMatrix()
   }
-  
+
   addSceneLight() {
     const A = new AmbientLight(0xffffff, 0.45)
     const D = new DirectionalLight( 0xffffff, 0.6 )
@@ -1187,7 +1187,7 @@ class SceneCreate extends EventDispatcher {
     this.controls.update()
   }
 
-  addDragControls() { 
+  addDragControls() {
 
     this.dragctrl = new DragControls( this.dragable, this.camera, this.renderer.domElement )
   }
@@ -1197,7 +1197,7 @@ class SceneCreate extends EventDispatcher {
     this.scene.background = new Color( 0xf2f5f8 )
     this.scene.fog = new Fog(0xffffff, 15, 100)
     this.addGridHelper()
-    this.addSceneLight()  
+    this.addSceneLight()
   }
 
   addGridHelper() {
@@ -1211,14 +1211,14 @@ class SceneCreate extends EventDispatcher {
 
   /**
    * make floor
-   * 
+   *
    */
 
   addPlane() {
 
     /**
      * add frame box
-     * 
+     *
      */
 
     const FrameBoxMat = new MeshBasicMaterial()
@@ -1231,7 +1231,7 @@ class SceneCreate extends EventDispatcher {
     this.loads.updateMatrix()
     this.loads.matrixAutoUpdate = false
 
-    const PlaneMat = new MeshBasicMaterial({ 
+    const PlaneMat = new MeshBasicMaterial({
       color: 0xFAFAFA,
       fog: false,
       opacity: 1,
@@ -1256,7 +1256,7 @@ class SceneCreate extends EventDispatcher {
 
     /**
      * add frame box
-     * 
+     *
      */
 
     this.loads.scale.x = this.fr.w
@@ -1269,7 +1269,7 @@ class SceneCreate extends EventDispatcher {
 
     /**
      * add panel
-     * 
+     *
      */
 
     this.panel.scale.x = this.fr.w - 0.06,
@@ -1307,7 +1307,7 @@ class SceneCreate extends EventDispatcher {
 
     /**
      * set scale & position
-     * 
+     *
      */
 
     let expandFloor
@@ -1334,7 +1334,7 @@ class SceneCreate extends EventDispatcher {
 
     /**
      * create
-     * 
+     *
      */
 
     const geo = new BoxGeometry(1,1,1)
@@ -1347,17 +1347,17 @@ class SceneCreate extends EventDispatcher {
 
     this.floor.updateMatrix()
     this.floor.matrixAutoUpdate = false
-    
+
     /**
      * add
-     * 
+     *
      */
 
     this.scene.add(this.floor)
 
     /**
      * clear
-     * 
+     *
      */
 
     geo.dispose()
@@ -1368,14 +1368,14 @@ class SceneCreate extends EventDispatcher {
 
     /**
      * make
-     * 
+     *
      */
 
     this.borders = Item.addHoverBorder()
 
     /**
-     * add 
-     * 
+     * add
+     *
      */
 
     this.scene.add(this.borders)
@@ -1383,7 +1383,7 @@ class SceneCreate extends EventDispatcher {
 
   /**
    * models
-   * 
+   *
    */
 
   _modelScaleToFit(object, { l, w, h }) {
@@ -1392,7 +1392,7 @@ class SceneCreate extends EventDispatcher {
 
     load = new Box3().setFromObject(object)
     size = load.getSize(new Vector3())
-  
+
     const sl = l / size.z
     const sw = w / size.x
     const sh = h / size.y
@@ -1403,7 +1403,7 @@ class SceneCreate extends EventDispatcher {
 
     SMath.floorVector(object.scale)
 
-    object.traverse((i) => {        
+    object.traverse((i) => {
       if (i.isMesh) {
 
         i.material = new MeshPhongMaterial()
@@ -1413,7 +1413,7 @@ class SceneCreate extends EventDispatcher {
 
       }
     })
-    
+
     load = new Box3().setFromObject(object)
     size = load.getSize(new Vector3())
 
@@ -1424,125 +1424,125 @@ class SceneCreate extends EventDispatcher {
 
     /**
      * dimension
-     * 
+     *
      */
 
     this._metr()
 
     /**
      * panel
-     * 
+     *
      */
 
     this._panel()
 
     /**
      * door
-     * 
+     *
      */
 
     if (Number(this.fr.tp) === 1) this._doors()
 
     /**
      * wheels & head
-     * 
+     *
      */
 
     switch (Number(this.fr.tp)) {
 
-    case 0: 
+    case 0:
 
       if (!this.fr.ax) {
 
         if (this.fr.w >= 1.4 && this.fr.w <= 5) {
 
           const l = Math.round((this.fr.l * 31.2) /  100)
-      
+
           if (this.fr.l < 22 &&  this.fr.l >= 12) {
 
             /**
-             * tt 1 
-             * 
+             * tt 1
+             *
              */
 
-            this._head(this.fr.l + 1.4)   
+            this._head(this.fr.l + 1.4)
 
-            /** 
+            /**
              * tt 2
-             * 
+             *
              */
 
             this._wheels(this.fr.l - 1.8)
 
             /**
              * пп
-             * 
+             *
              */
 
             this._wheels(l + 1)
             this._wheels(l)
             this._wheels(l - 1)
 
-          } else if (this.fr.l < 12  &&  this.fr.l >= 7.7) { 
+          } else if (this.fr.l < 12  &&  this.fr.l >= 7.7) {
 
             /**
-             * tt 1 
-             * 
+             * tt 1
+             *
              */
 
             this._head(this.fr.l + 0.8)
 
-            /** 
+            /**
              * tt 2
-             * 
+             *
              */
 
             this._wheels(this.fr.l - 1.5)
 
             /**
              * пп
-             * 
+             *
              */
 
             this._wheels(l + 0.5)
             this._wheels(l - 0.5)
 
-          } else if (this.fr.l < 7.7 &&  this.fr.l >= 3.6) { 
+          } else if (this.fr.l < 7.7 &&  this.fr.l >= 3.6) {
 
             /**
              * фургон
-             * 
+             *
              */
 
             /**
-             * tt 1 
-             * 
+             * tt 1
+             *
              */
 
-            this._head(this.fr.l + 0.8)  
+            this._head(this.fr.l + 0.8)
 
             /**
              * tt 2
-             * 
+             *
              */
 
             this._wheels(Math.round((this.fr.l * 40) /  100))
 
-          } else if (this.fr.l < 3.6 &&  this.fr.l >= 2.7) { 
+          } else if (this.fr.l < 3.6 &&  this.fr.l >= 2.7) {
 
             /**
              * маленький фургон
-             * 
+             *
              */
 
             this._wheels(Math.round((this.fr.l * 45) /  100))
             this._doors()
 
-          } else { 
+          } else {
 
             /**
-             * doors only 
-             * 
+             * doors only
+             *
              */
 
             this._doors()
@@ -1552,8 +1552,8 @@ class SceneCreate extends EventDispatcher {
         } else {
 
           /**
-           * doors only 
-           * 
+           * doors only
+           *
            */
 
           this._doors()
@@ -1563,7 +1563,7 @@ class SceneCreate extends EventDispatcher {
 
         /**
          * get axis
-         * 
+         *
          */
 
         if (this.fr?.axis?.geo) {
@@ -1572,7 +1572,7 @@ class SceneCreate extends EventDispatcher {
 
           /**
            * tt
-           * 
+           *
            */
 
           if (this.fr.axis.geo?.tt) {
@@ -1581,7 +1581,7 @@ class SceneCreate extends EventDispatcher {
 
             /**
              * axis > 1
-             * 
+             *
              */
 
             this._doors()
@@ -1605,12 +1605,12 @@ class SceneCreate extends EventDispatcher {
 
                 this._head(this.fr.l + 0.445)
                 this._annotate(this.fr.l + 0.445 + 0.7, 0, 'tt.0')
-                
+
               }
 
               /**
                * tt 2
-               * 
+               *
                */
 
               const tt_2 = this.fr.axis.geo.tt.slice(1, this.fr.axis.geo.tt.length)
@@ -1618,22 +1618,22 @@ class SceneCreate extends EventDispatcher {
               tt_2.forEach((i, x) => {
 
                 const l = i / 1000
-                
+
                 this._wheels(l)
                 this._annotate(l, 0, 'tt.' + (x + 1))
               })
-            }  
-            
+            }
+
             /**
              * if axis tt < 1 === false
-             * 
+             *
              */
 
           }
 
           /**
            * pp
-           * 
+           *
            */
 
           if (this.fr.axis.geo?.pp) {
@@ -1651,7 +1651,7 @@ class SceneCreate extends EventDispatcher {
 
       break
     }
-    
+
   }
 
   _doors() {
@@ -1675,16 +1675,16 @@ class SceneCreate extends EventDispatcher {
     const sin = Math.sin(rotation) * hypotenuse
     const offsetX = hypotenuse - Number(cos)
 
-    const left = new LineSegments(g, m) 
-  
-    left.rotation.y = rotation 
+    const left = new LineSegments(g, m)
+
+    left.rotation.y = rotation
     left.position.x = - hypotenuse - offsetX
     left.position.y = 0
     left.position.z = -this.fr.l2 - sin
 
-    const right = new LineSegments(g, m) 
-  
-    right.rotation.y = -rotation 
+    const right = new LineSegments(g, m)
+
+    right.rotation.y = -rotation
     right.position.x = hypotenuse + offsetX
     right.position.y = 0
     right.position.z = -this.fr.l2 - sin
@@ -1704,7 +1704,7 @@ class SceneCreate extends EventDispatcher {
 
   _panel() {
 
-    this.FBX.load(process.env.BASE_URL + 'models/panel_c.fbx', (object) => {   
+    this.FBX.load(process.env.BASE_URL + 'models/panel_c.fbx', (object) => {
 
       if (!this.renderer) return
 
@@ -1716,7 +1716,7 @@ class SceneCreate extends EventDispatcher {
       object.position.y = SMath.floor(object.position.y)
       object.name = 'm_panel'
 
-      object.traverse((i) => {        
+      object.traverse((i) => {
         if (i.isMesh) {
 
           i.material = new MeshPhongMaterial()
@@ -1741,13 +1741,13 @@ class SceneCreate extends EventDispatcher {
 
   _head(x) {
 
-    this.FBX.load(process.env.BASE_URL + 'models/truck_head.fbx', (object) => { 
-      
+    this.FBX.load(process.env.BASE_URL + 'models/truck_head.fbx', (object) => {
+
       if (!this.renderer) return
 
       const load = new Box3().setFromObject(object)
       const size = load.getSize(new Vector3())
-    
+
       const sw = 2.55 / size.x
 
       object.scale.y = 0.00862374794064857
@@ -1759,7 +1759,7 @@ class SceneCreate extends EventDispatcher {
       object.position.y = - this.fr.h2 - planeHeight - 1.005
       object.name = 'm_head'
 
-      object.traverse((i) => {        
+      object.traverse((i) => {
         if (i.isMesh) {
 
           i.material = new MeshPhongMaterial()
@@ -1780,7 +1780,7 @@ class SceneCreate extends EventDispatcher {
       return
 
     })
-    
+
   }
 
   _wheels(x) {
@@ -1797,7 +1797,7 @@ class SceneCreate extends EventDispatcher {
       object.position.y -= this.fr.h2 + planeHeight + size.y + 0.12
       object.name = 'm_wheel'
 
-      object.traverse((i) => {        
+      object.traverse((i) => {
         if (i.isMesh) {
 
           i.material = new MeshPhongMaterial()
@@ -1841,13 +1841,13 @@ class SceneCreate extends EventDispatcher {
 
     createText.updateMatrix()
 
-    this.annotate.add(createText) 
+    this.annotate.add(createText)
 
     const points = []
 
     points.push(new Vector3( this.fr.w2 , y, z))
     points.push(new Vector3( x, y, z))
-  
+
     const material = new LineBasicMaterial( { color: 0x999999, fog: false } )
     const geometry = new BufferGeometry().setFromPoints( points )
     const line = new Line( geometry, material )
@@ -1859,7 +1859,7 @@ class SceneCreate extends EventDispatcher {
 
     /**
      * dispose
-     * 
+     *
      */
 
     material.dispose()
@@ -1874,14 +1874,14 @@ class SceneCreate extends EventDispatcher {
 
   /**
    * metr
-   * 
+   *
    */
 
   _metr() {
 
     /**
      * set
-     * 
+     *
      */
 
     const array = [
@@ -1948,15 +1948,15 @@ class SceneCreate extends EventDispatcher {
 
     /**
      * set
-     * 
+     *
      */
-    
+
     const min = Math.floor(ln)
     const max = Math.ceil(ln)
 
     /**
      * body points
-     * 
+     *
      */
 
     if (body) {
@@ -1971,14 +1971,14 @@ class SceneCreate extends EventDispatcher {
           points.push(this._metrVector(direction, x - i, 0))
           points.push(this._metrVector(direction, x - i, 0.04))
 
-        }) 
+        })
       }
 
     }
 
     /**
      * end & start points
-     * 
+     *
      */
 
     points.push(this._metrVector(direction, ln, 0))
@@ -1997,12 +1997,12 @@ class SceneCreate extends EventDispatcher {
         }
 
       })
-      
+
     }
-  
+
     /**
      * main line
-     * 
+     *
      */
 
     if (body) {
@@ -2016,7 +2016,7 @@ class SceneCreate extends EventDispatcher {
 
     /**
      * mesh
-     * 
+     *
      */
 
     const mesh = new Line2(
@@ -2029,7 +2029,7 @@ class SceneCreate extends EventDispatcher {
 
     /**
      * dispose
-     * 
+     *
      */
 
     mesh.material.dispose()
@@ -2044,16 +2044,16 @@ class SceneCreate extends EventDispatcher {
     /**
      * необходимо тестирование на универсальность метода
      * не выполнялось
-     * 
+     *
      */
 
     const group = new Group()
 
     /**
      * text st
-     * 
+     *
      */
-    
+
     const ends = [
       { pos: 0, val: start },
       { pos: selflenght, val: SMath.floor(start + selflenght)  }
@@ -2063,8 +2063,8 @@ class SceneCreate extends EventDispatcher {
 
       /**
        * отступ если расстояние недостаточное для надписей
-       * 
-       * 
+       *
+       *
        */
 
       const offset = index === 1 && selflenght < 0.77 ? - metrFontSize : 0
@@ -2087,7 +2087,7 @@ class SceneCreate extends EventDispatcher {
 
     /**
      * body points
-     * 
+     *
      */
 
     if (body) {
@@ -2114,7 +2114,7 @@ class SceneCreate extends EventDispatcher {
 
           text.anchorX = 'center'
 
-          text.updateMatrix()        
+          text.updateMatrix()
 
           group.add(text)
           text.dispose()
@@ -2134,13 +2134,13 @@ class SceneCreate extends EventDispatcher {
 
     /**
      * met visible
-     * 
+     *
      */
 
-    if (!this.scene) return 
+    if (!this.scene) return
 
     if (this.metrtext) {
-      
+
       this.metrtext.visible = visible
       this.metrtext.updateMatrix()
 
@@ -2151,12 +2151,12 @@ class SceneCreate extends EventDispatcher {
 
   /**
    * images
-   * 
+   *
    */
-  
+
   async getImage() {
     if (!this.setup) return false
-    
+
     this.render()
 
     return await this.renderer.domElement.toDataURL('image/png')
@@ -2168,7 +2168,7 @@ class SceneCreate extends EventDispatcher {
 
     /**
      * set setting
-     * 
+     *
      */
 
     this.controls.enabled = false
@@ -2187,7 +2187,7 @@ class SceneCreate extends EventDispatcher {
 
     /**
      * invisible exist
-     * 
+     *
      */
 
     const exist = this.scene.getObjectByName('exist')
@@ -2196,21 +2196,21 @@ class SceneCreate extends EventDispatcher {
 
     /**
      * images
-     * 
+     *
      */
-    
+
     const images = []
 
     /**
      * getRecieversArray
-     * 
+     *
      */
 
     const receivers = Item.getRecieversArray()
 
     /**
      * invisible receivers group all
-     * 
+     *
      */
 
     /* eslint-disable */
@@ -2224,10 +2224,10 @@ class SceneCreate extends EventDispatcher {
       group.visible = false
 
     }
-    
+
     /**
      * get images each by each
-     * 
+     *
      */
 
     for (let x = 0; x < receivers.length; x ++) {
@@ -2251,11 +2251,11 @@ class SceneCreate extends EventDispatcher {
       images.push(await this.getImage())
     }
 
-    /* eslint-enable */  
+    /* eslint-enable */
 
     /**
      * get all groups
-     * 
+     *
      */
 
     this.zoomCameraToSelection(this.frame)
@@ -2263,16 +2263,16 @@ class SceneCreate extends EventDispatcher {
 
     /**
      * visible exist
-     * 
+     *
      */
 
-    if (exist) exist.visible = true    
-  
+    if (exist) exist.visible = true
+
     /**
      * old setting
-     * 
+     *
      */
-      
+
     this.scene.background = new Color( 0xf2f5f8 )
     this.controls.enabled = true
     this.camera.position.copy(cameraStartPosition)
@@ -2282,16 +2282,16 @@ class SceneCreate extends EventDispatcher {
 
   }
 
-  /** 
-   * 
+  /**
+   *
    * support func
-   * 
+   *
    */
 
-  zoomCameraToSelection(target = this.frame) {   
+  zoomCameraToSelection(target = this.frame) {
 
     const box = new Box3()
-    
+
     let offset = 1.3
 
     if (this.fr.tp === 1) offset = 1.5
@@ -2301,7 +2301,7 @@ class SceneCreate extends EventDispatcher {
         offset = 1.6
       }
     }
-    
+
     box.expandByObject(target)
 
     const size = box.getSize( new Vector3() )
@@ -2327,8 +2327,8 @@ class SceneCreate extends EventDispatcher {
     this.camera.near = distance / 100
     this.camera.far = distance * 100
     this.camera.updateProjectionMatrix()
-    
-    this.camera.position.copy( this.controls.target ).sub(direction)  
+
+    this.camera.position.copy( this.controls.target ).sub(direction)
 
     this.controls.saveState()
     this.controls.update()
@@ -2349,11 +2349,11 @@ class SceneCreate extends EventDispatcher {
   getCountInloads() {
     return Item.inloads.length
   }
-  
-  /** 
-   * 
-   * stepper 
-   * 
+
+  /**
+   *
+   * stepper
+   *
    */
 
   setStep(n, type) {
@@ -2362,63 +2362,63 @@ class SceneCreate extends EventDispatcher {
 
     /**
      * set cursor auto
-     * 
+     *
      */
 
     this.renderer.domElement.style.cursor = 'default'
 
     /**
      * change event
-     * 
+     *
      */
 
     Drag.event = null
 
     /**
      * clear draggable object
-     * 
+     *
      */
 
     Drag.mesh = null
 
     /**
      * clear dragable array
-     * 
+     *
      */
 
     this.dragable.length = 0
 
     /**
      * disabled drag control
-     * 
+     *
      */
 
-    this.dragctrl.deactivate() 
+    this.dragctrl.deactivate()
 
     /**
      * metr visible false
-     * 
+     *
      */
 
     if (this.annotate?.isGroup) this.annotate.visible = false
 
-    /** 
+    /**
      * step enable event
-     * 
+     *
      */
 
     Step.enable = true
 
     /**
      * offHover event
-     * 
+     *
      */
 
     this.offHover()
 
-    /** 
+    /**
      * for of inloads
-     * 
+     *
      */
 
     if (!Step.final.length) Step.makeOrder(Item.inloads, type)
@@ -2454,7 +2454,7 @@ class SceneCreate extends EventDispatcher {
 
       if (index > n) this.setMeshInVisible(Step.final[x])
 
-    }    
+    }
 
   }
 
@@ -2520,73 +2520,73 @@ class SceneCreate extends EventDispatcher {
 
     /**
      * offHover event
-     * 
+     *
      */
 
     this.offHover()
 
-    /** 
+    /**
      * for of inloads
-     * 
+     *
      */
 
     for (let x = 0; x < Item.inloads.length; x ++) {
 
       if (!Item.inloads[x]?.isMesh) continue
 
-      /** 
+      /**
        * visible item & border & text
-       * 
+       *
        */
 
       this.setMeshVisible(Item.inloads[x])
 
       /**
        * correct visible text auto
-       * 
+       *
        */
 
       Item.textTopVisibleAuto([Item.inloads[x]])
-    }    
-    
-    /** 
+    }
+
+    /**
      * enable step
-     * 
+     *
      */
 
     Step.enable = false
 
     /**
      * step clear
-     * 
+     *
      */
 
     if (deep) Step.clear()
 
     /**
      * change event
-     * 
+     *
      */
 
     Drag.event = null
 
     /**
      * clear draggable object
-     * 
+     *
      */
- 
+
     Drag.mesh = null
 
     /**
      * enable drag control
-     * 
+     *
      */
 
     this.dragctrl.activate()
 
     /**
      * metr default
-     * 
+     *
      */
 
     if (this.annotate?.isGroup) this.annotate.visible = true
@@ -2594,25 +2594,25 @@ class SceneCreate extends EventDispatcher {
   }
 
   /**
-   * 
+   *
    * animate
-   * 
+   *
    */
 
   animate() {
 
     this.animateID = window.requestAnimationFrame( this.animate.bind(this) )
-    
+
     if (process.env.NODE_ENV !== 'production') this.stats.update()
-    
+
     TWEEN.update()
     this.render()
   }
 
   /**
-   * 
+   *
    * events
-   * 
+   *
    */
 
   events() {
@@ -2640,11 +2640,11 @@ class SceneCreate extends EventDispatcher {
 
     /**
      * ArrowRight, ArrowLeft - поворот позиции вдоль Y
-     * 
+     *
      */
 
     if (['ArrowRight', 'ArrowLeft'].includes(event.key) && !event.repeat) {
-      
+
       // console.log('rotate')
 
       // console.log(Drag.mesh.scale)
@@ -2652,14 +2652,14 @@ class SceneCreate extends EventDispatcher {
 
       /**
        * поворот разрешен
-       * 
+       *
        */
 
       Item.rotateItem(Drag.mesh)
 
       /**
        * поворот выделения
-       * 
+       *
        */
 
       if (Drag.mesh?.isMesh) {
@@ -2671,18 +2671,18 @@ class SceneCreate extends EventDispatcher {
           this.borders.scale.copy(Drag.mesh.scale)
           this.borders.updateMatrix()
 
-        } 
+        }
       }
-      
+
     }
 
     /**
      * overturn
-     * 
+     *
      */
 
     if (['ArrowUp', 'ArrowDown'].includes(event.key) && !event.repeat) {
-      
+
       // console.log('overturn')
 
       // console.log(Drag.mesh.scale)
@@ -2690,14 +2690,14 @@ class SceneCreate extends EventDispatcher {
 
       /**
        * поворот разрешен
-       * 
+       *
        */
 
       Item.overturnItem(Drag.mesh)
 
       /**
        * поворот выделения
-       * 
+       *
        */
 
       if (Drag.mesh?.isMesh) {
@@ -2709,35 +2709,35 @@ class SceneCreate extends EventDispatcher {
           this.borders.scale.copy(Drag.mesh.scale)
           this.borders.updateMatrix()
 
-        } 
-      }   
+        }
+      }
 
-      /** 
+      /**
        * remove spaces
-       * 
+       *
        */
 
       Drag.spaceRemove()
 
       /**
        * calculate spaces
-       * 
+       *
        */
 
       const space = Drag.calculateSpace(Drag.mesh, Item.inloads)
 
       /**
        * add space to scene
-       * 
+       *
        */
 
       Drag.addSpace(space, [this.loads, this.floor])
- 
+
     }
 
     /**
      * обработка при новом положении
-     * 
+     *
      */
 
     this.onDrag( { object: Drag.mesh } )
@@ -2746,7 +2746,7 @@ class SceneCreate extends EventDispatcher {
 
   updatePointer( event ) {
 
-    if (!this.renderer) return 
+    if (!this.renderer) return
 
     const rect = this.renderer.domElement.getBoundingClientRect()
 
@@ -2757,9 +2757,9 @@ class SceneCreate extends EventDispatcher {
 
   onPointerMove( event ) {
 
-    if (!this.renderer) return 
+    if (!this.renderer) return
 
-    /** исключаем обработку во время выполнения orbit  */    
+    /** исключаем обработку во время выполнения orbit  */
     if (this.orbits) return
 
     /** исключаем обработку во время выполнения step */
@@ -2774,7 +2774,7 @@ class SceneCreate extends EventDispatcher {
 
       /**
        * clear intersections
-       * 
+       *
        */
 
       intersections.length = 0
@@ -2782,14 +2782,14 @@ class SceneCreate extends EventDispatcher {
       /**
        * deep: false
        * т.к. select имеют границы как дочерний компонент
-       * 
+       *
        */
 
       raycaster.intersectObjects( Item.selects, false, intersections )
 
       /**
        * if in selects
-       * 
+       *
        */
 
       if ( intersections.length > 0 ) {
@@ -2803,9 +2803,9 @@ class SceneCreate extends EventDispatcher {
         if ( this.hovered?.id !== object?.id && this.hovered !== null ) {
 
           /**
-           * 
+           *
            * hover off
-           * 
+           *
            */
 
           this.offHover(this.hovered)
@@ -2815,17 +2815,17 @@ class SceneCreate extends EventDispatcher {
         if (this.hovered?.id !== object?.id ) {
 
           /**
-           * 
+           *
            * hover on
-           * 
+           *
            */
 
-          if (object.name) { 
-            
+          if (object.name) {
+
             /**
              * get border
              * set material color
-             * 
+             *
              */
 
             this.onHover(object)
@@ -2840,9 +2840,9 @@ class SceneCreate extends EventDispatcher {
         if (this.hovered !== null ) {
 
           /**
-           * 
+           *
            * hover off
-           * 
+           *
            */
 
           // console.log('hover off')
@@ -2873,28 +2873,28 @@ class SceneCreate extends EventDispatcher {
 
     /**
      * set draggable object
-     * 
+     *
      */
 
     Drag.mesh = event.object
 
     /**
      * make event
-     * 
+     *
      */
 
     Drag.event = event.object.id
 
     /**
       * stop controls
-      * 
+      *
       */
 
     this.controls.enabled = false
 
     /**
      * copy start position
-     * 
+     *
      */
 
     Drag.getStart(Drag.mesh)
@@ -2903,44 +2903,44 @@ class SceneCreate extends EventDispatcher {
      * с этого момента
      * изъятие Drag.mesh из inloads / unloads
      * дальнейшая обработка выполняется без Drag.mesh в наборах
-     * 
+     *
      */
 
     Item.removeFromDragGroup(Drag.mesh)
 
     /**
      * обработка родителей после изъятия Drag.mesh
-     * 
+     *
      */
 
     if (Drag.mesh.userData._touch.length) {
 
       /**
        * пересчет нагрузки для прежних родителей
-       * 
+       *
        */
-      
+
       Item.countPressLimit(Drag.mesh.userData, Drag.mesh.userData.weight, false, false)
 
       /**
        * получить родителей
-       * 
+       *
        */
 
       const parents = []
 
       Drag.mesh.userData._touch.forEach((i) => parents.push(Item.getItemByMeshID(i.id)))
-       
+
       /**
       * top cover auto
-      * 
+      *
       */
 
       Drag.recountIsCover(parents, [...Item.inloads, ...Item.unloads])
 
       /**
       * top text visible auto
-      * 
+      *
       */
 
       Item.textTopVisibleAuto(parents)
@@ -2949,14 +2949,14 @@ class SceneCreate extends EventDispatcher {
 
     /**
      * calculate spaces
-     * 
+     *
      */
 
     const space = Drag.calculateSpace(Drag.mesh, Item.inloads)
 
     /**
      * add space to scene
-     * 
+     *
      */
 
     Drag.addSpace(space, [this.loads, this.floor])
@@ -2964,7 +2964,7 @@ class SceneCreate extends EventDispatcher {
     /**
      * border
      * text
-     * 
+     *
      */
 
     const { text, border } = Item.instance.list[Drag.mesh.id]
@@ -2981,35 +2981,35 @@ class SceneCreate extends EventDispatcher {
 
     /**
      * hover borders
-     * 
+     *
      */
 
-    if (this.borders?.isMesh) this.borders.visible = false 
+    if (this.borders?.isMesh) this.borders.visible = false
 
     /**
      * remove hover meshes
-     * 
+     *
      */
 
     this.removeHoverMeshes()
 
     /**
      * metr default
-     * 
+     *
      */
 
     this._metrTextVisible(true)
 
     /**
      * start drag once
-     * 
+     *
      */
 
     this.onDrag(event)
 
     /**
      * event
-     * 
+     *
      */
 
     this.createEventDragStart(Drag.mesh)
@@ -3028,77 +3028,77 @@ class SceneCreate extends EventDispatcher {
 
     /**
      * get meshes
-     * 
+     *
      */
 
     const meshes =  [...Item.inloads, ...Item.unloads]
 
     /**
      * disable drag validation
-     * 
+     *
      */
 
     Drag.valid = false
 
     /**
      * disable borders
-     * 
+     *
      */
 
     if (this.borders?.isMesh) this.borders.visible = false
 
     /**
      * floor position
-     * 
+     *
      */
 
     SMath.floorVector(Drag.mesh.position)
 
     /**
      * position update
-     * 
-     */  
-    
+     *
+     */
+
     Drag.mesh.updateMatrix()
 
     /**
      * detect active space
-     * 
+     *
      */
 
     Drag.calculateHeight(Drag.mesh)
 
     /**
      * snap in active
-     * 
+     *
      */
 
     Drag.snap(Drag.mesh, meshes)
 
     /**
      * meshes collision
-     * 
+     *
      */
 
     if (Drag.detectCollisions(Drag.mesh, meshes)) return
 
     /**
      * validate new position
-     * 
+     *
      */
-      
+
     Drag.validationPosition(Drag.mesh)
 
     /**
      * drag invalid
-     * 
+     *
      */
 
     if (!Drag.valid) return
 
     /**
      * отображение рамки перемещения
-     * 
+     *
      */
 
     if (this.borders?.isMesh) {
@@ -3109,8 +3109,8 @@ class SceneCreate extends EventDispatcher {
       this.borders.visible = true
 
     }
-  
-    return 
+
+    return
 
   }
 
@@ -3123,53 +3123,53 @@ class SceneCreate extends EventDispatcher {
     // console.log('onDragEnd')
 
     /**
-     * parameteres 
-     * 
+     * parameteres
+     *
      */
 
     let changeSpace = false
     let plus = false
     let maxn = false
-    let axis = false 
+    let axis = false
 
     /**
      * удалить активный спейс
-     * 
+     *
      */
 
     Drag.removeHeight()
 
     /**
      * remove spaces
-     * 
+     *
      */
 
     Drag.spaceRemove()
 
     /**
      * return previous position
-     * 
+     *
      */
 
     if (!Drag.valid) {
 
       /**
       * возврат места
-      * 
+      *
       */
 
       Drag.setStart(Drag.mesh)
 
       /**
       * добавляем объект обратно в inloads / unloads группу
-      * 
+      *
       */
 
       Item.addToDragGroup(Drag.mesh)
 
       /**
       * возврат выделения
-      * 
+      *
       */
 
       if (this.borders?.isMesh) {
@@ -3185,28 +3185,28 @@ class SceneCreate extends EventDispatcher {
       /**
        * очистка массива загрузки
        * при смене позиции любого из мест
-       * 
+       *
        */
 
       if (Drag.mesh.userData._inFrame || Drag.detectInFrame(Drag.mesh, this.loads)) Step.clear()
 
       /**
        * обновление _position
-       * 
+       *
        */
 
       Item.setUserDataPos(Drag.mesh)
 
       /**
        * обработка при пермещении
-       * 
+       *
        */
 
       if (Drag.mesh.userData._inFrame !== Drag.detectInFrame(Drag.mesh, this.loads)) {
 
         /**
          * обработка при смене inFrame
-         * 
+         *
          */
 
         changeSpace = true
@@ -3214,21 +3214,21 @@ class SceneCreate extends EventDispatcher {
 
         /**
         * обновить _inFrame
-        * 
+        *
         */
 
         Drag.mesh.userData._inFrame = !Drag.mesh.userData._inFrame
 
         /**
          * обновить inloads, unloads
-         * 
+         *
          */
 
         Item.addToDragGroup(Drag.mesh)
 
         /**
         * пересчитать показатели груза в ТС
-        * 
+        *
         */
 
         Item.countPlus()
@@ -3237,12 +3237,12 @@ class SceneCreate extends EventDispatcher {
 
         /**
          * обработка без смены inFrame
-         * 
+         *
          */
 
         /**
          * обновить inloads, unloads
-         * 
+         *
          */
 
         Item.addToDragGroup(Drag.mesh)
@@ -3251,7 +3251,7 @@ class SceneCreate extends EventDispatcher {
 
       /**
       * пересчитать оси при наличии
-      * 
+      *
       */
 
       if (this.fr.ax && this.fr.tp === 0) {
@@ -3260,14 +3260,14 @@ class SceneCreate extends EventDispatcher {
 
         /**
         * флаг
-        * 
+        *
         */
 
         axis = true
 
         /**
         * смена текста на сцене
-        * 
+        *
         */
 
         Item.axis['tt'].forEach((i, x) => {
@@ -3282,21 +3282,21 @@ class SceneCreate extends EventDispatcher {
           if (o) o.text = i
         })
 
-      }      
+      }
 
-      /** 
+      /**
       * пересчитать максимальные размеры расстановки
-      * 
+      *
       */
 
       Item.countMaxn()
 
       maxn = true
 
-      /** 
+      /**
       * отправить event
       * формируем объект отправки включая родителя (группу)
-      * 
+      *
       */
 
       this.createEventDragChange(Drag.mesh, plus, maxn, axis, changeSpace)
@@ -3305,28 +3305,28 @@ class SceneCreate extends EventDispatcher {
 
     /**
      * поиск новых родителей снизу
-     * 
+     *
      */
 
     Drag.mesh.userData._touch = Drag.findTouchArray(Drag.mesh, Item.inloads, 'bottom')
 
     /**
      * обработка родителей текущего Меша
-     * 
+     *
      */
 
     if (Drag.mesh.userData._touch.length) {
 
       /**
        * пересчет нагрузки для новых родителей и их родителей в цикле
-       * 
+       *
        */
 
       Item.countPressLimit(Drag.mesh.userData, Drag.mesh.userData.weight, true, false)
 
       /**
        * получить родителей
-       * 
+       *
        */
 
       const parents = []
@@ -3337,14 +3337,14 @@ class SceneCreate extends EventDispatcher {
 
       /**
        * top cover auto
-       * 
+       *
        */
 
       Drag.recountIsCover(parents, [...Item.inloads, ...Item.unloads])
 
       /**
        * top text visible auto
-       * 
+       *
        */
 
       Item.textTopVisibleAuto(parents)
@@ -3353,24 +3353,24 @@ class SceneCreate extends EventDispatcher {
 
     /**
      * end event
-     * 
+     *
      */
 
     this.createEventDragEnd(Drag.mesh)
 
     /**
      * notice event
-     * 
+     *
      */
 
     this.createEventNotice()
 
     /**
-     * 
+     *
      * update position
      * border
      * text
-     * 
+     *
      */
 
     const { text, border } = Item.instance.list[Drag.mesh.id]
@@ -3397,28 +3397,28 @@ class SceneCreate extends EventDispatcher {
 
     /**
      * orbit enable
-     *  
+     *
      */
-  
+
     this.controls.enabled = true
 
     /**
      * change event
-     * 
+     *
      */
 
     Drag.event = null
 
     /**
      * clear draggable object
-     * 
+     *
      */
 
     Drag.mesh = null
 
     /**
      * remove borders & hover
-     * 
+     *
      */
 
     this.offHover()
@@ -3427,11 +3427,11 @@ class SceneCreate extends EventDispatcher {
 
   createEventOnHover(origin, data = {}) {
 
-    this.dispatchEvent( { 
+    this.dispatchEvent( {
       type: 'hoveron',
       object: {
         item: origin,
-        data    
+        data
       }
     })
 
@@ -3439,10 +3439,10 @@ class SceneCreate extends EventDispatcher {
 
   createEventOffHover(origin) {
 
-    this.dispatchEvent( { 
+    this.dispatchEvent( {
       type: 'hoveroff',
       object: {
-        item: origin         
+        item: origin
       }
     })
 
@@ -3450,10 +3450,10 @@ class SceneCreate extends EventDispatcher {
 
   createEventDragStart(origin) {
 
-    this.dispatchEvent( { 
+    this.dispatchEvent( {
       type: 'dragstart',
       object: {
-        item: origin         
+        item: origin
       }
     })
 
@@ -3461,10 +3461,10 @@ class SceneCreate extends EventDispatcher {
 
   createEventDragEnd(origin) {
 
-    this.dispatchEvent( { 
+    this.dispatchEvent( {
       type: 'dragend',
       object: {
-        item: origin         
+        item: origin
       }
     })
 
@@ -3475,7 +3475,7 @@ class SceneCreate extends EventDispatcher {
     /**
      * ищем объект в массиве исходных объектов
      * и кго группу
-     * 
+     *
      */
 
     const { listID, pointID } = object.userData
@@ -3488,7 +3488,7 @@ class SceneCreate extends EventDispatcher {
 
     /**
      * копируем объект
-     * 
+     *
      */
 
     const data = Object.assign({}, d)
@@ -3504,24 +3504,24 @@ class SceneCreate extends EventDispatcher {
     // console.log(data)
     // console.log(list)
     // console.log(group)
-    
+
     /**
     * set list count
-    * 
+    *
     */
 
     list.count = 1
 
     /**
-    * set data uid 
-    * 
+    * set data uid
+    *
     */
 
     data.uid = object.userData.backID
 
     /**
     * интерполяция позиции
-    * 
+    *
     */
 
     data.geo = {
@@ -3532,7 +3532,7 @@ class SceneCreate extends EventDispatcher {
 
     /**
      * интерполяция размеров
-     * 
+     *
      */
 
     data.length = SMath.floorSize(object.scale.z * 1000)
@@ -3541,7 +3541,7 @@ class SceneCreate extends EventDispatcher {
 
     /**
      * вид перемещения
-     * 
+     *
      */
 
     const move = { change: null, inFrame: object.userData._inFrame }
@@ -3554,13 +3554,13 @@ class SceneCreate extends EventDispatcher {
     }
 
     // console.log(d)
-    
+
     /**
     * event
-    * 
+    *
     */
 
-    this.dispatchEvent( { 
+    this.dispatchEvent( {
       type: 'dragchange',
       object: {
         plus: plus ? Object.assign({}, Item.plus) : null,
@@ -3569,7 +3569,7 @@ class SceneCreate extends EventDispatcher {
         move: move,
         data: data,
         list: list,
-        group: group          
+        group: group
       }
     })
   }
@@ -3580,7 +3580,7 @@ class SceneCreate extends EventDispatcher {
 
     /**
      * проверка нагрузки
-     * 
+     *
      */
 
     if (Item.errorPress.length) {
@@ -3595,7 +3595,7 @@ class SceneCreate extends EventDispatcher {
 
     /**
      * максимальной загрузки
-     * 
+     *
      */
 
     if (Item.plus.wg > this.fr.wg) {
@@ -3607,10 +3607,10 @@ class SceneCreate extends EventDispatcher {
 
     /**
      * уведомления пользователя
-     * 
+     *
      */
 
-    this.dispatchEvent( { 
+    this.dispatchEvent( {
       type: 'dragnotice',
       object: { text, color, array }
     })
@@ -3630,7 +3630,7 @@ class SceneCreate extends EventDispatcher {
 
     /**
      * проверка инстанс по id
-     * 
+     *
      */
 
     const id = Number(listID)
@@ -3639,7 +3639,7 @@ class SceneCreate extends EventDispatcher {
 
     /**
      * make all invisible
-     * 
+     *
      */
 
     const meshes = Object.values(Item.instance.list)
@@ -3654,7 +3654,7 @@ class SceneCreate extends EventDispatcher {
 
       /**
        * make invisible
-       * 
+       *
        */
 
       item.visible = false
@@ -3662,7 +3662,7 @@ class SceneCreate extends EventDispatcher {
 
       /**
        * save visible
-       * 
+       *
        */
 
       text.userData.visible = text.visible
@@ -3672,7 +3672,7 @@ class SceneCreate extends EventDispatcher {
 
     /**
      * animate border
-     * 
+     *
      */
 
     new TWEEN.Tween(Item.instance.mesh[id].border.material)
@@ -3687,30 +3687,30 @@ class SceneCreate extends EventDispatcher {
 
     /**
      * return visible
-     * 
+     *
      */
 
     setTimeout(() => {
-        
+
       for (let x = 0; x < meshes.length; x ++) {
 
         const { item, border, text } = meshes[x]
 
         if (!item || !border || !text) continue
-  
+
         if (String(item.userData.listID) === String(listID)) continue
-  
+
         /**
          * make visible
-         * 
+         *
          */
-  
+
         item.visible = true
         border.visible = true
         text.visible = text.userData.visible
-  
+
       }
-      
+
     }, 1500)
 
   }
@@ -3754,14 +3754,14 @@ class SceneCreate extends EventDispatcher {
 
     /**
      *  любое перекрытие
-     * 
+     *
      */
 
     object.userData._isCover = _isCover
 
-    /** 
+    /**
      * частичное перекрытие
-     * 
+     *
      */
 
     object.userData._isCoverFull = _isCoverFull
@@ -3778,7 +3778,7 @@ class SceneCreate extends EventDispatcher {
 
     /**
      * можно ли перемещать объект
-     * 
+     *
      */
 
     if (Item.getItemStatusForDrag(object) && this.dragging && !Step.enable) {
@@ -3788,7 +3788,7 @@ class SceneCreate extends EventDispatcher {
 
       /**
        * сменить курсор для перемещения
-       * 
+       *
        */
 
       this.renderer.domElement.style.cursor = 'pointer'
@@ -3798,7 +3798,7 @@ class SceneCreate extends EventDispatcher {
     /**
      * borders copy position & scale
      * visible true
-     * 
+     *
      */
 
     if (this.borders?.isMesh) {
@@ -3812,7 +3812,7 @@ class SceneCreate extends EventDispatcher {
 
     /**
      * get offset location from origin point (0, 0, 0)
-     * 
+     *
      */
 
     const width = SMath.floorSize(object.position.x - SMath.floor(object.scale.x / 2) + this.fr.w2)
@@ -3821,17 +3821,17 @@ class SceneCreate extends EventDispatcher {
 
     /**
      * add text
-     * 
+     *
      */
 
     const fontSize = SceneText.setFontSize(object, 3)
 
-    const texts = [{ 
+    const texts = [{
       pos: 'right',
       value: SMath.floorSize(object.scale.z),
       align: 'right',
       valign: 'middle'
-    }, { 
+    }, {
       pos: 'bottom',
       value: SMath.floorSize(object.scale.x),
       align: 'center',
@@ -3842,14 +3842,14 @@ class SceneCreate extends EventDispatcher {
 
       /**
        * get parent coordinates
-       * 
+       *
        */
-      
+
       const geo = Item.setPositionTopText(object, fontSize, i.pos)
 
       /**
        * text add
-       * 
+       *
        */
 
       const text = SceneText.addText(
@@ -3867,30 +3867,30 @@ class SceneCreate extends EventDispatcher {
 
       /**
        * dispose
-       * 
+       *
        */
 
       text.dispose()
 
     })
-    
+
     /**
      * metr
-     * 
+     *
      */
 
     if (object.userData._inFrame) {
 
       /**
        * спрятать основной текст метра
-       * 
+       *
        */
 
       this._metrTextVisible(false)
 
       /**
        * показать вспомогательный текст метра
-       * 
+       *
        */
 
       const array = [
@@ -3925,9 +3925,9 @@ class SceneCreate extends EventDispatcher {
 
     }
 
-    /** 
+    /**
      * event
-     * 
+     *
      */
 
     const { listID } = object.userData
@@ -3980,7 +3980,7 @@ class SceneCreate extends EventDispatcher {
 
     /**
      * если груз находится вне хоны погрузки
-     * 
+     *
      */
 
     if (!object.userData._inFrame) {
@@ -4004,26 +4004,26 @@ class SceneCreate extends EventDispatcher {
   offHover() {
 
     if ( Drag.event ) return
-  
+
     // console.log('offHover')
 
     /**
      * borders invisible
-     * 
+     *
      */
 
     if (this.borders?.isMesh) this.borders.visible = false
 
     /**
      * remove hover meshes
-     * 
+     *
      */
 
     this.removeHoverMeshes()
 
     /**
      * show metr default
-     * 
+     *
      */
 
     this._metrTextVisible(true)
@@ -4040,7 +4040,7 @@ class SceneCreate extends EventDispatcher {
 
     /**
      * remove mesh from hover
-     * 
+     *
      */
 
     if (this.hover) {
@@ -4049,16 +4049,16 @@ class SceneCreate extends EventDispatcher {
 
       /**
        * renders dispose
-       * 
+       *
        */
 
       this.renderer.renderLists.dispose()
     }
 
     // console.log(this.hover.children.length)
-    
+
   }
 
-} 
+}
 
 export { SceneCreate }

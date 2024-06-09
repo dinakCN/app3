@@ -18,7 +18,7 @@
           {{ foot.icon }}
         </v-icon>
         <span v-if="!mobile">
-          {{ $t(foot.key) }}
+          {{ t(foot.key) }}
         </span>
       </v-btn>
 
@@ -33,7 +33,9 @@
 import { footerNavigation } from '../../configs/footer.js'
 import { reactive } from 'vue'
 import { useDisplay } from 'vuetify'
+import {useI18n} from "vue-i18n";
 
 const { mobile } = useDisplay()
+const {t} = useI18n()
 const footer = reactive(footerNavigation)
 </script>

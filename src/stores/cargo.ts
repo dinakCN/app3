@@ -7,8 +7,8 @@ import { getWght } from '@/configs/functions/getunits.js';
 import { getText } from '@/configs/functions/gettext.js';
 import { getVolume } from '@/configs/functions/getvolume.js';
 import { getCargoIcon } from '@/configs/functions/geticon.js';
-import { getRandomColor } from '@/configs/getcolor.js';
-import { stByValue, rt, rtByValue, ov, ovByValue, pg, st, } from '@/configs/items.js';
+import { getRandomColor } from '../configs/getcolor.js';
+import { stByValue, rt, rtByValue, ov, ovByValue, pg, st, } from '../configs/items.js';
 
 import { useUserStore } from './user';
 import { useProjectStore } from './project';
@@ -33,11 +33,6 @@ export const useCargoStore = defineStore('cargo', () => {
         point: [],
         items: [],
     });
-
-    /**
-     * Loads
-     */
-    const loads: Ref<any[]> = ref([]);
 
     /**
      * Sync
@@ -276,9 +271,6 @@ export const useCargoStore = defineStore('cargo', () => {
 
         return true
     }
-    const checkCountLoads = () => {
-        return Number(loads.value.length + 1) <= userStore.config.limit.loads;
-    }
 
     const list = (array, bool = false) => {
 
@@ -286,9 +278,9 @@ export const useCargoStore = defineStore('cargo', () => {
 
         list.unshift({ text: 'common.null', value: null })
 
-        if (bool) return Object.freeze(list.map((item) => { return { text: t(item.text), value: item.value }}))
+        if (bool) return list.map((item) => { return { text: t(item.text), value: item.value }})
 
-        return Object.freeze(list.map((item) => item.value))
+        return list.map((item) => item.value)
 
     }
 
@@ -333,7 +325,6 @@ export const useCargoStore = defineStore('cargo', () => {
         point,
         cargo,
         sync,
-        loads,
         packingList,
         overListValues,
         overList,
@@ -353,7 +344,6 @@ export const useCargoStore = defineStore('cargo', () => {
         moveItem,
         editItem,
         checkCountCargo,
-        checkCountLoads,
         checkCountRow,
         removeItem,
     };

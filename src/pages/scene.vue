@@ -20,18 +20,17 @@
           elevation="6"
           density="compact"
           position="absolute"
-          style="z-index: 1; top: 500; left: 0;"
+          style="z-index: 1; top: 500px; left: 0;"
         >
 
           <HelpButton />
 
           <v-btn
-            icon
             variant="text"
             size="40"
             @click.stop="screen()"
           >
-            <v-icon>mdi:mdi mdi-download</v-icon>
+            <v-icon>{{ icons.download }}</v-icon>
             <v-tooltip
               activator="parent"
               location="start"
@@ -42,12 +41,11 @@
 
           <v-btn
             v-if="user.tarif?.type && route.name === 'scene'"
-            icon
             variant="text"
             size="40"
             @click.stop="share()"
           >
-            <v-icon>mdi:mdi mdi-share</v-icon>
+            <v-icon>{{ icons.share }}</v-icon>
             <v-tooltip
               activator="parent"
               location="start"
@@ -58,12 +56,11 @@
 
           <v-btn
             v-if="route.name === 'scene'"
-            icon
             variant="text"
             size="40"
             @click.stop="reset()"
           >
-            <v-icon>mdi:mdi mdi-share</v-icon>
+            <v-icon>{{ icons.share }}</v-icon>
             <v-tooltip
               activator="parent"
               location="start"
@@ -87,7 +84,7 @@
             rounded
             size="small"
             color="primary"
-            prepend-icon="mdi:mdi mdi-cog"
+            :prepend-icon="icons.cog"
             :disabled="Boolean(step.value) || setting.value"
             @click="setting.value = true"
           >
@@ -99,7 +96,7 @@
             rounded
             size="small"
             color="primary"
-            prepend-icon="mdi:mdi mdi-cog"
+            :prepend-icon="icons.cog"
             :disabled="Boolean(step.value) || setting.value"
             @click="startStep()"
           >
@@ -112,19 +109,18 @@
         <v-btn
           v-show="!sceneMaxPage"
           rounded="pill"
-          icon
           size="40"
           variant="text"
           style="position: absolute; z-index: 1; right: 0; top: 0;"
           @click="setDrawer()"
         >
           <v-icon>
-            mdi:mdi mdi-menu
+            {{ icons.menu }}
           </v-icon>
         </v-btn>
 
       </div>
-
+      <confirm-dialog ref="confirmDialog" />
     </div>
   </v-container>
 </template>
@@ -144,13 +140,15 @@ import { ref, reactive, computed, toRefs, toRef, onMounted, nextTick } from "vue
 import type { Ref } from 'vue'
 import { useUserStore } from '../stores/user'
 import { useProjectStore } from '../stores/project'
-import { useProjectsStore } from '../stores/projects'
 import { useAppStore } from '../stores/app'
 import { useRoute, useRouter } from 'vue-router'
 import { useI18n } from "vue-i18n"
 import { useDisplay } from 'vuetify'
-import { ProjectInterface } from '../interfaces/ProjectInterface'
+import { SceneCreate } from '@/configs/class/scene.js'
 import HelpButton from "../components/brief/HelpButton.vue"
+import icons from "../configs/constants/icons";
+import ConfirmDialog from "../components/dialogs/ConfirmDialog.vue";
+import {useSceneStore} from "../stores/scene";
 
 /**
  * Mobile, Height
@@ -170,6 +168,8 @@ const { t } = useI18n()
 onMounted(() => {
   console.log(route.name)
 })
+
+const confirmDialog: Ref<ConfirmDialog> = ref(null)
 
 /**
  * Drawer
@@ -217,10 +217,18 @@ const user = computed(() => appUser.user)
 const appProject = useProjectStore()
 const project_id = computed(() => appProject.project.id)
 
+
+/**
+ * Scene store
+ */
+const appScene = useSceneStore()
+
 /**
  * Data
  */
 const sceneMaxPage = ref(0)
+
+// const sceneCreate = new SceneCreate( route.name === 'scene' )
 
 /**
  * Настройки сцены
@@ -254,91 +262,173 @@ const step = reactive({
 })
 
 const startStep = () => {
-  // this.step = 1
-  // this.makeStep()
+  step.value = 1
+  makeStep()
+}
+
+// const getData = () => {
+//
+//   /**
+//    * async
+//    *
+//    */
+//
+//   appScene.getScene(area)
+//
+//       .then((data) => {
+//
+//             // console.log(data)
+//
+//             this.error = false
+//
+//             /**
+//              * max pages
+//              *
+//              */
+//
+//             this.sceneMaxPage = data.step.length
+//
+//             /**
+//              * scene Data
+//              *
+//              */
+//
+//             sceneData = data
+//
+//             /**
+//              * change areaData
+//              *
+//              */
+//
+//             getAreaData()
+//
+//             /**
+//              * add transport
+//              *
+//              */
+//
+//             addtransport()
+//
+//             /**
+//              * add items
+//              *
+//              */
+//
+//             addItems()
+//
+//             /**
+//              * message
+//              *
+//              */
+//
+//             onSuccessSceneResult(data)
+//           },
+//           (message) => onErrorSceneResult(message))
+// }
+//
+// const stopStep = (deep = true) => {
+//
+//   /**
+//    * step default
+//    *
+//    */
+//
+//   step.value = null
+//
+//   if (!sceneCreate?.setup) return
+//
+//   sceneCreate.clearStep(deep)
+//
+// }
+
+const clearTransport = () => {
+  sceneCreate.clearTransport()
+}
+
+const clearItems = () => {
+  sceneCreate.clearItems()
 }
 
 /**
  * Toolbar top
  */
 const reset = async () => {
-
-  // if (this.$route.name === 'share') return
-
+  //
+  // if (route.name === 'share') return
+  //
   // /**
   //  * Жесткая перезагрузка сцены
   //  */
-  // const confirm = await this.$confirm('<b>' + this.$t('tooltips.scene.reset') + '?</b> Позиции грузов перемещенных вручную не будут сохранены')
-
+  // const confirm = await confirmDialog.value.open('<b>' + t('tooltips.scene.reset') + '?</b> Позиции грузов перемещенных вручную не будут сохранены')
+  //
   // if (confirm) {
-
-  //   this.putProject({ alias: 'loads' })
+  //
+  //   appProject.putProject({ alias: 'loads' })
   //     .then(() => {
-
-  //       this.stopStep()
-  //       this.clearItems()
-  //       this.clearTransport()
-  //       this.getData()
-
+  //       stopStep()
+  //       clearItems()
+  //       clearTransport()
+  //       getData()
+  //
   //     })
-
+  //
   // }
 }
 
 const screen = () => {
 
-  // if (!sceneCreate?.setup) return false
+  if (!screenCreate?.setup) return false
 
-  // return sceneCreate.screen()
-  //   .then((img) => {
-  //     const a = document.createElement('a')
+  return screenCreate.screen()
+    .then((img) => {
+      const a = document.createElement('a')
 
-  //     a.href = img.replace(/^data:image\/[^;]/, 'data:application/octet-stream')
-  //     a.download = 'scene.png'
-  //     a.click()
-  //     a.remove()
-  //   })
+      a.href = img.replace(/^data:image\/[^;]/, 'data:application/octet-stream')
+      a.download = 'scene.png'
+      a.click()
+      a.remove()
+    })
 }
 
 const share = () => {
 
-  // if (!this.project.id || !sceneData) return this.showError(this.$t('common.validation.error'))
+  if (!project_id.value || !sceneData) return storeApp.showError(t('common.validation.error'))
 
-  // return this.setShare({ scene: sceneData, project: this.project.id })
-  //   .then((id) => {
+  return appScene.setShare({ scene: sceneData, project: project_id.value })
+    .then((id) => {
 
-  //     if (!id) return this.showError(this.$t('common.validation.error'))
+      if (!id) return storeApp.showError(t('common.validation.error'))
 
-  //     let url
+      let url
 
-  //     if (process.env.NODE_ENV === 'production') {
+      if (process.env.NODE_ENV === 'production') {
 
-  //       url = 'https://app2.jload.me/'
+        url = 'https://app2.jload.me/'
 
-  //     } else {
+      } else {
 
-  //       url = 'http://localhost:8080/'
+        url = 'http://localhost:8080/'
 
-  //     }
+      }
 
-  //     const link = url + 'share/' + this.project.id + '/' + id
+      const link = url + 'share/' + project_id.value + '/' + id
 
-  //     /**
-  //      * to buffer and message
-  //      *
-  //      */
+      /**
+       * to buffer and message
+       *
+       */
 
-  //     this.$clipboard(link, this.$t('clipboard.copylink'))
+      // this.$clipboard(link, this.$t('clipboard.copylink'))
 
-  //     /**
-  //      * $metrika
-  //      *
-  //      */
+      /**
+       * $metrika
+       *
+       */
 
-  //     return this.$metrika.reachGoal('set.share')
+      // return this.$metrika.reachGoal('set.share')
 
-  //   },
-  //   () => this.showError(this.$t('common.validation.error')))
+    },
+    () => storeApp.showError(t('common.validation.error')))
 
 }
 

@@ -9,6 +9,7 @@
   },
   "dependencies": {
     "@mdi/font": "6.2.95",
+    "@tweenjs/tween.js": "^18.6.0",
     "@vue-youtube/component": "^0.0.6",
     "@vue-youtube/core": "^0.0.6",
     "@vuelidate/core": "^2.0.3",
@@ -17,6 +18,8 @@
     "boxicons": "^2.1.4",
     "core-js": "^3.34.0",
     "roboto-fontface": "*",
+    "three": "^0.165.0",
+    "troika-three-text": "^0.49.1",
     "vue": "^3.4.21",
     "vue-axios": "^3.5.2",
     "vue-i18n": "^9.10.2",
