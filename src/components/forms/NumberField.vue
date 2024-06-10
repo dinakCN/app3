@@ -119,8 +119,11 @@ const dataErrors = computed(() => {
 
   if (!v$.value.$dirty) return errors
   if (!v$.value.$errors.length) return errors
-
   v$.value.$errors.forEach(e => {
+    e.$validator === 'required' && errors.push(t('common.validation.required'))
+    e.$validator === 'integer'  && errors.push(t('common.validation.integer'))
+    e.$validator === 'minValue' && errors.push(t('common.validation.minValue') + ' ' + e.$params.min)
+    e.$validator === 'maxValue' && errors.push(t('common.validation.maxValue') + ' ' + e.$params.max)
     errors.push(e.$message)
   })
 

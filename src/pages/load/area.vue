@@ -644,12 +644,13 @@ watch(axinverse, (a) => {
                 <number-field
                     v-model:value="wg"
                     label="item.wg.label"
-                    suffix="units.size"
-                    :size="un.size"
+                    suffix="units.wght"
+                    :size="un.wght"
                     :step="0.1"
+                    :is-size="false"
                     :config="{
-                            max: wgValues.max[un.size],
-                            min: wgValues.min[un.size]
+                            max: wgValues.max[un.wght],
+                            min: wgValues.min[un.wght]
                         }"
                 />
               </v-col>
@@ -778,7 +779,7 @@ watch(axinverse, (a) => {
                       <number-field
                           v-model:value="pl2"
                           label="area.ax.pp.l2"
-                          suffix="units.wght"
+                          suffix="units.size"
                           :size="un.size"
                           :step="1"
                           :config="{
@@ -799,7 +800,7 @@ watch(axinverse, (a) => {
                       <number-field
                           v-model:value="pl3"
                           label="area.ax.pp.l3"
-                          suffix="units.wght"
+                          suffix="units.size"
                           :size="un.size"
                           :step="1"
                           :config="{

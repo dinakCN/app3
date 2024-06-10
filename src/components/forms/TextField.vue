@@ -95,7 +95,8 @@ const dataErrors = computed(() => {
   if (!v$.value.$errors.length) return errors
 
   v$.value.$errors.forEach(e => {
-    errors.push(e.$message)
+    e.$validator === 'required' && errors.push(t('common.validation.required'))
+    e.$validator === 'maxLength' && errors.push(t('common.validation.maxValue') + ' ' + e.$params.max)
   })
 
   return errors
