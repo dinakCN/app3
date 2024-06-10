@@ -73,20 +73,18 @@
           class="d-flex align-center py-0"
         >
           <radio-group
-              v-model="un['size']"
-              :items="unitSizeArray"
-              cls="mr-3"
-              mandatory
-              inline
+            v-model="un['size']"
+            :items="unitSizeArray"
+            cls="mr-3"
+            inline
           />
+          <v-spacer></v-spacer>
           <radio-group
-              v-model="un['wght']"
-              :items="unitWeightArray"
-              inline
+            v-model="un['wght']"
+            :items="unitWeightArray"
+            inline
           />
         </v-card-text>
-
-          <v-spacer></v-spacer>
 
         <!-- FORM -->
         <v-form class="pt-2">
@@ -294,10 +292,10 @@
       </v-card>
 
       <!-- BUTTONS -->
-      <div class="d-flex alig-center mt-4">
+      <div class="d-flex alig-center mt-1">
         <v-btn
           rounded
-          class="button grey--text text--darken-3 px-2"
+          class="button grey--text text--darken-3 px-2 no-uppercase"
           @click="back()"
         >
           {{ t('common.cancel') }}
@@ -309,7 +307,7 @@
           elevation="6"
           color="primary"
           rounded
-          class="px-2"
+          class="px-2 no-uppercase"
           @click="submit()"
         >
           {{ t('common.save') }}

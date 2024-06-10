@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import {ref, computed, onMounted, watch, reactive} from 'vue'
+import {ref, computed, onMounted, watch, reactive, Ref} from 'vue'
 import { useVuelidate } from '@vuelidate/core'
 import { tt as ttVal , pp as ppVal , nm as nmVal , ln as lnVal , wd as wdVal , hg as hgVal , wg as wgVal , ex as exVal , tp as tpVal , ax as axVal  } from '@/configs/items.js'
 import { getWght, getSize } from '@/configs/functions/getunits.js'
@@ -1065,7 +1065,7 @@ watch(axinverse, (a) => {
       </div>
 
       <!-- BUTTONS -->
-      <div class="d-flex alig-center mt-4">
+      <div class="d-flex alig-center mt-1">
 
         <v-btn
             rounded

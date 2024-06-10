@@ -142,7 +142,7 @@
         <v-btn
           v-if="!filter"
           ref="addGroup"
-          class="px-2 font-weight-medium"
+          class="px-2 font-weight-medium no-uppercase"
           variant="outlined"
           rounded
           color="primary"

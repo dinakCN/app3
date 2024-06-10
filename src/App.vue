@@ -39,3 +39,9 @@ const storeApp = useAppStore()
 const toast = computed(() => storeApp.toast)
 
 </script>
+
+<style>
+.no-uppercase {
+  text-transform: unset !important;
+}
+</style>

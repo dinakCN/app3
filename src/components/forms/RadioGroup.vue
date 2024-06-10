@@ -42,6 +42,7 @@ defineExpose({
       <v-radio
           :label="t(item.text)"
           :value="item.value"
+          color="primary"
       ></v-radio>
     </template>
   </v-radio-group>

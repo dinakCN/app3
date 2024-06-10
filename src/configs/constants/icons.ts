@@ -8,11 +8,11 @@ const icons = {
   textbox: 'mdi:mdi-form-textbox',
   copyContent: 'mdi:mdi-content-copy',
   trashCan: 'mdi:mdi-trash-can-outline',
-  plusBoxMultiply: 'mdi:mdi-plus-box-multiple',
+  plusBoxMultiply: 'mdi:mdi-plus-box-multiple-outline',
   repeat: 'mdi:mdi-repeat',
   checkCircle: 'mdi:mdi-check-circle',
-  minusCircle: 'mdi:mdi-minus-circle',
-  plusCircle: 'mdi:mdi-plus-circle',
+  minusCircle: 'mdi:mdi-minus-circle-outline',
+  plusCircle: 'mdi:mdi-plus-circle-outline',
   questionHead: 'mdi:mdi-head-question-outline',
   update: 'mdi:mdi-update',
   editOutline: 'mdi:mdi-square-edit-outline',
@@ -27,6 +27,11 @@ const icons = {
   menu: 'mdi:mdi-menu',
   cog: 'mdi:mdi-cog',
   rightArrowCircle: 'mdi:mdi-arrow-right-circle-outline',
+  fileTableOutline: 'mdi:mdi-file-table-outline',
+  windowMaximize: 'mdi:mdi-window-maximize',
+  windowMinimize: 'mdi:mdi-window-minimize',
+  eyeOutline: 'mdi:mdi-eye-outline',
+  eyeOff: 'mdi:mdi-eye-off',
 };
 
 type IIcons = {

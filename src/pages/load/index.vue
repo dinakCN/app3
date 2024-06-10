@@ -16,7 +16,7 @@
               <span>{{ t('load.header') }}</span>
             </div>
             <div class="text-button mx-1 d-flex">
-              <div :class="[getLoadsCount == config.limit.loads ? 'red--text text--lighten-2' : '']">
+              <div :class="getLoadsCount == config.limit.loads ? 'red--text text--lighten-2' : ''">
                 {{ getLoadsCount }} / {{ config.limit.loads }} <span class="text-lowercase font-weight-light"></span>
               </div>
             </div>
@@ -84,7 +84,7 @@
 
       <!-- Add Button -->
       <div class="mb-2 text-center" :class="!mobile && 'd-flex justify-center align-center'">
-        <v-btn elevation="6" color="primary" rounded class="ma-1 font-weight-medium" @click="add()">
+        <v-btn elevation="6" color="primary" rounded class="ma-1 font-weight-medium no-uppercase" @click="add()">
           <v-icon left>{{ icons.plusCircle }}</v-icon>
           {{ t('load.add') }}
         </v-btn>

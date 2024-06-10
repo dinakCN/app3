@@ -219,6 +219,7 @@
             rounded
             size="default"
             color="primary"
+            class="no-uppercase"
             :prepend-icon="icons.plusBoxMultiply"
             @click.stop="create()"
           >

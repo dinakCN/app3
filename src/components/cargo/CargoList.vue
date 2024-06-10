@@ -26,7 +26,7 @@
                 class="text-caption white--text"
                 color="red lighten-1"
                 close
-                close-icon="mdi-close"
+                :close-icon="icons.close"
                 @click:close="changeView()"
               >
                 {{ t('cargolist.disable') }}
@@ -50,7 +50,7 @@
               >
                 {{ point[clid]['name'] }}
               </span>
-              <v-icon v-if="!mobile" small right >mdi mdi-form-textbox</v-icon>
+              <v-icon v-if="!mobile" small right >{{ icons.textbox }}</v-icon>
             </v-btn>
           </v-col>
 
@@ -108,7 +108,7 @@
               <v-checkbox
                 :value="selectAll"
                 :indeterminate="selectAlmostAll"
-                @click.stop="onSelectAll(selectAll)"
+                @click.stop="onSelectAll()"
               ></v-checkbox>
             </v-col>
 
@@ -127,7 +127,7 @@
                   class="font-weight-medium px-1"
                   @click="editItems()"
                 >
-                  <v-icon left>mdi mdi-square-edit-outline</v-icon>
+                  <v-icon left>{{ icons.editOutline }}</v-icon>
                   <span>{{ t('common.edit') }}</span>
                 </v-btn>
 
@@ -138,7 +138,7 @@
                   class="font-weight-medium px-1"
                   @click="moveItems()"
                 >
-                  <v-icon left>mdi mdi-repeat</v-icon>
+                  <v-icon left>{{ icons.repeat }}</v-icon>
                   <span>{{ t('common.move') }}</span>
                 </v-btn>
 
@@ -149,7 +149,7 @@
                   class="font-weight-medium px-1"
                   @click="setTemplate()"
                 >
-                  <v-icon left>mdi mdi-content-save-outline</v-icon>
+                  <v-icon left>{{ icons.saveOutline }}</v-icon>
                   <span>{{ t('templates.tempsave') }}</span>
                 </v-btn>
 
@@ -160,7 +160,7 @@
                   class="font-weight-medium px-1"
                   @click="removeItemsSelected()"
                 >
-                  <v-icon left>mdi mdi-trash-can-outline</v-icon>
+                  <v-icon left>{{ icons.trashCan }}</v-icon>
                   <span >{{ t('common.delete') }}</span>
                 </v-btn>
               </div>
@@ -227,7 +227,7 @@
                             :color="i.st ? 'grey darken-3' : 'grey lighten-1'"
                             small
                           >
-                            mdi mdi-layers-outline
+                            {{ icons.layersOutline }}
                           </v-icon>
 
                           <span
@@ -241,7 +241,7 @@
                             :color="i.lm && i.st === 1 ? 'grey darken-3' : 'grey lighten-1'"
                             small
                           >
-                            mdi mdi-plus
+                            {{ icons.plusCircle }}
                           </v-icon>
 
                           <span
@@ -255,7 +255,7 @@
                             :color="i?.rt ? 'grey darken-3' : 'grey lighten-1'"
                             small
                           >
-                            mdi mdi-swap-horizontal
+                            {{ icons.swapHorizontal }}
                           </v-icon>
 
                           <span
@@ -269,7 +269,7 @@
                             :color="i?.ov ? 'grey darken-3' : 'grey lighten-1'"
                             small
                           >
-                            mdi mdi-swap-vertical
+                            {{ icons.swapVertical }}
                           </v-icon>
 
                           <span
@@ -351,7 +351,7 @@
                     @click="getFile()"
                   >
                     <v-icon left>
-                      mdi mdi-file-table-outline
+                      {{ icons.fileTableOutline }}
                     </v-icon>
                     <span>{{ t('cargolist.addfromfile') }}</span>
                   </v-btn>
@@ -371,13 +371,13 @@
                 <v-hover v-model="hover.custom">
                   <v-btn
                     rounded
-                    class="px-2 font-weight-regular"
+                    class="px-2 font-weight-regular no-uppercase"
                     variant="flat"
                     color="primary"
                     @click="addItem()"
                   >
                     <v-icon left>
-                      mdi mdi-plus-circle-outline
+                      {{ icons.plusCircle }}
                     </v-icon>
                     <span>
                       {{ t('cargolist.addcargo') }}
@@ -395,7 +395,7 @@
                 @click="getTemplates()"
               >
                 <v-icon left>
-                  mdi mdi-content-save-outline
+                  {{ icons.saveOutline }}
                 </v-icon>
                 <span>{{ t('cargolist.addfromtemplate') }}</span>
               </v-btn>
@@ -459,9 +459,9 @@ const hover = ref({
 
 const userPro = computed(() => Boolean(userStore.user.tarif.type));
 
-const logoMini = computed(() => point.value[props.clid]?.mini ? 'mdi mdi-window-maximize' : 'mdi mdi-window-minimize');
+const logoMini = computed(() => point.value[props.clid]?.mini ? icons.windowMaximize : icons.windowMaximize);
 
-const logoView = computed(() => props.order ? 'mdi mdi-eye-off' : 'mdi mdi-eye-outline');
+const logoView = computed(() => props.order ? icons.eyeOff : icons.eyeOutline);
 
 const subResult = computed(() => {
     if (!props.item.length) return '';
