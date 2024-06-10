@@ -32,6 +32,11 @@ const icons = {
   windowMinimize: 'mdi:mdi-window-minimize',
   eyeOutline: 'mdi:mdi-eye-outline',
   eyeOff: 'mdi:mdi-eye-off',
+  play: 'mdi:mdi-play-circle-outline',
+  cash: 'mdi:mdi-cash',
+  dollar: 'mdi:mdi-currency-usd',
+  account: 'mdi:mdi-account',
+  settings: 'mdi:mdi-cog-outline'
 };
 
 type IIcons = {

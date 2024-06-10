@@ -74,6 +74,12 @@ export const useUserStore = defineStore('user', () => {
         wght: 1
       }
     },
+    stats: {
+      counts: 0,
+      login: 0,
+      projects: 0,
+      templates: 0,
+    },
     scene: {
       setting: {
         snap: true,
@@ -111,6 +117,15 @@ export const useUserStore = defineStore('user', () => {
     config.units.cargo.wght = units.cargo.wght ? Number(units.cargo.wght) : 0
     config.units.loads.size = units.loads.size ? Number(units.loads.size) : 2
     config.units.loads.wght = units.loads.wght ? Number(units.loads.wght) : 1
+  }
+
+  function setConfigStats(arr) {
+    const { stats } = arr
+
+    config.stats.count = stats.count ? Number(stats.count) : 0
+    config.stats.login = stats.login ? Number(stats.login) : 0
+    config.stats.projects = stats.projects ? Number(stats.projects) : 0
+    config.stats.templates = stats.templates ? Number(stats.templates) : 1
   }
 
   function setConfigLimits(arr) {
@@ -157,6 +172,7 @@ export const useUserStore = defineStore('user', () => {
             setConfigLicense(config)
             setConfigLimits(config)
             setConfigUnits(config)
+            setConfigStats(config)
             projectStore.last_project = config.last_project
             resolve(config)
           }
