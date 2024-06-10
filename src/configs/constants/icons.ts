@@ -26,7 +26,7 @@ const icons = {
   share: 'mdi:mdi-share',
   menu: 'mdi:mdi-menu',
   cog: 'mdi:mdi-cog',
-  rightArrowCircle: 'mdi:mdi-right-arrow-circle',
+  rightArrowCircle: 'mdi:mdi-arrow-right-circle-outline',
 };
 
 type IIcons = {

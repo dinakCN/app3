@@ -39,7 +39,7 @@
                   <!-- Avatar -->
                   <v-col cols="auto" class="d-flex align-center">
                     <v-avatar class="mr-1" @click="router.push(`/load/area/${item.id}`)">
-                      <v-icon rounded color="primary">{{ item.icon }}</v-icon>
+                      <v-icon rounded color="primary">mdi:{{ item.icon }}</v-icon>
                     </v-avatar>
                   </v-col>
 
@@ -105,45 +105,61 @@
 
       <!-- Type Tabs -->
       <v-card class="rounded-lg mb-2 pb-1">
-        <v-tabs v-model="tab" grow large class="mb-2">
-          <v-tab v-for="t in typeList" :key="t.value"><span>{{ t.text }}</span></v-tab>
+        <v-tabs
+            v-model="tab"
+            grow
+            class="mb-2"
+        >
+          <template v-for="t in typeList" :key="t.value">
+            <v-tab :value="t.tab">{{ t.text }}</v-tab>
+          </template>
         </v-tabs>
 
         <!-- Template List -->
         <div class="overflow-y-auto" style="height:26vh">
-          <v-scale-transition group>
+          <div v-if="loading" class="text-center mt-4">
+            <v-progress-circular
+                color="primary"
+                indeterminate
+            ></v-progress-circular>
+          </div>
+          <v-scale-transition v-else group>
             <template v-for="item in listTemplates" :key="item.id">
               <v-list-item link style="height:60px;">
                 <v-lazy width="100%">
                   <v-row no-gutters>
                     <!-- Avatar -->
                     <v-col cols="auto" class="d-flex align-center mr-2">
-                      <v-avatar class="mx-0" @click.stop="getTemplate(item.clid)">
-                        <v-icon color="primary" rounded>{{ item.icon }}</v-icon>
+                      <v-avatar class="mx-0" @click.stop="getTemplate(item.data)">
+                        <v-icon color="primary" rounded>mdi:{{ item.icon }}</v-icon>
                       </v-avatar>
                     </v-col>
                     <!-- Content -->
                     <v-col class="flex-grow-1 text-truncate mr-1 d-flex align-center">
-                      <v-avatar :class="[item.gr == 1 ? 'primary--text' : '']" @click="getTemplate(item.clid)">
-                        <v-list-item-title class="body-2 font-weight-medium">{{ item.nm }}</v-list-item-title>
-                        <v-list-item-subtitle>{{ item.text }}</v-list-item-subtitle>
-                      </v-avatar>
+                      <v-list lines="one" @click="getTemplate(item.data)">
+                        <v-list-item
+                            class="body-2 font-weight-medium"
+                            :class="item.gr == 1 ? 'primary--text' : ''"
+                            :title="item.nm"
+                            :subtitle="item.text"
+                        ></v-list-item>
+                      </v-list>
                     </v-col>
                     <!-- Actions -->
                     <v-col cols="auto" class="flex-shrink-0 d-flex align-center">
                       <v-list-item-action class="mr-0">
                         <div class="d-flex align-center pl-1">
-                          <v-btn v-if="item.clid && !mobile" :disabled="!user.tarif.type" variant="text" color="error" class="font-weight-regular text-lowercase" @click.stop="delTemplate(item.clid)">
+                          <v-btn v-if="item.clid && !mobile" :disabled="!user.tarif.type" variant="text" color="error" class="font-weight-regular text-lowercase" @click.stop="delTemplate(item.data)">
                             {{ t('common.delete') }}
                           </v-btn>
-                          <v-btn v-if="item.clid" :disabled="!user.tarif.type" color="error" @click.stop="delTemplate(item.clid)">
+                          <v-btn v-if="item.clid" :disabled="!user.tarif.type" variant="text" color="error" @click.stop="delTemplate(item.data)">
                             <v-icon>{{ icons.trashCan }}</v-icon>
                           </v-btn>
-                          <v-btn v-if="!mobile" variant="text" class="font-weight-regular text-lowercase" color="primary" @click.stop="getTemplate(item.clid)">
+                          <v-btn v-if="!mobile" variant="text" class="font-weight-regular text-lowercase" color="primary" @click.stop="getTemplate(item.data)">
                             {{ t('common.add') }}
                           </v-btn>
-                          <v-btn color="primary" @click.stop="getTemplate(item.clid)">
-                            <v-icon>{{ icons.rightArrowCircle }}</v-icon>
+                          <v-btn variant="text" color="primary" @click.stop="getTemplate(item.data)">
+                            <v-icon rounded>{{ icons.rightArrowCircle }}</v-icon>
                           </v-btn>
                         </div>
                       </v-list-item-action>
@@ -155,7 +171,7 @@
           </v-scale-transition>
 
           <!-- No Data Text -->
-          <v-card-text v-if="!listTemplates.length" class="pb-4 justify-center d-flex fill-height">
+          <v-card-text v-if="!listTemplates.length && !loading" class="pb-4 justify-center d-flex fill-height">
             <div class="text-caption text-uppercase grey--text font-weight-regular align-self-center">{{ t('common.nodata') }}</div>
           </v-card-text>
         </div>
@@ -174,14 +190,14 @@
       </div>
 
       <!-- Promo Dialog -->
-      <PromoDialog ref="promo" :head="$t('message.loads.add.head')" :call="pc" :text="pt" />
+      <PromoDialog ref="promo" :head="t('message.loads.add.head')" :call="pc" :text="pt" />
     </v-col>
   </v-row>
 </template>
 
 
 <script setup lang="ts">
-import { ref, computed } from 'vue'
+import {ref, computed, onMounted} from 'vue'
 import { trucks, containers, pallet } from '../../configs/templates/loads.js'
 import { getText } from '../../configs/functions/gettext.js'
 import { getVolume } from '../../configs/functions/getvolume.js'
@@ -194,7 +210,6 @@ import {useDisplay} from "vuetify";
 import icons from "../../configs/constants/icons";
 import {useRouter} from "vue-router";
 import {useLoadsStore} from "../../stores/load";
-import useTemplateName from "../../hooks/useTemplateName";
 import PromoDialog from "../../components/dialogs/PromoDialog.vue"
 import useMessages from "../../hooks/useMessages";
 import {LoadInterface} from "../../interfaces/ProjectInterface";
@@ -211,7 +226,11 @@ const userStore = useUserStore()
 const appStore = useAppStore()
 const loadsStore = useLoadsStore()
 
-const { getName } = useTemplateName()
+const loading = computed(() => {
+  return Boolean(appStore.loading)
+})
+
+
 const { getMessage } = useMessages()
 
 const pt = ref('')
@@ -246,46 +265,64 @@ const dataList = computed(() => {
   return arr.length ? arr : []
 })
 
-const dataTemplates = computed(() => {
-  if (!templates.value.length) return []
+const getName = (i) => {
+  let nm
 
-  return templates.value.reduce((o, i) => {
-    // name
-    i.nm = getName(i)
-    // icon
-    i.icon = getLoadsIcon(i.data.tp)
-    // standard
-    i.text = t('area.tp.' + i.data.tp)
-    // size + vol
-    i.size = getText(
+  if (i.nm && !Array.isArray(i.nm)) {
+    nm = i.nm
+  } else if (i.nm && Array.isArray(i.nm)) {
+
+    /** для грузов и транспорта */
+    if (i.nm.length === 2) nm = t(i.nm[0], { n: i.nm[1] })
+
+    /** для транспорта */
+    if (i.nm.length === 4) nm = t(i.nm[0], { n: i.nm[1] }) + ' + ' + t(i.nm[2], { n: i.nm[3] })
+
+  } else {
+    nm = t('templates.noname')
+  }
+  return nm
+}
+
+const dataTemplates = computed(() => {
+  if (!templates.value.length) return [];
+
+  return templates.value.map(i => {
+    const nm = getName(i);
+    const icon = getLoadsIcon(i.data.tp);
+    let text = t('area.tp.' + i.data.tp);
+    let size = getText(
         i.data.base,
         t('units.size.' + loadsStore.unitsLoads.size),
         t('units.wght.' + loadsStore.unitsLoads.wght),
-        loadsStore.unitsLoads)
-    // volume
-    i.vol = Number(getVolume(i.data.base))
-    // type text
+        loadsStore.unitsLoads
+    );
+    let vol = Number(getVolume(i.data.base));
+
     if (Number(i.data.tp) === 3 || Number(i.data.tp) === 4) {
-      // extended
-      i.text = ': ' + t('area.ex.' + i.data.tpex).toLowerCase()
-      // size + vol
-      i.size = i.size + ' * ' +
-          getText(
-              i.data.adds,
-              t('units.size.' + loadsStore.unitsLoads.size),
-              t('units.wght.' + loadsStore.unitsLoads.wght),
-              loadsStore.unitsLoads)
-      // volume
-      i.vol = i.vol + Number(getVolume(i.data.adds))
+      text += ': ' + t('area.ex.' + i.data.tpex).toLowerCase();
+      size += ' * ' + getText(
+          i.data.adds,
+          t('units.size.' + loadsStore.unitsLoads.size),
+          t('units.wght.' + loadsStore.unitsLoads.wght),
+          loadsStore.unitsLoads
+      );
+      vol += Number(getVolume(i.data.adds));
     }
-    i.text = i.text + ', ' + i.size + ', ' + i.vol + ' ' + t('units.m3')
-    i.type = i.data.tp
-    // freeze
-    for (const p of Object.keys(i)) i[p] = Object.freeze(i[p])
-    o.push(i)
-    return o
-  }, [])
-})
+
+    text += ', ' + size + ', ' + vol + ' ' + t('units.m3');
+
+    return {
+      ...i,
+      nm,
+      icon,
+      text,
+      size,
+      vol,
+      type: i.data.tp
+    };
+  });
+});
 
 const listTemplates = computed(() => {
   /** search */
@@ -343,7 +380,7 @@ const listTemplates = computed(() => {
     return 0
   })
 
-  for (const p of sortedResult) sortedResult[p] = Object.freeze(sortedResult[p])
+  for (const p of sortedResult) sortedResult[p] = sortedResult[p]
   return sortedResult
 })
 
@@ -384,7 +421,7 @@ const saveTemp = async (id) => {
       .then(() => {
         appStore.showSuccess(t('templates.add'))
         // $metrika.reachGoal('add.template.load')
-        index()
+        // index()
       }, (message) => {
         if (message) {
           message = JSON.parse(message)
@@ -402,9 +439,13 @@ const saveTemp = async (id) => {
         }
         appStore.showError(message)
       })
+      .finally(() => {
+        load()
+      })
 }
 
 const load = async () => {
+  appStore.setLoading(true)
   const loadedTemplates = []
   for (const i of [...trucks, ...containers, ...pallet]) {
     for (const p of Object.keys(i)) i[p] = Object.freeze(i[p])
@@ -417,7 +458,12 @@ const load = async () => {
           return loadedTemplates.push(i)
         })
       })
-  for (let x = 0; x < loadedTemplates.length; x ++)  loadedTemplates[x].id = x + 1
+      .finally(() => {
+        appStore.setLoading(false)
+      })
+  for (let x = 0; x < loadedTemplates.length; x ++) {
+    loadedTemplates[x].id = x + 1
+  }
   templates.value = [...loadedTemplates]
 }
 
@@ -425,6 +471,7 @@ const delTemplate = (clid) => {
   const index = templates.value.findIndex((i) => String(i.clid) === String(clid))
   templates.value.splice(index, 1)
   projectStore.remTemplate({ type: 'l', clid })
+  load()
 }
 
 const submit = (i: LoadInterface) => {
@@ -485,5 +532,10 @@ const limitMessage = () => {
   }
   return appStore.showError(t('message.loads.add.text'))
 }
+
+onMounted(() => {
+  appStore.hideToast()
+  load()
+})
 
 </script>

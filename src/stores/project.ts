@@ -242,7 +242,6 @@ export const useProjectStore = defineStore('project', () => {
 
       axios.post('/templates', param)
           .then((r) => {
-            // console.log(r)
             r.data.success ? resolve(r.data.object) : reject(r.data.message)
           })
     })
@@ -280,8 +279,6 @@ export const useProjectStore = defineStore('project', () => {
         params: param
       })
           .then((r) => {
-            // console.log(r)
-
             if (r.data.success) {
               resolve(r.data.object)
             } else {
