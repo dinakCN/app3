@@ -1,6 +1,6 @@
 <template>
   <v-select
-      ref="selectRef"
+      ref="fieldRef"
       v-model="data"
       dense
       :disabled="disabled"
@@ -45,12 +45,12 @@ const {t} = useI18n()
  */
 const data = defineModel<Number>('value', { default: 0 })
 
-const selectRef = ref(null)
+const fieldRef = ref(null)
 
 /**
  * Внещний доступ к методам
  */
 defineExpose({
-  selectRef,
+  fieldRef,
 })
 </script>

@@ -346,6 +346,7 @@ import {useRoute, useRouter} from "vue-router";
 import SelectField from "../../../components/forms/SelectField.vue";
 import icons from "../../../configs/constants/icons";
 import {unitSizeArray, unitWeightArray} from "../../../configs/units";
+import {useVuelidate} from "@vuelidate/core";
 
 const {t} = useI18n();
 const router = useRouter();
@@ -353,6 +354,8 @@ const router = useRouter();
 const rout = useRoute();
 
 const promoRef: Ref<PromoDialog> = ref(null)
+
+const validate = useVuelidate()
 
 const cargoStore = useCargoStore();
 const userStore = useUserStore();
@@ -476,8 +479,13 @@ const clearForm = () => {
   state();
   appStore.showSuccess(t('item.message.clear'));
 };
+
+const isFormError = () => {
+  validate.value.$touch()
+  return validate.value.$error
+}
 const submit = () => {
-  if (valid()) return appStore.showError(t('item.message.form_error'));
+  if (isFormError()) return appStore.showError(t('item.message.form_error'));
 
   let addItems = null;
 

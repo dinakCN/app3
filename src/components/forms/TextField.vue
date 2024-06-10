@@ -1,6 +1,6 @@
 <template>
   <v-text-field
-      ref="textfieldRef"
+      ref="fieldRef"
       v-model="data"
       :label="t(label)"
       :hint="t(hint)"
@@ -71,7 +71,7 @@ const { t } = useI18n()
  */
 const data = defineModel<String>('value', { default: '' })
 
-const textfieldRef = ref(null)
+const fieldRef = ref(null)
 
 const rules = {
   data: {
@@ -84,6 +84,8 @@ const rules = {
  * Vuelidate
  */
 const v$ = useVuelidate(props.isNeedValidate ? rules : {}, { data })
+
+const isInvalid = computed(() => v$.value.$invalid)
 
 /**
  * Обработка ошибок
@@ -127,6 +129,7 @@ const clear = () => {
  * Внещний доступ к методам
  */
 defineExpose({
-  textfieldRef,
+  fieldRef,
+  isInvalid
 })
 </script>
