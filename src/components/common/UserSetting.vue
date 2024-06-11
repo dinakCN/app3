@@ -1,6 +1,6 @@
 <template>
-  <v-card>
-    <v-card v-if="cargo" class="rounded-lg">
+  <div>
+    <v-card class="rounded-lg">
       <!-- HEADER -->
       <div class="text-button font-weight-bold mx-2 pt-1">
         {{ t('setting.units.cargo.header') }}
@@ -11,23 +11,11 @@
       </div>
 
       <v-card-text class="d-flex align-center py-0">
-        <v-radio-group
-            v-model="cargo.size"
-            class="mr-3"
-            mandatory
-            row
-        >
-          <v-radio :label="t('units.mm')" value="0"></v-radio>
-          <v-radio :label="t('units.sm')" value="1"></v-radio>
-          <v-radio :label="t('units.m')" value="2"></v-radio>
-        </v-radio-group>
+        <radio-group v-model:value="cargo.size" :items="unitSizeArray" />
 
         <v-spacer></v-spacer>
 
-        <v-radio-group v-model="cargo.wght" row>
-          <v-radio :label="t('units.kg')" value="0"></v-radio>
-          <v-radio :label="t('units.tn')" value="1"></v-radio>
-        </v-radio-group>
+        <radio-group v-model:value="cargo.wght" :items="unitWeightArray" />
       </v-card-text>
     </v-card>
 
@@ -42,23 +30,11 @@
       </div>
 
       <v-card-text class="d-flex align-center py-0">
-        <v-radio-group
-            v-model="loads.size"
-            class="mr-3"
-            mandatory
-            row
-        >
-          <v-radio :label="t('units.mm')" value="0"></v-radio>
-          <v-radio :label="t('units.sm')" value="1"></v-radio>
-          <v-radio :label="t('units.m')" value="2"></v-radio>
-        </v-radio-group>
+        <radio-group v-model:value="loads.size" :items="unitSizeArray" />
 
         <v-spacer></v-spacer>
 
-        <v-radio-group v-model="loads.wght" row>
-          <v-radio :label="t('units.kg')" value="0"></v-radio>
-          <v-radio :label="t('units.tn')" value="1"></v-radio>
-        </v-radio-group>
+        <radio-group v-model:value="loads.wght" :items="unitWeightArray" />
       </v-card-text>
     </v-card>
 
@@ -69,44 +45,39 @@
           elevation="6"
           color="primary"
           rounded
-          class="px-2"
+          class="px-2 no-uppercase"
           @click="submit"
       >
         {{ t('common.save') }}
       </v-btn>
     </div>
-  </v-card>
+  </div>
 </template>
 
 <script setup lang="ts">
-import { ref, onMounted } from 'vue'
+import { onMounted, ref } from 'vue'
 import { useI18n } from 'vue-i18n'
-import { useAppStore } from '@/stores/app'
-import { useCargoStore } from '@/stores/cargo'
+import { useAppStore } from '../../stores/app'
 import {useUserStore} from "../../stores/user";
+import {unitSizeArray, unitWeightArray} from "../../configs/units";
 
 const { t } = useI18n()
 const appStore = useAppStore()
-const cargoStore = useCargoStore()
 const userStore = useUserStore()
 
-const cargo = ref({ size: '1', wght: '0' })
-const loads = ref({ size: '1', wght: '0' })
 
-const unitsCargo = ref(cargoStore.unitsCargo)
-const unitsLoads = ref(cargoStore.unitsLoads)
+const cargo = ref(userStore.config.units.cargo)
+const loads = ref(userStore.config.units.loads)
 
 const submit = () => {
   appStore.setLoading(true)
   userStore.postConfigUnits({ cargo: cargo.value, loads: loads.value })
-      .then(() => appStore.showSuccess(t('common.saveSuccess')))
+      .then(() => appStore.showSuccess(t('common.success')))
       .catch(() => appStore.showError(t('common.validation.error')))
       .finally(() => appStore.setLoading(false))
 }
 
 onMounted(() => {
-  cargo.value = unitsCargo.value
-  loads.value = unitsLoads.value
   appStore.hideToast()
 })
 </script>

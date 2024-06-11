@@ -20,7 +20,7 @@
           x-small
           @click="toast.show = false"
         >
-          <v-icon>mdi:mdi mdi-close</v-icon>
+          <v-icon>{{ icons.close }}</v-icon>
         </v-btn>
       </template>
     </v-snackbar>
@@ -34,6 +34,7 @@
 >
 import { computed } from 'vue';
 import { useAppStore } from './stores/app'
+import icons from "./configs/constants/icons";
 
 const storeApp = useAppStore()
 const toast = computed(() => storeApp.toast)

@@ -1,5 +1,5 @@
 <template>
-  <v-card v-if="user">
+  <div>
     <!-- TYPE -->
     <v-row dense class="mx-1">
       <v-col cols="12" sm="6">
@@ -10,17 +10,17 @@
             :disabled="loading"
             @click="type = 'expir'"
         >
-          <v-list-item>
-            <v-list-item-content>
+          <v-list>
+            <v-list-item>
               <v-list-item-title class="text-button font-weight-bold pt-1">
                 {{ t('payment.types.expir.head') }}
-                <v-icon small>bx bx-pin</v-icon>
+                <v-icon small>{{ icons.pin }}</v-icon>
               </v-list-item-title>
-              <v-list-item-content class="text-body-2 grey--text text-darken-2 pb-0">
+              <v-list-item class="text-body-2 grey--text text-darken-2 pb-0">
                 {{ t('payment.types.expir.desc') }}
-              </v-list-item-content>
-            </v-list-item-content>
-          </v-list-item>
+              </v-list-item>
+            </v-list-item>
+          </v-list>
         </v-card>
       </v-col>
 
@@ -32,23 +32,23 @@
             :disabled="loading"
             @click="type = 'count'"
         >
-          <v-list-item>
-            <v-list-item-content>
+          <v-list>
+            <v-list-item>
               <v-list-item-title class="text-button font-weight-bold pt-1">
                 {{ t('payment.types.count.head') }}
                 <v-icon small>bx bx-pin</v-icon>
               </v-list-item-title>
-              <v-list-item-content class="text-body-2 grey--text text-darken-2 pb-0">
+              <v-list-item class="text-body-2 grey--text text-darken-2 pb-0">
                 {{ t('payment.types.count.desc') }}
-              </v-list-item-content>
-            </v-list-item-content>
-          </v-list-item>
+              </v-list-item>
+            </v-list-item>
+          </v-list>
         </v-card>
       </v-col>
     </v-row>
 
     <!-- BODY -->
-    <v-card :disabled="loading" class="mx-2 mt-2 rounded-lg">
+    <v-card :disabled="loading" class="mx-2 mt-2 rounded-lg py2 px-2">
       <div class="d-flex align-top my-1 py-1">
         <!-- periods -->
         <div class="text-button font-weight-bold mx-2">
@@ -61,7 +61,7 @@
             outlined
             class="px-2 mx-1 mt-0 font-weight-bold text-button"
         >
-          <v-icon small class="pr-1">mdi-gift-outline</v-icon>
+          <v-icon small class="pr-1">{{ icons.gift }}</v-icon>
           <span class="px-1">Cкидка</span>
           <span>{{ user.discount }}%</span>
           <div v-if="user.discount">
@@ -72,14 +72,15 @@
       </div>
 
       <!-- users -->
-      <div v-if="usersList.length" class="mx-2">
+      <div v-if="usersList.length">
         <v-radio-group
             v-model="users"
             :disabled="type !== 'expir' && selectedProducts?.type !== 'month'"
-            row
+            inline
         >
           <v-radio
               v-for="u in usersList"
+              color="primary"
               :key="u.id"
               :label="u.text"
               :value="u.id"
@@ -87,7 +88,7 @@
         </v-radio-group>
       </div>
 
-      <v-toolbar height="auto" flat>
+      <v-toolbar height="auto" flat color="transparent">
         <v-chip-group v-model="tarif" :color="chipsClass" column mandatory>
           <template v-for="i in products" :key="i?.id">
             <v-chip :value="i?.id" filter outlined>
@@ -96,7 +97,7 @@
               </span>
               <span class="pl-1">
                 <div>
-                  <v-icon small>bx bx-user</v-icon>
+                  <v-icon small>{{ icons.account }}</v-icon>
                   {{ usersSelected?.text ? usersSelected.text : 1 }}
                 </div>
               </span>
@@ -124,7 +125,7 @@
           color="primary"
           rounded
           large
-          class="px-3 font-weight-regular"
+          class="px-3 font-weight-regular no-uppercase"
           :disabled="!tarif || loading"
           @click="dataDialog = true"
       >
@@ -139,7 +140,7 @@
           <v-col v-if="!mobile" cols="auto" class="align-center">
             <!--logo -->
             <v-img
-                :src="require('@/assets/images/jets/start.svg')"
+                :src="require('../../assets/images/jets/start.svg')"
                 max-width="128"
                 min-height="128"
                 alt="You are lucky!"
@@ -162,7 +163,7 @@
         <v-btn
             color="primary"
             rounded
-            class="font-weight-medium px-2"
+            class="font-weight-medium px-2 no-uppercase"
             @click="dialog = false"
         >
           {{ t('common.ok') }}
@@ -179,8 +180,8 @@
             {{ t('payment.userdata.label') }}
           </div>
           <v-spacer></v-spacer>
-          <v-btn icon color="red" @click="dataDialog = false">
-            <v-icon>mdi-close</v-icon>
+          <v-btn color="red" @click="dataDialog = false">
+            <v-icon>{{ icons.close }}</v-icon>
           </v-btn>
         </div>
 
@@ -213,13 +214,14 @@
                         required
                         clearable
                         type="text"
-                        @keypress="NumbersOnly"
+                        @keydown="NumbersOnly"
                     ></v-text-field>
                   </v-col>
                   <v-col cols="auto">
                     <v-btn
                         outlined
                         color="primary"
+                        class="no-uppercase"
                         block
                         rounded
                         :disabled="loading || !c.regn"
@@ -262,7 +264,7 @@
                   :label="t('payment.userdata.ogrn.label')"
                   dense
                   type="text"
-                  @keypress="NumbersOnly"
+                  @keydown="NumbersOnly"
               ></v-text-field>
             </v-col>
 
@@ -293,31 +295,32 @@
           </v-row>
         </v-form>
 
-        <div class="d-flex justify-center py-2 px-2">
+        <div class="d-flex justify-center my-2 py-2 px-2">
           <v-btn
               block
               color="primary"
               rounded
               large
-              class="font-weight-medium px-2"
-              :disabled="loading"
-              @click="validate"
+              class="font-weight-medium px-2 no-uppercase"
+              @click="validateForm"
           >
             Выписать счет
           </v-btn>
         </div>
       </v-card>
     </v-dialog>
-  </v-card>
+  </div>
 </template>
 
 <script setup lang="ts">
 import { ref, computed, onMounted, watch } from 'vue'
 import { useI18n } from 'vue-i18n'
-import { useAppStore } from '@/stores/app'
-import { useCargoStore } from '@/stores/cargo'
+import { useAppStore } from '../../stores/app'
+import { useCargoStore } from '../../stores/cargo'
 import { useDisplay } from 'vuetify'
 import {useUserStore} from "../../stores/user";
+import icons from "../../configs/constants/icons";
+import {useVuelidate} from "@vuelidate/core";
 
 const { t } = useI18n()
 const appStore = useAppStore()
@@ -333,7 +336,7 @@ const typeUserPayment = ref(1)
 const dialog = ref(false)
 const dataDialog = ref(false)
 
-const loading = computed(() => appStore.loading)
+const loading = computed(() => Boolean(appStore.loading))
 const user = computed(() => userStore.user)
 
 const c = ref({
@@ -401,8 +404,8 @@ const toPay = computed(() => {
 })
 
 const discountInt = computed(() => {
-  if (!toPay.value || !appStore.user.discount) return 0
-  return Math.round(toPay.value * (appStore.user.discount / 100))
+  if (!toPay.value || !user.value.discount) return 0
+  return Math.round(toPay.value * (user.value.discount / 100))
 })
 
 const toPayDiscount = computed(() => {
@@ -436,7 +439,7 @@ watch(typeUserPayment, (type) => {
 })
 
 const getPaymentsList = async () => {
-  const r = await cargoStore.getPaymentsList()
+  const r = await appStore.getPaymentsList()
   const { expir, count } = r
 
   r.expir = expir.sort((e1, e2) => (e1.price > e2.price ? 1 : -1))
@@ -484,15 +487,15 @@ const getPaymentsList = async () => {
 }
 
 const getConfig = async () => {
-  const r = await cargoStore.getConfig()
+  const r = await userStore.getConfig()
   const { company, user } = r
   const { email } = user
   const { redn, name, regn, ogrn, address, manager, longtext } = company
 
   if (rules.required(email) && rules.email(email)) {
-    e.value = email
+    e.value.value = email
   } else {
-    e.show = true
+    e.value.show = true
   }
 
   c.value = {
@@ -508,8 +511,15 @@ const getConfig = async () => {
   appStore.setLoading(false)
 }
 
-const validate = async () => {
-  if (!form.value.validate()) {
+const validate = useVuelidate()
+
+const isFormError = () => {
+  validate.value.$touch()
+  return validate.value.$error
+}
+
+const validateForm = async () => {
+  if (isFormError()) {
     appStore.showError(t('item.message.form_error'))
     return
   }

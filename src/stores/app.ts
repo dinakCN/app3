@@ -1,6 +1,8 @@
 // Utilities
 import { defineStore } from 'pinia'
 import { reactive, ref } from 'vue'
+import axios from "axios";
+import {useUserStore} from "./user";
 
 export const useAppStore = defineStore('app', () => {
 
@@ -17,6 +19,8 @@ export const useAppStore = defineStore('app', () => {
   const setLoading = (bool: Boolean = false) => {
     loading.value = bool
   }
+
+  const userStore = useUserStore()
 
   /**
    * Toast
@@ -150,6 +154,58 @@ export const useAppStore = defineStore('app', () => {
 
   }
 
+  const getTariffs = () => {
+    return new Promise((resolve, reject) => {
+
+      setLoading(true)
+
+      axios.get('/tarifs')
+        .then((r) => {
+          r.data.success ? resolve(r.data.object) : reject(r.data.message)
+        })
+        .finally(() => setLoading(false))
+    })
+  }
+
+    const getPaymentsList = () => {
+        return new Promise((resolve) => {
+
+            setLoading(true)
+
+            axios.get('/payment')
+                .then((r) => {
+                    if (r.data.success) {
+                        resolve(r.data.object)
+                    }
+                })
+                .finally(() => setLoading(false))
+        })
+    }
+
+    const postPayments = (obj) => {
+        return new Promise((resolve) => {
+
+            const params =  {
+                user: userStore.user.id,
+                types: obj.types,
+                prods: obj.prods,
+                optns: obj.optns,
+                email: obj.email,
+                company: obj.company,
+                comment: obj.comment,
+                version: version
+            }
+
+            setLoading(true)
+
+            axios.post('/payment', params)
+                .then((r) => {
+                    if (r.data.success) resolve(r.data)
+                })
+                .finally(() => setLoading(false))
+        })
+    }
+
   return {
     version,
     loading,
@@ -162,6 +218,9 @@ export const useAppStore = defineStore('app', () => {
     showErrorSmall,
     showInfo,
     showInfoSmall,
-    showSuccess
+    showSuccess,
+    getTariffs,
+    postPayments,
+    getPaymentsList,
   }
 })

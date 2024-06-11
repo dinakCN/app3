@@ -36,7 +36,9 @@ const icons = {
   cash: 'mdi:mdi-cash',
   dollar: 'mdi:mdi-currency-usd',
   account: 'mdi:mdi-account',
-  settings: 'mdi:mdi-cog-outline'
+  settings: 'mdi:mdi-cog-outline',
+  pin: 'mdi:mdi-pin-outline',
+  gift: 'mdi:mdi-gift-outline'
 };
 
 type IIcons = {

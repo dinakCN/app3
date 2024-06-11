@@ -19,202 +19,165 @@
             <v-col
               cols="12"
             >
-              <v-text-field
-                v-model="nm"
-                :label="$t('item.nm.label')"
-                :error-messages="nmErrors"
-                :counter="start.nm.max"
-                :maxlength="start.nm.max"
-                dense
-                clearable
-                @click:clear="nm = null"
-                @input="$v.nm.$touch()"
-                @blur="$v.nm.$touch()"
+              <text-field
+                  v-model:value="nm"
+                  label="item.nm.label"
+                  clearable
+                  :size="start.nm.max"
+                  :config="{
+                    max: start.nm.max
+                  }"
               >
-                <template v-slot:prepend>
-                  <v-icon
+                <v-icon
                     :color="nm ? 'primary' : 'secondary'"
                     small
-                  >
-                    mdi-bookmark-check-outline
-                  </v-icon>
-                </template>
-              </v-text-field>
+                >
+                  mdi:mdi-bookmark-check-outline
+                </v-icon>
+              </text-field>
             </v-col>
 
             <!-- ln -->
             <v-col
               cols="6"
             >
-              <v-text-field
-                v-model="ln"
-                :label="$t('item.ln.label')"
-                :suffix="$t('units.size.' + un.size)"
-                dense
-                counter
-                step="0.1"
-                :counter-value="() => subFieldText(ln, start.ln.max)"
-                :error-messages="lnErrors"
-                type="number"
-                @input="$v.ln.$touch()"
-                @blur="$v.ln.$touch()"
+              <number-field
+                  v-model:value="ln"
+                  label="item.ln.label"
+                  suffix="units.size"
+                  :size="un.size"
+                  :step="0.1"
+                  :config="{
+                    max: start.ln.max,
+                    min: start.ln.min
+                  }"
               >
-                <template v-slot:prepend>
-                  <v-icon
+                <v-icon
                     :color="ln ? 'primary' : 'secondary'"
                     small
-                  >
-                    mdi-arrow-top-left
-                  </v-icon>
-                </template>
-              </v-text-field>
+                >
+                  mdi:mdi-arrow-top-left
+                </v-icon>
+              </number-field>
             </v-col>
 
             <!-- wd -->
             <v-col
               cols="6"
             >
-              <v-text-field
-                v-model="wd"
-                :label="$t('item.wd.label')"
-                :suffix="$t('units.size.' + un.size)"
-                dense
-                counter
-                step="0.1"
-                :counter-value="() => subFieldText(wd, start.wd.max)"
-                :error-messages="wdErrors"
-                type="number"
-                @input="$v.wd.$touch()"
-                @blur="$v.wd.$touch()"
+              <number-field
+                  v-model:value="wd"
+                  label="item.wd.label"
+                  suffix="units.size"
+                  :size="un.size"
+                  :step="0.1"
+                  :config="{
+                    max: start.wd.max,
+                    min: start.wd.min
+                  }"
               >
-                <template v-slot:prepend>
-                  <v-icon
+                <v-icon
                     :color="wd ? 'primary' : 'secondary'"
                     small
-                  >
-                    mdi-arrow-bottom-left
-                  </v-icon>
-                </template>
-              </v-text-field>
+                >
+                  mdi:mdi-arrow-bottom-left
+                </v-icon>
+              </number-field>
             </v-col>
 
             <!-- hg -->
             <v-col
               cols="6"
             >
-              <v-text-field
-                v-model="hg"
-                :label="$t('item.hg.label')"
-                :suffix="$t('units.size.' + un.size)"
-                dense
-                counter
-                step="0.1"
-                :counter-value="() => subFieldText(hg, start.hg.max)"
-                :error-messages="hgErrors"
-                type="number"
-                @input="$v.hg.$touch()"
-                @blur="$v.hg.$touch()"
+              <number-field
+                  v-model:value="hg"
+                  label="item.hg.label"
+                  suffix="units.size"
+                  :size="un.size"
+                  :step="0.1"
+                  :config="{
+                    max: start.wd.max,
+                    min: start.wd.min
+                  }"
               >
-                <template v-slot:prepend>
-                  <v-icon
+                <v-icon
                     :color="hg ? 'primary' : 'secondary'"
                     small
-                  >
-                    mdi-arrow-up
-                  </v-icon>
-                </template>
-              </v-text-field>
+                >
+                  mdi:mdi-arrow-up
+                </v-icon>
+              </number-field>
             </v-col>
 
             <!-- wg -->
             <v-col
               cols="6"
             >
-              <v-text-field
-                v-model="wg"
-                :label="$t('item.wg.label')"
-                :suffix="$t('units.wght.' + un.wght)"
-                dense
-                step="0.1"
-                :error-messages="wgErrors"
-                type="number"
-                @input="$v.wg.$touch()"
-                @blur="$v.wg.$touch()"
+              <number-field
+                  v-model:value="wg"
+                  label="item.wg.label"
+                  suffix="units.wght"
+                  :size="un.wght"
+                  :is-size="false"
+                  :step="0.1"
+                  :config="{
+                    max: start.wg.max,
+                    min: start.wg.min
+                  }"
               >
-                <template v-slot:prepend>
-                  <v-icon
+                <v-icon
                     :color="wg ? 'primary' : 'secondary'"
                     small
-                  >
-                    mdi-weight-gram
-                  </v-icon>
-                </template>
-              </v-text-field>
+                >
+                  mdi:mdi-weight-gram
+                </v-icon>
+              </number-field>
             </v-col>
 
             <v-col
               cols="12"
             >
-              <v-text-field
-                v-model="cn"
-                :label="$t('item.cn.label')"
-                dense
-                :error-messages="cnErrors"
-                type="number"
-                step="1"
-                @input="$v.cn.$touch()"
-                @blur="$v.cn.$touch()"
+              <number-field
+                  v-model:value="cn"
+                  label="item.cn.label"
+                  suffix="units.size"
+                  :size="un.size"
+                  :step="1"
+                  :config="{
+                    max: start.cn.max,
+                    min: start.cn.min
+                  }"
               >
-                <template v-slot:prepend>
-                  <v-icon
+                <v-icon
                     :color="cn ? 'primary' : 'secondary'"
                     small
-                  >
-                    mdi-tally-mark-4
-                  </v-icon>
-                </template>
-              </v-text-field>
+                >
+                  mdi:mdi-tally-mark-4
+                </v-icon>
+              </number-field>
             </v-col>
 
             <!-- pg -->
             <v-col
               cols="6"
             >
-              <v-select
-                v-model="pg"
-                dense
-                :items="packingList"
-                :label="$t('item.pg.label')"
-                :error-messages="pgErrors"
-                required
-              >
-                <template v-slot:prepend>
-                  <v-icon
-                    :color="pg !== null ? 'primary' : 'secondary'"
-                    small
-                  >{{ pgIcon }}</v-icon>
-                </template>
-              </v-select>
+              <select-field
+                  v-model:value="pg"
+                  label="item.pg.label"
+                  :items="packingList"
+                  :icon="pgIcon"
+              />
             </v-col>
             <v-col
               class="d-flex"
               cols="6"
             >
-              <v-select
-                v-model="st"
-                dense
-                :label="$t('item.st.label')"
-                :items="stuckList"
-                :error-messages="stErrors"
-                required
-              >
-                <template v-slot:prepend>
-                  <v-icon
-                    :color="st !== null ? 'primary' : 'secondary'"
-                    small
-                  >mdi-layers-outline</v-icon>
-                </template>
-              </v-select>
+              <select-field
+                  v-model:value="st"
+                  label="item.st.label"
+                  :items="stuckList"
+                  icon="mdi:mdi-layers-outline"
+              />
             </v-col>
 
             <!-- LIMIT -->
@@ -223,23 +186,21 @@
                 v-if="st == 1"
                 cols="12"
               >
-                <v-text-field
-                  v-model="lm"
-                  dense
-                  :label="$t('item.lm.label')"
-                  :suffix="$t('units.wght.' + un.wght)"
-                  :error-messages="lmErrors"
-                  :hint="$t('item.lm.hint')"
-                  persistent-hint
-                  step="1"
-                  type="number"
-                  @input="$v.lm.$touch()"
-                  @blur="$v.lm.$touch()"
+                <number-field
+                    v-model:value="lm"
+                    label="item.lm.label"
+                    suffix="units.wght"
+                    hint="item.lm.hint"
+                    :size="un.wght"
+                    :is-size="false"
+                    :step="1"
+                    :config="{
+                    max: start.lm.max,
+                    min: start.lm.min
+                  }"
                 >
-                  <template v-slot:prepend>
-                    <v-icon small>mdi-plus</v-icon>
-                  </template>
-                </v-text-field>
+                  <v-icon small>mdi:mdi-plus</v-icon>
+                </number-field>
               </v-col>
             </v-fade-transition>
 
@@ -250,42 +211,23 @@
             <v-col
               cols="6"
             >
-              <v-select
-                v-model="rt"
-                dense
-                :label="$t('item.rt.label')"
-                :items="rotateList"
-                :error-messages="rtErrors"
-                required
-              >
-                <template v-slot:prepend>
-                  <v-icon
-                    :color="rt !== null ? 'primary' : 'secondary'"
-                    small
-                  >mdi-swap-horizontal</v-icon>
-                </template>
-              </v-select>
+              <select-field
+                  v-model:value="rt"
+                  label="item.rt.label"
+                  :items="rotateList"
+                  icon="mdi:mdi-swap-horizontal"
+              />
             </v-col>
 
             <v-col
               cols="6"
             >
-              <v-select
-                v-model="ov"
-                :disabled="pg === 1"
-                dense
-                :label="$t('item.ov.label')"
-                :items="overList"
-                :error-messages="ovErrors"
-                required
-              >
-                <template v-slot:prepend>
-                  <v-icon
-                    :color="ov !== null ? 'primary' : 'secondary'"
-                    small
-                  >mdi-swap-vertical</v-icon>
-                </template>
-              </v-select>
+              <select-field
+                  v-model:value="ov"
+                  label="item.ov.label"
+                  :items="overList"
+                  icon="mdi:mdi-swap-vertical"
+              />
             </v-col>
 
             <v-col
@@ -343,12 +285,11 @@
 
                 <v-btn
                   v-if="color !== colorDefault"
-                  icon
                   small
                   class="font-weight-regular text-uppercase red--text"
                   @click="color = colorDefault"
                 >
-                  <v-icon>mdi-close</v-icon>
+                  <v-icon>{{ icons.close }}</v-icon>
                 </v-btn>
               </div>
 
@@ -364,8 +305,8 @@
 
           <v-btn
             color="primary"
-            class="font-weight-medium"
-            text
+            class="font-weight-medium no-uppercase"
+            variant="text"
             @click="close"
           >
             {{ t('common.cancel') }}
@@ -374,6 +315,7 @@
           <v-btn
             color="primary"
             type="submit"
+            class="no-uppercase"
           >
             {{ t('common.ok') }}
           </v-btn>
@@ -395,6 +337,7 @@ import { setWght, setSize } from '@/configs/functions/setunits.js'
 import { getCargoIcon } from '@/configs/functions/geticon.js'
 import {useUserStore} from "../../stores/user";
 import {useI18n} from "vue-i18n";
+import icons from "../../configs/constants/icons";
 
 const {t} = useI18n()
 
@@ -452,21 +395,7 @@ const form = reactive({
   color: '#000000'
 })
 
-const validationRules = {
-  nm: { maxLength: maxLength(start.nm.max) },
-  ln: { decimal, minValue: minValue(getSize(start.ln.min, un.size)), maxValue: maxValue(getSize(start.ln.max, un.size)) },
-  wd: { decimal, minValue: minValue(getSize(start.wd.min, un.size)), maxValue: maxValue(getSize(start.wd.max, un.size)) },
-  hg: { decimal, minValue: minValue(getSize(start.hg.min, un.size)), maxValue: maxValue(getSize(start.hg.max, un.size)) },
-  wg: { decimal, minValue: minValue(getWght(start.wg.min, un.wght)), maxValue: maxValue(getWght(start.wg.max, un.wght)) },
-  cn: { integer, minValue: minValue(start.cn.min), maxValue: maxValue(start.cn.max) },
-  pg: { required },
-  st: { required },
-  rt: { required },
-  ov: { required },
-  lm: {}
-}
-
-const v$ = useVuelidate(validationRules, form)
+const v$ = useVuelidate()
 
 const colorText = computed(() => {
   return form.color !== colorDefault ? 'выбран' : 'не выбран'
@@ -525,42 +454,6 @@ const resetForm = () => {
 const pgIcon = computed(() => {
   return Object.freeze(getCargoIcon(form.pg))
 })
-
-const subFieldText = (int, max) => {
-  int = int ? int : 0
-      return `${int} / ${getSize(max, userStore.config.units.cargo.size)}`
-}
-
-const dataErrors = (data, min, max, unit = '') => {
-  const errors = []
-
-  if (!data.$dirty) return errors
-  !data.decimal  && errors.push(t('common.validation.decimal'))
-  !data.minValue && errors.push(t('common.validation.minValue') + ' ' + min + ' ' + unit)
-  !data.maxValue && errors.push(t('common.validation.maxValue') + ' ' + max + ' ' + unit)
-
-  return errors
-}
-
-const countErrors = (data, min, max) => {
-  const errors = []
-
-  if (!data.$dirty) return errors
-  !data.integer  && errors.push(t('common.validation.integer'))
-  !data.minValue && errors.push(t('common.validation.minValue') + ' ' + min)
-  !data.maxValue && errors.push(t('common.validation.maxValue') + ' ' + max)
-
-  return errors
-}
-
-const selectErrors = (data) => {
-  const errors = []
-
-  if (!data.$dirty) return errors
-  !data.includes && errors.push(t('common.validation.required'))
-
-  return errors
-}
 
 const state = () => {
 

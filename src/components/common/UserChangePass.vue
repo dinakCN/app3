@@ -28,13 +28,13 @@
       </v-card-text>
 
       <v-card-actions>
-        <v-btn variant="text" rounded @click="back">
+        <v-btn variant="text" class="no-uppercase" rounded @click="back">
           {{ t('common.back') }}
         </v-btn>
 
         <v-spacer></v-spacer>
 
-        <v-btn rounded color="primary" class="px-2" @click="submit">
+        <v-btn rounded color="primary" class="px-2 no-uppercase" @click="submit">
           {{ t('password.btn') }}
         </v-btn>
       </v-card-actions>
@@ -46,8 +46,8 @@
 import { ref } from 'vue'
 import { useRouter } from 'vue-router'
 import { useI18n } from 'vue-i18n'
-import { useAppStore } from '@/stores/app'
-import { useCargoStore } from '@/stores/cargo'
+import { useAppStore } from '../../stores/app'
+import { useCargoStore } from '../../stores/cargo'
 import icons from "../../configs/constants/icons";
 
 const { t } = useI18n()

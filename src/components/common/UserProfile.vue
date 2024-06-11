@@ -1,6 +1,6 @@
 <template>
   <div>
-    <v-card v-if="user" class="rounded-lg">
+    <v-card class="rounded-lg">
       <!-- HEADER -->
       <div class="text-button font-weight-bold mx-2 pt-1">
         {{ t('user.header') }}
@@ -13,9 +13,7 @@
           </v-col>
           <v-col class="font-weight-medium primary--text" @click="setReName()">
             {{ user.name }}
-            <v-btn color="primary" small @click="setReName()">
-              <v-icon small>{{ icons.editOutline }}</v-icon>
-            </v-btn>
+            <v-btn :icon="icons.editOutline" variant="text" color="primary" small @click="setReName()"></v-btn>
           </v-col>
         </v-row>
 
@@ -76,10 +74,10 @@
 
       <v-card-actions class="align-center">
         <v-spacer></v-spacer>
-        <v-btn color="success" rounded class="px-2" to="/user#user-changepass">
+        <v-btn color="success" rounded class="px-2 no-uppercase" to="/user#user-changepass">
           {{ t('user.pwdchange') }}
         </v-btn>
-        <v-btn color="error" rounded class="px-2" @click="exit">
+        <v-btn color="error" rounded class="px-2 no-uppercase" @click="exit">
           {{ t('user.logout') }}
         </v-btn>
       </v-card-actions>
@@ -89,28 +87,29 @@
     <v-card class="rounded-lg"></v-card>
 
     <!-- EDIT NAME -->
-    <ReNameDialog ref="dialogReNameRef" icon="bx bxs-check-circle" color="primary" />
+    <ReNameDialog ref="dialogReNameRef" :icon="icons.checkCircle" color="primary" />
   </div>
 </template>
 
 <script setup lang="ts">
 import {ref, computed, Ref} from 'vue'
 import { useI18n } from 'vue-i18n'
-import { useAppStore } from '@/stores/app'
 import {useUserStore} from "../../stores/user";
-import ReNameDialog from '@/components/dialogs/ReNameDialog.vue'
+import ReNameDialog from '../dialogs/ReNameDialog.vue'
 import icons from "../../configs/constants/icons";
 
 const { t } = useI18n()
-const appStore = useAppStore()
 const userStore = useUserStore()
 
 const dialogReNameRef: Ref<ReNameDialog> = ref(null)
 
-const user = computed(() => appStore.user)
+const user = computed(() => userStore.user)
 const config = computed(() => userStore.config)
 
 const license = computed(() => {
+  if(!user.value) {
+    return ''
+  }
   if (Number(user.value.tarif.type) === 2) {
     return t('tarif.type.1.title')
   } else if (Number(user.value.tarif.type) === 1) {
@@ -131,6 +130,9 @@ const colors = computed(() => {
 })
 
 const data = computed(() => {
+  if(!user.value) {
+    return ''
+  }
   const o = []
   o.push({ head: t('tarif.current'), text: license.value, color: true })
   if (user.value.tarif.type) {
@@ -145,6 +147,9 @@ const data = computed(() => {
 })
 
 const licExpir = computed(() => {
+  if(!user.value) {
+    return ''
+  }
   if (Date.parse(user.value.tarif.expir) >= Date.now()) {
     const date = new Date(user.value.tarif.expir)
     return `${date.getDate()}.${date.getMonth() + 1}.${date.getFullYear()}`

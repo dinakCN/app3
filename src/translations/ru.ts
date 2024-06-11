@@ -96,7 +96,8 @@ export default {
     'soon': 'скоро',
     'getlicense': 'Сменить тариф',
     'needlicense': 'Подробнее о тарифах',
-    'needhelp': 'Нужна помощь? Посмотрите обучающее видео'
+    'needhelp': 'Нужна помощь? Посмотрите обучающее видео',
+    'success': 'Успешно'
   },
   message: {
     project: {

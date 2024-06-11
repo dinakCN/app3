@@ -197,7 +197,7 @@
 
 
 <script setup lang="ts">
-import {ref, computed, onMounted} from 'vue'
+import {ref, computed, onMounted, Ref} from 'vue'
 import { trucks, containers, pallet } from '../../configs/templates/loads.js'
 import { getText } from '../../configs/functions/gettext.js'
 import { getVolume } from '../../configs/functions/getvolume.js'

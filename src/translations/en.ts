@@ -9,7 +9,8 @@ export default {
     faq: 'FAQ',
     contact: 'Contact Us',
     tos: 'Terms of Service',
-    policy: 'Privacy Policy'
+    policy: 'Privacy Policy',
+    success: 'Success',
   },
   board: {
     titlePlaceholder: 'Enter a title for this card',
