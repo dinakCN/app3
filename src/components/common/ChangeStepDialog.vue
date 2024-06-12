@@ -1,134 +1,81 @@
 <template>
-  <v-dialog
-    v-model="dialog"
-    max-width="360"
-  >
+  <v-dialog v-model="dialog" max-width="360">
     <v-card class="rounded-lg pb-2 pt-3">
-
       <!-- FORM -->
-
-      <v-form
-        class="mx-2 d-flex align-center"
-        @submit.prevent="submit()"
-      >       
-        <v-text-field
-          v-model="s"
-          :label="$t('scene.step.changeLabel')"
-          required
-          step="1"
-          dense
-          type="number"
-          :error-messages="sErrors"
-          @input="$v.s.$touch()"
-          @blur="$v.s.$touch()"
-        >
-        </v-text-field>
-        <v-btn
-          icon
-          class="ml-1"
-          color="primary"
-          type="submit"
-        >
+      <v-form class="mx-2 d-flex align-center" @submit.prevent="submit">
+        <number-field
+            v-model:value="s"
+            :step="1"
+            label="scene.step.changeLabel"
+            :config="{
+              max: maxValue,
+              min: minValue
+            }"
+        />
+        <v-btn class="ml-1" color="primary" type="submit">
           <v-icon x-large>
-            bx bxs-chevron-down-circle
+            {{ icons.chevronDown }}
           </v-icon>
         </v-btn>
       </v-form>
-
     </v-card>
-  </v-dialog>  
+  </v-dialog>
 </template>
 
-<script>
-import { validationMixin } from 'vuelidate'
-import { required, integer, maxValue, minValue } from 'vuelidate/lib/validators'
+<script setup lang="ts">
+import { ref, watch } from 'vue'
+import { useVuelidate } from '@vuelidate/core'
+import icons from "../../configs/constants/icons";
 
-export default {
-  name: 'ChangeStepDialog',
-  mixins: [validationMixin],
-  props: {
-    maxValue: {
-      type: Number,
-      default: 1
-    },
-    minValue: {
-      type: Number,
-      default: 1
-    }
+const props = defineProps({
+  maxValue: {
+    type: Number,
+    default: 1,
   },
-  data() {
-    return {
-      dialog: false,
-
-      resolve: null,
-      reject: null,
-
-      s: 1
-    }
+  minValue: {
+    type: Number,
+    default: 1,
   },
-  validations() {
-    return {
-      s: { 
-        required,
-        integer,
-        maxValue: maxValue(this.maxValue),
-        minValue: minValue(this.minValue)
-      }
-    }
-  },
-  computed: {
-    sErrors () {
-      const errors = []
-      
-      if (!this.$v.s.$dirty) return errors
+})
 
-      !this.$v.s.required && errors.push(this.$t('common.validation.required'))
-      !this.$v.s.integer  && errors.push(this.$t('common.validation.integer'))
-      !this.$v.s.minValue && errors.push(this.$t('common.validation.minValue') + ' ' + this.minValue)
-      !this.$v.s.maxValue && errors.push(this.$t('common.validation.maxValue') + ' ' + this.maxValue)
+const emit = defineEmits(['update:dialog'])
 
-      return errors
-    }
-  },
-  mounted() {
-    this.$v.$reset()
-  },
-  beforeUnmount() {
-    this.$v.$reset()
-  },
-  methods: {
+const dialog = ref(false)
+const s = ref(1)
 
-    submit() {
+const v$ = useVuelidate()
 
-      this.$v.$touch()
+const resolve = ref<((value: number | false) => void) | null>(null)
+const reject = ref<((reason?: any) => void) | null>(null)
 
-      if (!this.$v.$error) {
-
-        this.dialog = false
-      
-        this.resolve(this.s)
-
-      }
-    },
-
-    open(n) {
-
-      this.dialog = true
-
-      /** data by default */
-
-      this.s = n
-
-      return new Promise((resolve, reject) => {
-        this.resolve = resolve
-        this.reject = reject
-      })
-    },
-
-    close() {
-      this.resolve(false)
-      this.dialog = false
-    }
+const submit = () => {
+  v$.value.$touch()
+  if (!v$.value.$error) {
+    dialog.value = false
+    if (resolve.value) resolve.value(s.value)
   }
 }
+
+const open = (n: number) => {
+  dialog.value = true
+  s.value = n
+  return new Promise<number | false>((res, rej) => {
+    resolve.value = res
+    reject.value = rej
+  })
+}
+
+const close = () => {
+  if (resolve.value) resolve.value(false)
+  dialog.value = false
+}
+
+watch(dialog, (newVal) => {
+  emit('update:dialog', newVal)
+})
+
+defineExpose({
+  open,
+  close,
+})
 </script>

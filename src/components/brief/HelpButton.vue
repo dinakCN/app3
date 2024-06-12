@@ -4,7 +4,7 @@
     variant="text"
     @click.stop="open()"
   >
-    <v-icon>mdi:mdi mdi-help-circle-outline</v-icon>
+    <v-icon>{{ icons.helpCircleOutline }}</v-icon>
     <v-tooltip
       activator="parent"
       location="start"
@@ -29,6 +29,7 @@ import { useRoute } from 'vue-router'
 import { useI18n } from "vue-i18n"
 import { VideoInterface } from '../../interfaces/VideoInterfaces';
 import links from '../../configs/video'
+import icons from "../../configs/constants/icons";
 
 /**
  * Router

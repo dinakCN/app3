@@ -17,6 +17,7 @@
     "axios": "^1.6.8",
     "boxicons": "^2.1.4",
     "core-js": "^3.34.0",
+    "jspdf": "^2.5.1",
     "roboto-fontface": "*",
     "three": "^0.165.0",
     "troika-three-text": "^0.49.1",

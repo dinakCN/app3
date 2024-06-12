@@ -38,7 +38,8 @@ const icons = {
   account: 'mdi:mdi-account',
   settings: 'mdi:mdi-cog-outline',
   pin: 'mdi:mdi-pin-outline',
-  gift: 'mdi:mdi-gift-outline'
+  gift: 'mdi:mdi-gift-outline',
+  helpCircleOutline: 'mdi:mdi-help-circle-outline'
 };
 
 type IIcons = {

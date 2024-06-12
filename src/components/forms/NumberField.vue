@@ -46,7 +46,7 @@ interface IConfig {
 }
 
 const props = withDefaults(defineProps<{
-  label: string,
+  label?: string,
   isSize?: boolean,
   isNeedValidate?: boolean,
   variant?: string,
