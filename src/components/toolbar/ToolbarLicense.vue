@@ -1,5 +1,7 @@
 <template>
   <v-btn
+    variant="text"
+    rounded
     to="/user#user-tarif"
   >
     <v-avatar

@@ -3,6 +3,7 @@
       ref="fieldRef"
       v-model="data"
       dense
+      required
       :disabled="disabled"
       :variant="variant"
       :item-title="itemTitle"

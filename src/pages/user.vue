@@ -7,7 +7,7 @@
             <v-tab
                 :value="item.value"
                 :to="`#${item.value}`"
-                :style="mobile ? 'min-width:60px' : ''"
+                :style="{minWidth: mobile ? '60px' : '', display: item.label ? 'block' : 'none' }"
             >
               <span><v-icon>{{ item.icon }}</v-icon></span>
               <span v-if="!mobile" class="pl-2">{{ item.label }}</span>
@@ -23,8 +23,11 @@
       </div>
 
       <v-tabs-window v-model="tab">
+        <v-tabs-window-item :value="'user-changepass'">
+          <user-change-pass />
+        </v-tabs-window-item>
         <v-tabs-window-item v-for="item in tabItems" :key="item.value" :value="item.value" class="py-3">
-          <component :is="item.component" />
+          <component :is="item.component" @open="tab = 'user-changepass'"/>
         </v-tabs-window-item>
       </v-tabs-window>
 
@@ -33,7 +36,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref, onMounted, shallowRef } from 'vue'
+import {ref, onMounted, shallowRef, nextTick} from 'vue'
 import {useRoute, useRouter} from 'vue-router'
 import { useAppStore } from '../stores/app'
 import { useDisplay } from 'vuetify'
@@ -44,6 +47,7 @@ import UserProfile from "../components/common/UserProfile.vue";
 import UserSetting from "../components/common/UserSetting.vue";
 import UserTarifs from "../components/common/UserTarifs.vue";
 import UserPayments from "../components/common/UserPayments.vue";
+import UserChangePass from "../components/common/UserChangePass.vue";
 
 const { mobile } = useDisplay()
 const appStore = useAppStore()
@@ -60,7 +64,8 @@ const tabItems = shallowRef([
   { value: 'user-profile', label: t('user.header'), icon: icons.account, component: UserProfile },
   { value: 'user-setting', label: t('user.setting'), icon: icons.settings, component: UserSetting },
   { value: 'user-tarif', label: t('user.tarif'), icon: icons.cash, component: UserTarifs },
-  { value: 'user-payments', label: t('user.payment'), icon: icons.dollar, component: UserPayments }
+  { value: 'user-payments', label: t('user.payment'), icon: icons.dollar, component: UserPayments },
+  { value: 'user-changepass', label: '', icon: '', component: UserChangePass }
 ])
 
 const close = () => {
@@ -68,10 +73,11 @@ const close = () => {
 }
 
 onMounted(() => {
-  if(route.hash) {
-    tab.value = route.hash.replace('#', '')
-  }
-  console.log(tab.value)
+  nextTick(() => {
+    if(route.hash) {
+      tab.value = route.hash.replace('#', '')
+    }
+  })
 })
 </script>
 

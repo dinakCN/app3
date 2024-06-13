@@ -1,63 +1,63 @@
 <template>
   <v-tooltip bottom>
-    <template v-slot:activator="{ on }">
-      <div ref="copylabel" class="copylabel animate__faster" v-on="on" @click.stop.prevent="copy">{{ text }}</div>
+    <template v-slot:activator="{ props }">
+      <div ref="copylabel" class="copylabel animate__faster" v-bind="props" @click.stop.prevent="performCopy">{{ text }}</div>
     </template>
     <span>{{ tooltip }}</span>
   </v-tooltip>
 </template>
 
-<script>
-/*
-|---------------------------------------------------------------------
-| Copy Label Component
-|---------------------------------------------------------------------
-|
-| Copy to clipboard with the plugin clipboard `this.$clipboard`
-|
-*/
-export default {
-  props: {
-    // Text to copy to clipboard
-    text: {
-      type: String,
-      default: ''
-    },
-    // Text to show on toast
-    toastText: {
-      type: String,
-      default: 'Copied to clipboard!'
-    },
-    /**
-     * CSS animation with animate.css
-     * https://animate.style/
-     */
-    animation: {
-      type: String,
-      default: 'heartBeat'
-    }
-  },
-  data() {
-    return {
-      tooltip: 'Copy',
-      timeout: null
-    }
-  },
-  beforeUnmount() {
-    if (this.timeout) clearTimeout(this.timeout)
-  },
-  methods: {
-    copy() {
-      this.$animate(this.$refs.copylabel, this.animation)
-      this.$clipboard(this.text, this.toastText)
-      this.tooltip = 'Copied!'
+<script setup lang="ts">
+import { ref, onBeforeUnmount, Ref } from 'vue'
+import {useClipboard} from "../../hooks/useClipboard";
 
-      this.timeout = setTimeout(() => {
-        this.tooltip = 'Copy'
-      }, 2000)
-    }
+const props = withDefaults(defineProps<{
+    text: string,
+    toastText: string,
+    animation: string
+}>(), {
+  text: '',
+  toastText: 'Copied to clipboard!',
+  animation: 'heartBeat'
+})
+
+const tooltip = ref('Copy')
+const timeout = ref<ReturnType<typeof setTimeout> | null>(null)
+const copylabel: Ref<HTMLElement> = ref(null)
+
+const { copy } = useClipboard()
+
+const performCopy = async () => {
+  await copy(props.text, props.toastText)
+  if (copylabel.value) {
+    await animateCSS(copylabel.value, props.animation)
   }
+  tooltip.value = 'Copied!'
+  if (timeout.value) clearTimeout(timeout.value)
+  timeout.value = setTimeout(() => {
+    tooltip.value = 'Copy'
+  }, 2000)
 }
+
+const animateCSS = (element, animation, prefix = 'animate__') =>
+  // We create a Promise and return it
+  new Promise((resolve, reject) => {
+    const animationName = `${prefix}${animation}`
+    element.classList.add(`${prefix}animated`, animationName)
+
+    // When the animation ends, we clean the classes and resolve the Promise
+    function handleAnimationEnd(event) {
+      event.stopPropagation()
+      element.classList.remove(`${prefix}animated`, animationName)
+      resolve('Animation ended')
+    }
+
+    element.addEventListener('animationend', handleAnimationEnd, { once: true })
+  })
+
+onBeforeUnmount(() => {
+  if (timeout.value) clearTimeout(timeout.value)
+})
 </script>
 
 <style scoped>

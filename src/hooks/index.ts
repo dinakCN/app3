@@ -1,9 +1,9 @@
 import useMessages from "./useMessages";
 import useTemplateName from "./useTemplateName";
-import useFormValidator from "./useFormValidator";
+import useClipboard from "./useClipboard";
 
 export default {
   useMessages,
   useTemplateName,
-  useFormValidator,
+  useClipboard,
 }

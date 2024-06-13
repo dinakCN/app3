@@ -1,270 +1,204 @@
 <template>
   <span>
     <!-- STEP -->
-
     <v-btn
-      v-if="!step && sceneMaxPage"
-      height="36px"
-      text
-      rounded
-      small
-      class="font-weight-bold"
-      style="position: absolute; z-index: 1; right: 48px; top: 0;"
-      @click="startStep()"
-    >                
+        v-if="!step && sceneMaxPage"
+        height="36px"
+        variant="text"
+        rounded
+        small
+        class="font-weight-bold"
+        style="position: absolute; z-index: 1; right: 48px; top: 0;"
+        @click="startStep"
+    >
       <v-icon left color="primary">
         bx bxs-game
       </v-icon>
-      {{ $t('scene.step.label') }}
+      {{ t('scene.step.label') }}
     </v-btn>
-    
+
     <v-expand-x-transition>
       <div
-        v-if="step && sceneMaxPage"
-        class="d-flex align-center pl-1"
-        style="position: absolute; z-index: 1; right: 48px; top: 0; height:36px;"
+          v-if="step && sceneMaxPage"
+          class="d-flex align-center pl-1"
+          style="position: absolute; z-index: 1; right: 48px; top: 0; height:36px;"
       >
-
         <v-toolbar
-          color="primary"
-          dark 
-          height="36px"
-          rounded="xl"
-          class="d-flex justify-content-center align-center"
+            color="primary"
+            dark
+            height="36px"
+            rounded="xl"
+            class="d-flex justify-content-center align-center"
         >
-
-          <v-btn 
-            icon
-            small           
-            @click="prevStepMax()"
-          >                
+          <v-btn
+              small
+              @click="prevStepMax"
+          >
             <v-icon class="font-weight-regular">
-              bx-chevrons-left
+              {{ icons.chevronRight }}
             </v-icon>
           </v-btn>
 
           <v-btn
-            icon
-            small
-            @click="prevStep()"
-          >                
+              small
+              @click="prevStep"
+          >
             <v-icon class="font-weight-regular">
-              bx-left-arrow-circle
+              {{ icons.arrowLeftCircle }}
             </v-icon>
           </v-btn>
 
           <v-btn
-            text
-            small
-            width="70px"
-            class="font-weight-regular text-caption"
-            @click="() => stepDialog()"
-          >                
+              variant="text"
+              small
+              width="70px"
+              class="font-weight-regular text-caption"
+              @click="stepDialog"
+          >
             {{ stepsVal }}
           </v-btn>
 
           <v-btn
-            icon
-            small
-            @click="nextStep()"
-          >                
+              small
+              @click="nextStep"
+          >
             <v-icon class="font-weight-regular">
-              bx-right-arrow-circle
+               {{ icons.arrowRightCircle }}
             </v-icon>
           </v-btn>
 
           <v-btn
-            icon
-            small
-            @click="nextStepMax()"
-          >                
+              small
+              @click="nextStepMax"
+          >
             <v-icon class="font-weight-regular">
-              bx-chevrons-right
+              {{ icons.chevronRight }}
             </v-icon>
           </v-btn>
-        
         </v-toolbar>
 
-        <v-btn 
-          small
-          height="36px"
-          rounded
-          class="font-weight-bold ml-1 px-2"
-          @click="stopStep(false)"
-        >                
+        <v-btn
+            small
+            height="36px"
+            rounded
+            class="font-weight-bold ml-1 px-2"
+            @click="stopStep(false)"
+        >
           <v-icon left color="red">
-            bx-x
+            {{ icons.close }}
           </v-icon>
-          {{ $t('$vuetify.close') }}
+          {{ t('$vuetify.close') }}
         </v-btn>
-
       </div>
     </v-expand-x-transition>
 
     <div v-if="step" style="position: absolute; z-index: 1; right: 48px; top: 45px; height:40px; ">
-
-      <v-chip-group            
-        v-model="stepType"
-        mandatory
-        column
-        center-active
-        color="transparent"
-        active-class="primary--text"
+      <v-chip-group
+          v-model="stepType"
+          mandatory
+          column
+          center-active
+          color="transparent"
+          active-class="primary--text"
       >
         <v-chip
-          small
-          outlined
-          pill
-          :value="0"
+            small
+            outlined
+            pill
+            :value="0"
         >
-          верхняя загрузка  
+          верхняя загрузка
         </v-chip>
         <v-chip
-          small
-          outlined
-          pill
-          :value="1"
+            small
+            outlined
+            pill
+            :value="1"
         >
-          задняя загрузка  
+          задняя загрузка
         </v-chip>
-      </v-chip-group>           
-
+      </v-chip-group>
     </div>
 
-    <StepDialog
-      ref="step"
-      :maxValue="stepMax"
+    <ChangeStepDialog
+        ref="stepRef"
+        :maxValue="stepMax"
     />
-    
   </span>
 </template>
 
-<script>
+<script setup lang="ts">
+import { ref, computed } from 'vue'
+import { useI18n } from 'vue-i18n'
+import icons from "../../configs/constants/icons";
+import ChangeStepDialog from "./ChangeStepDialog.vue";
 
-export default {
-  name: 'StepComponent',
-  components: {
-    StepDialog: () => import(/* webpackPrefetch: true */'@/components/common/ChangeStepDialog')
-  },
-  mixins: [messMixin],
-  data() {
-    return {
+const { t } = useI18n()
 
-      /** режим шагов загрузки */
+//TODO: ?????
+const sceneCreate = null
+const sceneMaxPage = 1
 
-      step: null,
-      stepMax: null,
-      stepType: 1
-    }
-  },
-  computed: {
+const stepRef = ref<typeof ChangeStepDialog | null>(null)
 
-    stepsVal() {
+const step = ref<number | null>(null)
+const stepMax = ref<number | null>(null)
+const stepType = ref<number>(1)
 
-      if (this.step) return this.step + ' / ' + this.stepMax
+const stepsVal = computed(() => {
+  if (step.value) return `${step.value} / ${stepMax.value}`
+  return t('scene.step.all')
+})
 
-      return this.$t('scene.step.all')
-    }
+const startStep = () => {
+  step.value = 1
+  makeStep()
+}
 
-  },
-  watch: {
-    stepType() {
-      // sceneCreate.clearStep(true)
-      // sceneCreate.setStep(this.step, this.stepType)
-    }
-  },
-  methods: {
+const nextStep = () => {
+  if (step.value && step.value < stepMax.value) {
+    step.value++
+    makeStep()
+  } else {
+    prevStepMax()
+  }
+}
 
-    /** 
-     * 
-     * step change
-     * 
-     */
+const prevStepMax = () => {
+  step.value = 1
+  makeStep()
+}
 
-    nextStep() {
+const prevStep = () => {
+  if (step.value && step.value > 1) {
+    step.value--
+    makeStep()
+  } else {
+    nextStepMax()
+  }
+}
 
-      if (this.step < this.stepMax) {
+const nextStepMax = () => {
+  step.value = stepMax.value
+  makeStep()
+}
 
-        this.step++
+const makeStep = () => {
+  if (!sceneCreate?.setup) return
+  sceneCreate.setStep(step.value, stepType.value)
+}
 
-        this.makeStep()
-        this.hideToast()
+const stopStep = (deep = true) => {
+  step.value = null
+  if (!sceneCreate?.setup) return
+  sceneCreate.clearStep(deep)
+}
 
-      } else {
-        this.prevStepMax()
-      }
-
-    },
-
-    prevStepMax() {
-      this.step = 1
-      this.makeStep()        
-    },
-
-    prevStep() {
-
-      if (this.step > 1) {
-
-        this.step--
-
-        this.makeStep()
-        this.hideToast()
-
-      } else {
-        this.nextStepMax()
-      }     
-      
-    },
-
-    nextStepMax() {
-      this.step = this.stepMax
-      this.makeStep()      
-    },
-
-    startStep() {
-
-      this.step = 1
-      this.makeStep()
-
-    },
-
-    makeStep() {
-      if (!sceneCreate?.setup) return 
-
-      sceneCreate.setStep(this.step, this.stepType)
-    },
-
-    stopStep(deep = true) {
-      
-      this.step = null
-
-      if (!sceneCreate?.setup) return 
-      
-      sceneCreate.clearStep(deep)
-  
-    },
-
-    async stepDialog() {
-
-      /**
-       * открыть диалог
-       * 
-       */
-
-      const update = await this.$refs.step.open(this.step)
-
-      /**
-       * смена шага погрузки
-       * 
-       */
-
-      if (update >= 1 && update <= this.stepMax)  {
-
-        this.step = update
-
-        this.makeStep()
-      }
-    }
+const stepDialog = async () => {
+  const update = await stepRef.value.open(step.value)
+  if (update >= 1 && update <= stepMax.value) {
+    step.value = update
+    makeStep()
   }
 }
 </script>

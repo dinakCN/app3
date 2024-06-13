@@ -1,6 +1,8 @@
 const icons = {
   chevronDown: 'mdi:mdi-chevron-down',
   chevronUp: 'mdi:mdi-chevron-up',
+  chevronLeft: 'mdi mdi-chevron-left',
+  chevronRight: 'mdi mdi-chevron-right',
   close: 'mdi:mdi-close',
   magnify: 'mdi:mdi-magnify',
   folderOpen: 'mdi:mdi-folder-open',
@@ -39,7 +41,9 @@ const icons = {
   settings: 'mdi:mdi-cog-outline',
   pin: 'mdi:mdi-pin-outline',
   gift: 'mdi:mdi-gift-outline',
-  helpCircleOutline: 'mdi:mdi-help-circle-outline'
+  helpCircleOutline: 'mdi:mdi-help-circle-outline',
+  arrowLeftCircle: 'mdi:mdi-arrow-left-circle-outline',
+  arrowRightCircle: 'mdi:mdi-arrow-right-circle-outline',
 };
 
 type IIcons = {

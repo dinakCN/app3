@@ -20,7 +20,7 @@
               cols="12"
             >
               <text-field
-                  v-model:value="nm"
+                  v-model:value="form.nm"
                   label="item.nm.label"
                   clearable
                   :size="start.nm.max"
@@ -29,7 +29,7 @@
                   }"
               >
                 <v-icon
-                    :color="nm ? 'primary' : 'secondary'"
+                    :color="form.nm ? 'primary' : 'secondary'"
                     small
                 >
                   mdi:mdi-bookmark-check-outline
@@ -42,7 +42,7 @@
               cols="6"
             >
               <number-field
-                  v-model:value="ln"
+                  v-model:value="form.ln"
                   label="item.ln.label"
                   suffix="units.size"
                   :size="un.size"
@@ -53,7 +53,7 @@
                   }"
               >
                 <v-icon
-                    :color="ln ? 'primary' : 'secondary'"
+                    :color="form.ln ? 'primary' : 'secondary'"
                     small
                 >
                   mdi:mdi-arrow-top-left
@@ -66,7 +66,7 @@
               cols="6"
             >
               <number-field
-                  v-model:value="wd"
+                  v-model:value="form.wd"
                   label="item.wd.label"
                   suffix="units.size"
                   :size="un.size"
@@ -77,7 +77,7 @@
                   }"
               >
                 <v-icon
-                    :color="wd ? 'primary' : 'secondary'"
+                    :color="form.wd ? 'primary' : 'secondary'"
                     small
                 >
                   mdi:mdi-arrow-bottom-left
@@ -90,7 +90,7 @@
               cols="6"
             >
               <number-field
-                  v-model:value="hg"
+                  v-model:value="form.hg"
                   label="item.hg.label"
                   suffix="units.size"
                   :size="un.size"
@@ -101,7 +101,7 @@
                   }"
               >
                 <v-icon
-                    :color="hg ? 'primary' : 'secondary'"
+                    :color="form.hg ? 'primary' : 'secondary'"
                     small
                 >
                   mdi:mdi-arrow-up
@@ -114,7 +114,7 @@
               cols="6"
             >
               <number-field
-                  v-model:value="wg"
+                  v-model:value="form.wg"
                   label="item.wg.label"
                   suffix="units.wght"
                   :size="un.wght"
@@ -126,7 +126,7 @@
                   }"
               >
                 <v-icon
-                    :color="wg ? 'primary' : 'secondary'"
+                    :color="form.wg ? 'primary' : 'secondary'"
                     small
                 >
                   mdi:mdi-weight-gram
@@ -138,7 +138,7 @@
               cols="12"
             >
               <number-field
-                  v-model:value="cn"
+                  v-model:value="form.cn"
                   label="item.cn.label"
                   suffix="units.size"
                   :size="un.size"
@@ -149,7 +149,7 @@
                   }"
               >
                 <v-icon
-                    :color="cn ? 'primary' : 'secondary'"
+                    :color="form.cn ? 'primary' : 'secondary'"
                     small
                 >
                   mdi:mdi-tally-mark-4
@@ -162,7 +162,7 @@
               cols="6"
             >
               <select-field
-                  v-model:value="pg"
+                  v-model:value="form.pg"
                   label="item.pg.label"
                   :items="packingList"
                   :icon="pgIcon"
@@ -173,7 +173,7 @@
               cols="6"
             >
               <select-field
-                  v-model:value="st"
+                  v-model:value="form.st"
                   label="item.st.label"
                   :items="stuckList"
                   icon="mdi:mdi-layers-outline"
@@ -183,11 +183,11 @@
             <!-- LIMIT -->
             <v-fade-transition>
               <v-col
-                v-if="st == 1"
+                v-if="form.st == 1"
                 cols="12"
               >
                 <number-field
-                    v-model:value="lm"
+                    v-model:value="form.lm"
                     label="item.lm.label"
                     suffix="units.wght"
                     hint="item.lm.hint"
@@ -212,7 +212,7 @@
               cols="6"
             >
               <select-field
-                  v-model:value="rt"
+                  v-model:value="form.rt"
                   label="item.rt.label"
                   :items="rotateList"
                   icon="mdi:mdi-swap-horizontal"
@@ -223,7 +223,7 @@
               cols="6"
             >
               <select-field
-                  v-model:value="ov"
+                  v-model:value="form.ov"
                   label="item.ov.label"
                   :items="overList"
                   icon="mdi:mdi-swap-vertical"
@@ -231,7 +231,7 @@
             </v-col>
 
             <v-col
-              v-if="ov === 1"
+              v-if="form.ov === 1"
               cols="12"
               class="red--text text-lighten-2 text-center text-caption"
             >
@@ -244,13 +244,13 @@
             >
               <div
                 class="pl-3 text-body-2"
-                :class="color !== colorDefault ? 'primary--text' : 'text-secondary'"
+                :class="form.color !== colorDefault ? 'primary--text' : 'text-secondary'"
               >
                 {{ t('item.color') }} {{ colorText }}
               </div>
               <div>
                 <v-icon
-                  :color="color !== colorDefault ? 'primary' : 'secondary'"
+                  :color="form.color !== colorDefault ? 'primary' : 'secondary'"
                   small
                 >
                   mdi mdi-eyedropper-variant
@@ -263,20 +263,18 @@
                   offset-y
                   class="ml-1"
                 >
-                  <template v-slot:activator="{ on, attrs }">
+                  <template v-slot:activator="{ props }">
                     <v-btn
-                      icon
-                      v-bind="attrs"
-                      v-on="on"
+                      v-bind="props"
                     >
-                      <v-icon :color="color">
-                        mdi mdi-circle
+                      <v-icon :color="form.color">
+                        {{ icons.circle }}
                       </v-icon>
                     </v-btn>
                   </template>
                   <v-card>
                     <v-color-picker
-                      v-model="color"
+                      v-model="form.color"
                       dot-size="25"
                       mode="hexa"
                     ></v-color-picker>
@@ -284,10 +282,10 @@
                 </v-menu>
 
                 <v-btn
-                  v-if="color !== colorDefault"
+                  v-if="form.color !== colorDefault"
                   small
                   class="font-weight-regular text-uppercase red--text"
-                  @click="color = colorDefault"
+                  @click="form.color = colorDefault"
                 >
                   <v-icon>{{ icons.close }}</v-icon>
                 </v-btn>
@@ -331,17 +329,27 @@
 <script setup lang="ts">
 import { ref, reactive, computed } from 'vue'
 import { useVuelidate } from '@vuelidate/core'
-import { required, decimal, maxValue, minValue, integer, maxLength } from '@vuelidate/validators'
-import { getWght, getSize } from '@/configs/functions/getunits.js'
 import { setWght, setSize } from '@/configs/functions/setunits.js'
 import { getCargoIcon } from '@/configs/functions/geticon.js'
 import {useUserStore} from "../../stores/user";
 import {useI18n} from "vue-i18n";
 import icons from "../../configs/constants/icons";
+import {useCargoStore} from "../../stores/cargo";
 
 const {t} = useI18n()
 
 const userStore =useUserStore()
+const cargoStore = useCargoStore()
+
+const state = reactive({
+  resolve: null as any,
+  reject: null as any
+})
+
+const overList = computed(() => cargoStore.overList)
+const rotateList = computed(() => cargoStore.rotateList)
+const stuckList = computed(() => cargoStore.stuckList)
+const packingList = computed(() => cargoStore.packingList)
 
 const dialog = ref(false)
 
@@ -350,6 +358,10 @@ const colorDefault = Object.freeze('#999999')
 
 const start = reactive({
   ln: {
+    min: 0,
+    max: 0,
+  },
+  lm: {
     min: 0,
     max: 0,
   },
@@ -427,10 +439,16 @@ const submit = () => {
 const open = () => {
   resetForm()
   dialog.value = true
+  return new Promise((resolve, reject) => {
+    state.resolve = resolve
+    state.reject = reject
+  })
 }
 
 const close = () => {
   dialog.value = false
+  state.resolve(false)
+  return false
 }
 
 const resetForm = () => {
@@ -455,36 +473,8 @@ const pgIcon = computed(() => {
   return Object.freeze(getCargoIcon(form.pg))
 })
 
-const state = () => {
-
-   form.nm = null
-   form.ln = null
-   form.wd = null
-   form.hg = null
-   form.wg = null
-   form.cn = null
-
-   form.pg = null
-   form.st = null
-   form.lm = null
-   form.rt = null
-   form.ov = null
-
-   form.color = colorDefault
-
-  un.size = userStore.config.units.cargo.size
-  un.wght = userStore.config.units.cargo.wght
-}
-
-const list = (array, bool = false) => {
-
-  const list = [...array]
-
-  list.unshift({ text: 'common.null', value: null })
-
-  if (bool) return Object.freeze(list.map((item) => { return { text: t(item.text), value: item.value }}))
-
-  return Object.freeze(list.map((item) => item.value))
-
-}
+defineExpose({
+  open,
+  close
+})
 </script>

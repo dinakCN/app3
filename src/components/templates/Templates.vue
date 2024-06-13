@@ -8,7 +8,7 @@
       <v-btn
         rounded
         small
-        text
+        variant="text"
         color="red"
         class="text-caption text-uppercase px-1"
         @click="close()"
@@ -63,15 +63,15 @@
               :key="item.add_time"
               link
             >
-              <v-list-item-avatar>
+              <v-avatar>
                 <v-icon
                   rounded
                   color="primary"
                 >
                   {{ item.icon }}
                 </v-icon>
-              </v-list-item-avatar>
-              <v-list-item-content
+              </v-avatar>
+              <v-list-item
                 :class="[item.gr == 1 ? 'primary--text' : '']"
                 @click="submit(item.data, item.clid)"
               >
@@ -81,23 +81,21 @@
                 <v-list-item-subtitle>
                   {{ item.text }}
                 </v-list-item-subtitle>
-              </v-list-item-content>
+              </v-list-item>
 
               <v-list-item-action>
                 <div class="d-flex align-center pl-2">
                   <v-btn
                     v-if="item.clid"
                     :disabled="!user.tarif.type"
-                    icon
                     @click.stop="del(item.clid)"
                   >
-                    <v-icon>bx-trash</v-icon>
+                    <v-icon>{{  icons.trashCan }}</v-icon>
                   </v-btn>
                   <v-btn
-                    icon
                     @click.stop="submit(item.data, item.clid)"
                   >
-                    <v-icon>bx bx-right-arrow-circle</v-icon>
+                    <v-icon>{{ icons.arrowRightCircle }}</v-icon>
                   </v-btn>
                 </div>
               </v-list-item-action>
@@ -137,6 +135,7 @@ import {useI18n} from "vue-i18n";
 import {useUserStore} from "../../stores/user";
 import {useAppStore} from "../../stores/app";
 import PromoDialog from "../dialogs/PromoDialog.vue";
+import icons from "../../configs/constants/icons";
 
 const {t} = useI18n()
   const props = withDefaults(defineProps<{data: string[]}>(), {
@@ -204,4 +203,3 @@ const user = computed(() => userStore.user)
       appStore.hideToast()
     })
 </script>
-// lang ok

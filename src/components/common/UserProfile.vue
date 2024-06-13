@@ -74,7 +74,7 @@
 
       <v-card-actions class="align-center">
         <v-spacer></v-spacer>
-        <v-btn color="success" rounded class="px-2 no-uppercase" to="/user#user-changepass">
+        <v-btn color="success" @click="emit('open')" rounded class="px-2 no-uppercase" to="/user#user-changepass">
           {{ t('user.pwdchange') }}
         </v-btn>
         <v-btn color="error" rounded class="px-2 no-uppercase" @click="exit">
@@ -101,7 +101,9 @@ import icons from "../../configs/constants/icons";
 const { t } = useI18n()
 const userStore = useUserStore()
 
-const dialogReNameRef: Ref<ReNameDialog> = ref(null)
+const emit = defineEmits(['open'])
+
+const dialogReNameRef: Ref<typeof ReNameDialog> = ref(null)
 
 const user = computed(() => userStore.user)
 const config = computed(() => userStore.config)

@@ -1,60 +1,50 @@
 <template>
   <!-- UPDATE -->
   <v-snackbar
-    v-model="updateExists"
-    bottom
-    right
-    color="primary"
+      v-model="updateExists"
+      bottom
+      right
+      color="primary"
   >
-    {{ $t('update.text') }}
-    <v-btn text class="ml-2" @click="refreshApp">
-      {{ $t('update.btn') }}
+    {{ t('update.text') }}
+    <v-btn variant="text" class="ml-2" @click="refreshApp">
+      {{ t('update.btn') }}
     </v-btn>
   </v-snackbar>
 </template>
 
-<script>
-export default {
-  name: 'UpdateSnack',
-  data() {
-    return {
-      // refresh variables
-      refreshing: false,
-      registration: null,
-      updateExists: false
-    }
-  },
+<script setup lang="ts">
+import {ref, onMounted, onUnmounted} from 'vue'
+import { useI18n } from 'vue-i18n'
 
-  created() {
-    // Listen for our custom event from the SW registration
-    document.addEventListener('swUpdated', this.updateAvailable, { once: true })
+const { t } = useI18n()
 
-    // Prevent multiple refreshes
-    navigator.serviceWorker.addEventListener('controllerchange', () => {
-      if (this.refreshing) return
-      this.refreshing = true
-      // Here the actual reload of the page occurs
-      window.location.reload()
-    })
-  },
+const refreshing = ref(false)
+const registration = ref<ServiceWorkerRegistration | null>(null)
+const updateExists = ref(false)
 
-  methods: {
-    // Store the SW registration so we can send it a message
-    // We use `updateExists` to control whatever alert, toast, dialog, etc we want to use
-    // To alert the user there is an update they need to refresh for
-    updateAvailable(event) {
-      this.registration = event.detail
-      this.updateExists = true
-    },
-
-    // Called when the user accepts the update
-    refreshApp() {
-      this.updateExists = false
-      // Make sure we only send a 'skip waiting' message if the SW is waiting
-      if (!this.registration || !this.registration.waiting) return
-      // send message to SW to skip the waiting and activate the new SW
-      this.registration.waiting.postMessage({ type: 'SKIP_WAITING' })
-    }
-  }
+const updateAvailable = (event: CustomEvent) => {
+  registration.value = event.detail
+  updateExists.value = true
 }
+
+const refreshApp = () => {
+  updateExists.value = false
+  if (!registration.value || !registration.value.waiting) return
+  registration.value.waiting.postMessage({ type: 'SKIP_WAITING' })
+}
+
+onMounted(() => {
+  document.addEventListener('swUpdated', updateAvailable, { once: true })
+
+  navigator.serviceWorker.addEventListener('controllerchange', () => {
+    if (refreshing.value) return
+    refreshing.value = true
+    window.location.reload()
+  })
+})
+
+onUnmounted(() => {
+  document.removeEventListener('swUpdated', updateAvailable)
+})
 </script>

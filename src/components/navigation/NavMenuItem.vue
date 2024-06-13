@@ -48,7 +48,6 @@ const isActive = (link: string) => {
   // Check if the current route path matches the menu item link
   const path = link.split('#')[0];
   const hash = link.split('#')[1];
-  console.log(route.path === path && route.hash === `#${hash}`)
   return route.path === path && route.hash === `#${hash}`;
 };
 </script>
