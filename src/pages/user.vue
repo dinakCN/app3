@@ -23,9 +23,6 @@
       </div>
 
       <v-tabs-window v-model="tab">
-        <v-tabs-window-item :value="'user-changepass'">
-          <user-change-pass />
-        </v-tabs-window-item>
         <v-tabs-window-item v-for="item in tabItems" :key="item.value" :value="item.value" class="py-3">
           <component :is="item.component" @open="tab = 'user-changepass'"/>
         </v-tabs-window-item>

@@ -2,7 +2,7 @@
   <v-list nav density="comfortable">
     <v-list-item
       link
-      to="/support"
+      :href="'https://app.jload.me/send'"
       color="primary"
     >
       <template v-slot:prepend>
