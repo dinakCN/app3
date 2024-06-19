@@ -583,6 +583,10 @@ const limitMessage = (n) => {
 };
 
 onMounted(() => {
+  console.log(cargoStore.item)
+  if(!Object.keys(cargoStore.item).length) {
+    router.push('/cargo')
+  }
   state();
   appStore.hideToast();
 
