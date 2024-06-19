@@ -1,0 +1,609 @@
+<template>
+  <v-row class="mt-4" justify="center" no-gutters>
+    <v-col
+      col="12"
+      lg="8"
+    >
+      <v-card
+        class="rounded-lg mb-1"
+      >
+        <v-card-actions class="d-flex align-center">
+          <!-- HEADER -->
+          <div class="text-button font-weight-bold ml-1">
+            {{ t('item.header') }}
+          </div>
+
+          <v-spacer></v-spacer>
+
+          <!-- COMMAND -->
+          <div class="ml-2 text-right">
+            <!-- COLOR -->
+            <v-menu
+                v-model:opened="colorMenu"
+                :close-on-content-click="false"
+                transition="scale-transition"
+                offset-y
+            >
+              <template #activator="{ props }">
+                <v-btn v-bind="props">
+                  <v-icon :color="color">
+                    {{icons.circle}}
+                  </v-icon>
+                </v-btn>
+              </template>
+              <v-card>
+                <v-color-picker
+                    v-model="color"
+                    dot-size="25"
+                    mode="hexa"
+                ></v-color-picker>
+              </v-card>
+            </v-menu>
+
+            <!-- RESET -->
+            <v-tooltip location="bottom">
+              <template #activator="{ props }">
+                <v-btn v-bind="props" @click="clearForm">
+                  <v-icon>{{ icons.refresh }}</v-icon>
+                </v-btn>
+              </template>
+              <span>{{ t('common.refresh') }}</span>
+            </v-tooltip>
+
+            <!-- REMOVE -->
+            <template v-if="!newItem">
+              <v-tooltip location="bottom">
+                <template #activator="{ props }">
+                  <v-btn v-bind="props" @click="rem">
+                    <v-icon>{{ icons.trashCan }}</v-icon>
+                  </v-btn>
+                </template>
+                <span>{{ t('common.delete') }}</span>
+              </v-tooltip>
+            </template>
+
+            <!-- HELP -->
+            <HelpButton name="item"/>
+          </div>
+        </v-card-actions>
+      </v-card>
+
+      <v-card class="rounded-lg">
+        <v-card-text
+          class="d-flex align-center py-0"
+        >
+          <radio-group
+            v-model:value="un.size"
+            :items="unitSizeArray"
+            cls="mr-3"
+            inline
+          />
+          <v-spacer></v-spacer>
+          <radio-group
+            v-model:value="un.wght"
+            :items="unitWeightArray"
+            inline
+          />
+        </v-card-text>
+
+        <!-- FORM -->
+        <v-form class="pt-2">
+          <v-card-text>
+            <v-row class="align-center">
+              <v-col
+                cols="12"
+                sm="6"
+                md="6"
+                lg="9"
+              >
+                <text-field
+                  v-model:value="nmVal"
+                  label="item.nm.label"
+                  hint="item.nm.hint"
+                  :clearable="true"
+                  :config="{
+                      max: start.nm.max
+                  }"
+                />
+              </v-col>
+              <v-col
+                cols="12"
+                sm="6"
+                md="6"
+                lg="3"
+              >
+                  <number-field
+                        v-model:value="cnVal"
+                        label="item.cn.label"
+                        :type="'number'"
+                        :with-icons="true"
+                        :step="1"
+                        :config="{
+                            max: start.cn.max,
+                            min: start.cn.min
+                        }"
+                  />
+              </v-col>
+              <v-col
+                cols="6"
+                sm="6"
+                md="3"
+                lg="3"
+              >
+                  <number-field
+                        v-model:value="lnVal"
+                        label="item.ln.label"
+                        suffix="units.size"
+                        :size="un.size"
+                        :step="0.1"
+                        :config="{
+                            max: lnValues.max[un.size],
+                            min: lnValues.min[un.size]
+                        }"
+                  />
+              </v-col>
+
+              <v-col
+                cols="6"
+                sm="6"
+                md="3"
+                lg="3"
+              >
+                  <number-field
+                        v-model:value="wdVal"
+                        label="item.wd.label"
+                        suffix="units.size"
+                        :size="un.size"
+                        :step="0.1"
+                        :config="{
+                            max: wdValues.max[un.size],
+                            min: wdValues.min[un.size]
+                        }"
+                  />
+              </v-col>
+              <v-col
+                cols="6"
+                sm="6"
+                md="3"
+                lg="3"
+              >
+                <number-field
+                  v-model:value="hgVal"
+                  label="item.hg.label"
+                  suffix="units.size"
+                  :size="un.size"
+                  :step="0.1"
+                  :config="{
+                           max: hgValues.max[un.size],
+                           min: hgValues.min[un.size]
+                        }"
+                />
+              </v-col>
+              <v-col
+                cols="6"
+                sm="6"
+                md="3"
+                lg="3"
+              >
+                <number-field
+                  v-model:value="wgVal"
+                  label="item.wg.label"
+                  suffix="units.wght"
+                  :size="un.wght"
+                  :step="0.1"
+                  :is-size="false"
+                  :config="{
+                           max: wgValues.max[un.size],
+                           min: wgValues.min[un.size]
+                        }"
+                />
+              </v-col>
+              <v-col
+                cols="6"
+                sm="6"
+                md="3"
+                lg="3"
+              >
+                <select-field
+                    v-model="pgVal"
+                    label="item.st.label"
+                    :items="packingList"
+                    :item-title="'text'"
+                    :icon="pgIcon"
+                />
+              </v-col>
+              <v-col
+                class="d-flex"
+                cols="6"
+                sm="6"
+                md="3"
+                lg="3"
+              >
+                <select-field
+                    v-model="stVal"
+                    label="item.st.label"
+                    :items="stuckList"
+                    :item-title="'text'"
+                    :icon="icons.layersOutline"
+                />
+              </v-col>
+
+<!--               LIMIT-->
+              <v-fade-transition>
+                <v-col
+                  v-if="stVal === 1"
+                  cols="12"
+                  sm="6"
+                  md="3"
+                  lg="3"
+                >
+                  <number-field
+                      v-model:value="lmVal"
+                      label="item.lm.label"
+                      suffix="units.wght"
+                      :size="un.wght"
+                      :step="1"
+                      :is-size="false"
+                      :config="{
+                          max: wgValues.max[un.size],
+                          min: wgValues.min[un.size]
+                        }"
+                      :is-custom-validate="lmValValidator"
+                  />
+                </v-col>
+              </v-fade-transition>
+            </v-row>
+            <v-row class="align-center">
+
+              <v-col
+                cols="6"
+                sm="6"
+                md="3"
+                lg="3"
+              >
+                <select-field
+                    v-model="rtVal"
+                    label="item.rt.label"
+                    :items="rotateList"
+                    :item-title="'text'"
+                    :icon="icons.swapHorizontal"
+                />
+              </v-col>
+
+              <v-col
+                cols="6"
+                sm="6"
+                md="3"
+                lg="3"
+              >
+                <select-field
+                    v-model="ovVal"
+                    :disabled="pg.value === 1"
+                    label="item.ov.label"
+                    :items="overList"
+                    :item-title="'text'"
+                    :icon="icons.swapVertical"
+                />
+              </v-col>
+
+            </v-row>
+          </v-card-text>
+        </v-form>
+      </v-card>
+
+      <!-- BUTTONS -->
+      <div class="d-flex alig-center mt-1">
+        <v-btn
+          rounded
+          class="button grey--text text--darken-3 px-2 no-uppercase"
+          @click="back()"
+        >
+          {{ t('common.cancel') }}
+        </v-btn>
+
+        <v-spacer></v-spacer>
+
+        <v-btn
+          elevation="6"
+          color="primary"
+          rounded
+          class="px-2 no-uppercase"
+          @click="submit()"
+        >
+          {{ t('common.save') }}
+        </v-btn>
+      </div>
+
+      <!-- PROMO -->
+      <PromoDialog
+        ref="promoRef"
+        :head="t('message.cargo.add.head')"
+        :text="promo"
+        :call="t('message.cargo.add.call')"
+      />
+
+    </v-col>
+  </v-row>
+</template>
+
+<script setup lang='ts'>
+import {computed, ref, reactive, onMounted, watch, Ref} from 'vue';
+import { decimal, maxValue, minValue } from '@vuelidate/validators';
+import { nm, ln, wd, hg, wg, cn, pg, st, lm, rt, ov } from '../../../../configs/items.js';
+import { getRandomColor } from '../../../../configs/getcolor.js';
+import { getWght, getSize } from '../../../../configs/functions/getunits.js';
+import { setWght, setSize } from '../../../../configs/functions/setunits.js';
+import { getCargoIcon } from '../../../../configs/functions/geticon.js';
+import PromoDialog from '../../../../components/dialogs/PromoDialog.vue';
+import {useCargoStore} from "../../../../stores/cargo";
+import {useUserStore} from "../../../../stores/user";
+import {useAppStore} from "../../../../stores/app";
+import {useProjectStore} from "../../../../stores/project";
+import {useI18n} from "vue-i18n";
+import {useRoute, useRouter} from "vue-router";
+import SelectField from "../../../../components/forms/SelectField.vue";
+import icons from "../../../../configs/constants/icons";
+import {unitSizeArray, unitWeightArray} from "../../../../configs/units";
+import {useVuelidate} from "@vuelidate/core";
+
+const {t} = useI18n();
+const router = useRouter();
+
+const rout = useRoute();
+
+const promoRef: Ref<PromoDialog> = ref(null)
+
+const validate = useVuelidate()
+
+const cargoStore = useCargoStore();
+const userStore = useUserStore();
+const appStore = useAppStore();
+const projectStore = useProjectStore();
+
+const nmVal = ref(nm.val);
+const lnVal = ref(ln.val);
+const wdVal = ref(wd.val);
+const hgVal = ref(hg.val);
+const wgVal = ref(wg.val);
+const cnVal = ref(cn.val);
+const pgVal = ref(pg.val);
+const stVal = ref(st.val);
+const lmVal = ref(lm.val);
+const rtVal = ref(rt.val);
+const ovVal = ref(ov.val);
+const color = ref(null);
+
+const colorMenu = ref(false);
+
+const promo = ref('');
+
+const start = {
+  nm, ln, wd, hg, wg, cn, pg, st, lm, rt, ov
+};
+
+const un = reactive({
+  size: 0,
+  wght: 0
+});
+
+const overList = computed(() => cargoStore.overList)
+const rotateList = computed(() => cargoStore.rotateList)
+const stuckList = computed(() => cargoStore.stuckList)
+const packingList = computed(() => cargoStore.packingList)
+const pgIcon = computed(() => getCargoIcon(pgVal.value));
+
+const lmValValidator = computed(() => {
+  if (stVal.value === 1) {
+    return {
+      decimal,
+      minValue: minValue(getWght(start.lm.min, un.wght)),
+      maxValue: maxValue(getWght(start.lm.max, un.wght))
+    };
+  }
+  return {};
+})
+
+
+const state = () => {
+  nmVal.value = start.nm.val;
+  lnVal.value = start.ln.val;
+  wdVal.value = start.wd.val;
+  hgVal.value = start.hg.val;
+  wgVal.value = start.wg.val;
+  cnVal.value = start.cn.val;
+  pgVal.value = start.pg.val;
+  stVal.value = start.st.val;
+  lmVal.value = start.lm.val;
+  rtVal.value = start.rt.val;
+  ovVal.value = start.ov.val;
+  un.size = +userStore.config.units.cargo.size;
+  un.wght = +userStore.config.units.cargo.wght;
+};
+
+const lnValues = computed(() => ({
+  min: {
+    0: getSize(start.ln.min, '0'),
+    1: getSize(start.ln.min, '1'),
+    2: getSize(start.ln.min, '2')
+  },
+  max: {
+    0: getSize(start.ln.max, '0'),
+    1: getSize(start.ln.max, '1'),
+    2: getSize(start.ln.max, '2')
+  }
+}))
+
+const wdValues = computed(() => ({
+  min: {
+    0: getSize(start.wd.min, '0'),
+    1: getSize(start.wd.min, '1'),
+    2: getSize(start.wd.min, '2')
+  },
+  max: {
+    0: getSize(start.wd.max, '0'),
+    1: getSize(start.wd.max, '1'),
+    2: getSize(start.wd.max, '2')
+  }
+}))
+
+const hgValues = computed(() => {
+  return {
+    min: {
+      0: getSize(start.hg.min, '0'),
+      1: getSize(start.hg.min, '1'),
+      2: getSize(start.hg.min, '2')
+    },
+    max: {
+      0: getSize(start.hg.max, '0'),
+      1: getSize(start.hg.max, '1'),
+      2: getSize(start.hg.max, '2')
+    }
+  }
+})
+
+const wgValues = computed(() => {
+  return {
+    min: {
+      0: getWght(start.wg.min, '0'),
+      1: getWght(start.wg.min, '1')
+    },
+    max: {
+      0: getWght(start.wg.max, '0'),
+      1: getWght(start.wg.max, '1')
+    }
+  }
+})
+
+const rem = () => {
+  cargoStore.removeItem(+rout.params.id)
+  sync()
+  back()
+}
+
+const setData = (data) => {
+  if (!data) return;
+
+  if (data.un) {
+    un.size = +data.un.size;
+    un.wght = +data.un.wght;
+  }
+
+  if (data.nm) nmVal.value = data.nm;
+  lnVal.value = getSize(data.ln, un.size);
+  wdVal.value = getSize(data.wd, un.size);
+  hgVal.value = getSize(data.hg, un.size);
+  wgVal.value = getWght(data.wg, un.wght);
+  cnVal.value = Number(data.cn);
+  pgVal.value = Number(data.pg);
+  stVal.value = Number(data.st);
+  lmVal.value = getWght(data.lm, un.wght);
+  rtVal.value = Object.prototype.hasOwnProperty.call(data, 'rt') ? Number(data.rt) : start.rt.val;
+  ovVal.value = Object.prototype.hasOwnProperty.call(data, 'ov') ? Number(data.ov) : start.ov.val;
+
+  if (data.key && !nmVal.value) nmVal.value = t(data.key);
+  if (data.cr) color.value = data.cr;
+};
+
+const getData = () => {
+  return {
+    id: rout.params.id ? Number(rout.params.id) : null,
+    nm: String(nmVal.value),
+    ln: setSize(lnVal.value, un.size),
+    wd: setSize(wdVal.value, un.size),
+    hg: setSize(hgVal.value, un.size),
+    wg: setWght(wgVal.value, un.wght),
+    cn: Number(cnVal.value),
+    pg: Number(pgVal.value),
+    st: Number(stVal.value),
+    lm: stVal.value === 1 ? setWght(lmVal.value, un.wght) : 0,
+    rt: Number(rtVal.value),
+    ov: Number(pgVal.value) !== 1 ? Number(ovVal.value) : Number(start.ov.val),
+    cr: String(color.value),
+    un: {
+      size: un.size,
+      wght: un.wght
+    },
+    point: Number(rout.params.clid)
+  };
+};
+
+const clearForm = () => {
+  state();
+  appStore.showSuccess(t('item.message.clear'));
+};
+
+const isFormError = () => {
+  validate.value.$touch()
+  return validate.value.$error
+}
+const submit = () => {
+  if (isFormError()) return appStore.showError(t('item.message.form_error'));
+
+  let addItems = null;
+
+  if (newItem.value) {
+    addItems = cnVal.value;
+  } else {
+    addItems = cargoStore.item[+rout.params.id];
+    addItems = cnVal.value - addItems.cn;
+  }
+
+  if (!cargoStore.checkCountCargo(addItems)) return limitMessage(addItems);
+
+  const data = getData();
+  cargoStore.addItem(data);
+  sync();
+
+  back();
+};
+
+const sync = () => {
+  projectStore.putProject({ alias: 'cargo' });
+};
+
+const back = () => {
+  return router.replace('/cargo');
+};
+
+const limitMessage = (n) => {
+  let limit = Number(userStore.config.limit.items) - Number(cargoStore.itemsCount);
+
+  if (limit < 0) limit += n;
+  if (n < 0 || !limit) n = 0;
+
+  const up = n - limit;
+
+  if (!userStore.user.tarif.type) {
+    promo.value = `${t('message.cargo.add.text')}, ${up}, { n: ${up} }`;
+    // Assume promo dialog has a ref
+    promoRef.value.open();
+  }
+
+  return appStore.showError(`${t('message.cargo.add.text')}, ${up}, { n: ${up} }`);
+};
+
+onMounted(() => {
+  state();
+  appStore.hideToast();
+
+  if (!newItem.value) {
+    setData(cargoStore.item[+rout.params.id]);
+  } else {
+    color.value = getRandomColor();
+    nmVal.value = t('item.new_nm');
+  }
+});
+
+const newItem = computed(() => !rout.params.clid || !rout.params.id);
+
+watch(pgVal, (newVal) => {
+  if (newVal === 1) ovVal.value = 0;
+});
+
+</script>
+
+<style>
+  .centered-input input {
+    text-align: center !important;
+  }
+</style>

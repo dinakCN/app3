@@ -460,14 +460,12 @@
     }
 
     const templateGet = async (clid: number) => {
-      const data = await templates.value.open()
-      if (!data) return false
-
-      const count = data.reduce((o, i) => Number(o) + Number(i.cn), 0)
-      if (!cargoStore.checkCountRow(data.length)) return false
+      const result = await templates.value.open()
+      if (!result) return false
+      const count = result.reduce((o, i) => Number(o) + Number(i.cn), 0)
+      if (!cargoStore.checkCountRow(result.length)) return false
       if (!cargoStore.checkCountCargo(count)) return limitMessage(count)
-
-      for (const i of data) {
+      for (const i of result) {
         i.point = clid
         cargoStore.addItem(i)
       }

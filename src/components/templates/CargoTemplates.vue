@@ -25,13 +25,19 @@ import useTemplateName from '../../hooks/useTemplateName';
 import { useUserStore } from '../../stores/user';
 import { useProjectStore } from '../../stores/project';
 import {useI18n} from "vue-i18n";
+import icons from "../../configs/constants/icons";
 
 const { getName } = useTemplateName();
 const userStore = useUserStore();
 const projectStore = useProjectStore();
 
-const templates = ref<any[]>([]);
+const templatesArray = ref<any[]>([]);
 const dialog: Ref<boolean> = ref(false);
+
+const state = reactive({
+  resolve: null as any,
+  reject: null as any,
+})
 
 const { t } = useI18n();
 
@@ -41,18 +47,13 @@ const start = reactive({
 });
 
 const dataList = computed(() => {
-  if (!templates.value.length) return [];
-  return templates.value.reduce((o, i) => {
-    // name
+  if (!templatesArray.value.length) return [];
+  return templatesArray.value.reduce((o, i) => {
     i.nm = getName(i);
 
-    if (!i.icon) i.icon = 'bx bxs-extension';
+    if (!i.icon) i.icon = icons.extension;
 
-    // text
     i.text = text(i.data);
-
-    // freeze
-    for (const p of Object.keys(i)) i[p] = Object.freeze(i[p]);
 
     o.push(i);
 
@@ -78,20 +79,20 @@ const submit = (arr: any[]) => {
     un: { size: String(userStore.config.units.cargo.size), wght: String(userStore.config.units.cargo.wght) },
     point: null,
   }));
-
   dialog.value = false;
+  state.resolve([...data])
 };
 
 const open = () => {
   dialog.value = true;
-  templates.value = [];
+  templatesArray.value = [];
 
   // default
   for (const i of [...pallet]) {
     for (const p of Object.keys(i)) {
       i[p] = Object.freeze(i[p]);
     }
-    templates.value.push(i);
+    templatesArray.value.push(i);
   }
 
   // mine & shared
@@ -100,25 +101,26 @@ const open = () => {
       r.forEach((i, index) => {
         i.add_time = 50 + index;
         for (const p of Object.keys(i)) i[p] = Object.freeze(i[p]);
-        templates.value.push(i);
+        templatesArray.value.push(i);
       });
     }
   });
 
   return new Promise((resolve, reject) => {
-    resolve(templates);
-    reject('Failed to open templates');
+    state.resolve = resolve
+    state.reject = reject
   });
 };
 
 const close = () => {
+  state.resolve([])
   dialog.value = false;
 };
 
 const del = (clid: number) => {
-  const index = templates.value.findIndex((i) => String(i.clid) === String(clid));
+  const index = templatesArray.value.findIndex((i) => String(i.clid) === String(clid));
   if (index !== -1) {
-    templates.value.splice(index, 1);
+    templatesArray.value.splice(index, 1);
     projectStore.remTemplate({ type: 'c', clid });
   }
 };
@@ -146,4 +148,9 @@ const text = (data: any[]) => {
       `units.wght.${userStore.config.units.cargo.wght}`
   )}`;
 };
+
+
+defineExpose({
+  open, close,
+})
 </script>

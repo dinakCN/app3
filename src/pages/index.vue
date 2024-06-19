@@ -167,6 +167,14 @@
 
                     <template v-slot:append>
                       <div class="d-flex align-center">
+                        <v-btn
+                          v-show="item.id !== project_id"
+                          variant="text"
+                          class="font-weight-medium text-lowercase"
+                          @click.stop="set(item.id)"
+                        >
+                          {{ t('common.open') }}
+                        </v-btn>
 
                         <!-- rename -->
                         <v-btn

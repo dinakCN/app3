@@ -67,7 +67,7 @@ export const useCargoStore = defineStore('cargo', () => {
             i.icon = getCargoIcon(i.pg);
             i.vl = Number(getVolume(i)) * i.cn;
             i.wf = getWght(i.wg * i.cn, userStore.config.units.cargo.wght);
-            i.tt = t('item.pg.' + i.pg);
+            i.tt = i.pg ? t('item.pg.' + i.pg) : '';
             i.sz = getText(
                 i,
                 t('units.size.' + userStore.config.units.cargo.size),
@@ -79,22 +79,21 @@ export const useCargoStore = defineStore('cargo', () => {
             i.ov = Object.prototype.hasOwnProperty.call(i, 'ov') ? i.ov : ov.val;
 
             i.attr = {
-                st: Object.freeze(t(stByValue[i.st])),
-                lm: Object.freeze(i.st === 1 && i.lm ? getWght(i.lm, userStore.config.units.cargo.wght) + ' ' + t('units.wght.' + userStore.config.units.cargo.wght) : t('common.no')),
-                rt: Object.freeze(t(rtByValue[i.rt])),
-                ov: Object.freeze(t(ovByValue[i.ov])),
-            };
+                  lm: i.st === 1 && i.lm ? getWght(i.lm, userStore.config.units.cargo.wght) + ' ' + t('units.wght.' + userStore.config.units.cargo.wght) : t('common.no'),
+                  st: i.st ? t(stByValue[i.st]) : '',
+                  rt: t(rtByValue[i.rt]),
+                  ov: t(ovByValue[i.ov]),
+              };
 
-            for (const p of Object.keys(i)) i[p] = Object.freeze(i[p]);
-            out[i.id] = Object.freeze(i);
+            out[i.id] = i;
 
             return out;
         }, {} as Record<number, any>);
     });
 
     const itemsCount = computed(() => {
-        return cargo.value.items.reduce((n, i) => {
-            return n + Number(i.cn);
+        return   cargo.value.items.reduce((n, i) => {
+            return n + i.cn ? Number(i.cn) : 0;
         }, 0);
     });
 
@@ -235,24 +234,23 @@ export const useCargoStore = defineStore('cargo', () => {
     };
 
     const addItem = (item: ItemInterface) => {
-        for (const p of Object.keys(item)) item[p] = Object.freeze(item[p])
-
+      try {
         if (!item.id) {
-
-            if (!item.cr) item.cr = getRandomColor()
-
-            item.id = cargo.value.items.length + 1
-            while (checkID(item.id, cargo.value.items)) item.id = Number(item.id) + 1
-
-            cargo.value.items.push(item)
-
+          if (!item.cr) item.cr = getRandomColor()
+          item.id = cargo.value.items.length + 1
+          while (checkID(item.id, cargo.value.items)) {
+            item.id = Number(item.id) + 1
+          }
+          cargo.value.items = [...cargo.value.items, item]
         } else {
-            const index = cargo.value.items.findIndex((i) => String(i.id) === String(item.id))
-
-            cargo.value.items.splice(index, 1, item)
+          const index = cargo.value.items.findIndex((i) => String(i.id) === String(item.id))
+          cargo.value.items.splice(index, 1, item)
         }
 
         setProjectLastModified()
+      } catch (e) {
+        console.log(e)
+      }
     }
 
     const checkCountCargo =(n = 0) => {

@@ -66,7 +66,7 @@ export const useUserStore = defineStore('user', () => {
     },
     units: {
       cargo: {
-        size: 2,
+        size: 0,
         wght: 1
       },
       loads: {

@@ -194,10 +194,10 @@
                       <v-checkbox v-model="selected" :value="i.id"></v-checkbox>
                     </v-col>
                     <v-col cols="auto" class="d-flex align-center mx-1">
-                      <v-list-item-avatar
+                      <v-avatar
                         class="mx-0"
                         :color="i.cr"
-                        @click.stop="router.push(`/cargo/item/${clid}/${i.id}`)"
+                        @click.stop="router.push(`/cargo/item/${+clid}/${+i.id}`)"
                       >
                         <v-icon
                           color="grey darken-4"
@@ -205,18 +205,17 @@
                         >
                           {{ i.icon }}
                         </v-icon>
-                      </v-list-item-avatar>
+                      </v-avatar>
                     </v-col>
                     <v-col class="flex-grow-1 text-truncate mx-1 d-flex align-center">
 
-                      <v-list-item-content
-                        @click="$router.push(`/cargo/item/${clid}/${i.id}`)"
+                      <v-list-item
+                        @click="router.push(`/cargo/item/${+clid}/${+i.id}`)"
                       >
 
                         <v-list-item-title class="body-2 font-weight-medium">
                           <span v-if="i.id < 10000">{{ i.id }}. </span>{{ i.nm }}
                         </v-list-item-title>
-
                         <v-list-item-subtitle :class="selectedById[i.id] && 'primary--text'">
                           {{ i.tt }} {{ i.sz }}, {{ i.cn }} {{ t('units.co') }}
                         </v-list-item-subtitle>
@@ -280,7 +279,7 @@
                           </span>
 
                         </v-list-item-subtitle>
-                      </v-list-item-content>
+                      </v-list-item>
 
                     </v-col>
                     <v-col cols="auto" class="d-flex align-center">
@@ -288,7 +287,7 @@
                         <div class="d-flex align-center">
                           <v-btn
                             :icon="icons.editOutline"
-                            @click="router.push(`/cargo/item/${clid}/${i.id}`)"
+                            @click="router.push(`/cargo/item/${+clid}/${+i.id}`)"
                           >
                           </v-btn>
                           <v-btn

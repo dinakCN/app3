@@ -171,4 +171,8 @@ const del = (clid: any) => {
   templates.value.splice(index, 1)
   cargoStore.remTemplate({ type: 'l', clid })
 }
+
+defineExpose({
+  open, close
+})
 </script>

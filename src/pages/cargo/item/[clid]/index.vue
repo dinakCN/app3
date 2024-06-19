@@ -1,11 +1,11 @@
 <template>
   <v-row class="mt-4" justify="center" no-gutters>
     <v-col
-      col="12"
-      lg="8"
+        col="12"
+        lg="8"
     >
       <v-card
-        class="rounded-lg mb-1"
+          class="rounded-lg mb-1"
       >
         <v-card-actions class="d-flex align-center">
           <!-- HEADER -->
@@ -70,19 +70,19 @@
 
       <v-card class="rounded-lg">
         <v-card-text
-          class="d-flex align-center py-0"
+            class="d-flex align-center py-0"
         >
           <radio-group
-            v-model="un['size']"
-            :items="unitSizeArray"
-            cls="mr-3"
-            inline
+              v-model:value="un.size"
+              :items="unitSizeArray"
+              cls="mr-3"
+              inline
           />
           <v-spacer></v-spacer>
           <radio-group
-            v-model="un['wght']"
-            :items="unitWeightArray"
-            inline
+              v-model:value="un.wght"
+              :items="unitWeightArray"
+              inline
           />
         </v-card-text>
 
@@ -91,118 +91,118 @@
           <v-card-text>
             <v-row class="align-center">
               <v-col
-                cols="12"
-                sm="6"
-                md="6"
-                lg="9"
+                  cols="12"
+                  sm="6"
+                  md="6"
+                  lg="9"
               >
                 <text-field
-                  v-model:value="nmVal"
-                  label="item.nm.label"
-                  hint="item.nm.hint"
-                  :clearable="true"
-                  :config="{
+                    v-model:value="nmVal"
+                    label="item.nm.label"
+                    hint="item.nm.hint"
+                    :clearable="true"
+                    :config="{
                       max: start.nm.max
                   }"
                 />
               </v-col>
               <v-col
-                cols="12"
-                sm="6"
-                md="6"
-                lg="3"
+                  cols="12"
+                  sm="6"
+                  md="6"
+                  lg="3"
               >
-                  <number-field
-                        v-model:value="cnVal"
-                        label="item.cn.label"
-                        :type="'number'"
-                        :with-icons="true"
-                        :step="1"
-                        :config="{
+                <number-field
+                    v-model:value="cnVal"
+                    label="item.cn.label"
+                    :type="'number'"
+                    :with-icons="true"
+                    :step="1"
+                    :config="{
                             max: start.cn.max,
                             min: start.cn.min
                         }"
-                  />
+                />
               </v-col>
               <v-col
-                cols="6"
-                sm="6"
-                md="3"
-                lg="3"
+                  cols="6"
+                  sm="6"
+                  md="3"
+                  lg="3"
               >
-                  <number-field
-                        v-model:value="lnVal"
-                        label="item.ln.label"
-                        suffix="units.size"
-                        :size="un.size"
-                        :step="0.1"
-                        :config="{
-                            max: start.ln.max,
-                            min: start.ln.min
+                <number-field
+                    v-model:value="lnVal"
+                    label="item.ln.label"
+                    suffix="units.size"
+                    :size="un.size"
+                    :step="0.1"
+                    :config="{
+                            max: lnValues.max[un.size],
+                            min: lnValues.min[un.size]
                         }"
-                  />
+                />
               </v-col>
 
               <v-col
-                cols="6"
-                sm="6"
-                md="3"
-                lg="3"
-              >
-                  <number-field
-                        v-model:value="wdVal"
-                        label="item.wd.label"
-                        suffix="units.size"
-                        :size="un.size"
-                        :step="0.1"
-                        :config="{
-                            max: start.wd.max,
-                            min: start.wd.min
-                        }"
-                  />
-              </v-col>
-              <v-col
-                cols="6"
-                sm="6"
-                md="3"
-                lg="3"
+                  cols="6"
+                  sm="6"
+                  md="3"
+                  lg="3"
               >
                 <number-field
-                  v-model:value="hgVal"
-                  label="item.hg.label"
-                  suffix="units.size"
-                  :size="un.size"
-                  :step="0.1"
-                  :config="{
-                            max: start.hg.max,
-                            min: start.hg.min
+                    v-model:value="wdVal"
+                    label="item.wd.label"
+                    suffix="units.size"
+                    :size="un.size"
+                    :step="0.1"
+                    :config="{
+                            max: wdValues.max[un.size],
+                            min: wdValues.min[un.size]
                         }"
                 />
               </v-col>
               <v-col
-                cols="6"
-                sm="6"
-                md="3"
-                lg="3"
+                  cols="6"
+                  sm="6"
+                  md="3"
+                  lg="3"
               >
                 <number-field
-                  v-model:value="wgVal"
-                  label="item.wg.label"
-                  suffix="units.wght"
-                  :size="un.wght"
-                  :step="0.1"
-                  :is-size="false"
-                  :config="{
-                            max: start.wg.max,
-                            min: start.wg.min
+                    v-model:value="hgVal"
+                    label="item.hg.label"
+                    suffix="units.size"
+                    :size="un.size"
+                    :step="0.1"
+                    :config="{
+                           max: hgValues.max[un.size],
+                           min: hgValues.min[un.size]
                         }"
                 />
               </v-col>
               <v-col
-                cols="6"
-                sm="6"
-                md="3"
-                lg="3"
+                  cols="6"
+                  sm="6"
+                  md="3"
+                  lg="3"
+              >
+                <number-field
+                    v-model:value="wgVal"
+                    label="item.wg.label"
+                    suffix="units.wght"
+                    :size="un.wght"
+                    :step="0.1"
+                    :is-size="false"
+                    :config="{
+                           max: wgValues.max[un.size],
+                           min: wgValues.min[un.size]
+                        }"
+                />
+              </v-col>
+              <v-col
+                  cols="6"
+                  sm="6"
+                  md="3"
+                  lg="3"
               >
                 <select-field
                     v-model="pgVal"
@@ -213,11 +213,11 @@
                 />
               </v-col>
               <v-col
-                class="d-flex"
-                cols="6"
-                sm="6"
-                md="3"
-                lg="3"
+                  class="d-flex"
+                  cols="6"
+                  sm="6"
+                  md="3"
+                  lg="3"
               >
                 <select-field
                     v-model="stVal"
@@ -228,14 +228,14 @@
                 />
               </v-col>
 
-<!--               LIMIT-->
+              <!--               LIMIT-->
               <v-fade-transition>
                 <v-col
-                  v-if="stVal === 1"
-                  cols="12"
-                  sm="6"
-                  md="3"
-                  lg="3"
+                    v-if="stVal === 1"
+                    cols="12"
+                    sm="6"
+                    md="3"
+                    lg="3"
                 >
                   <number-field
                       v-model:value="lmVal"
@@ -245,8 +245,8 @@
                       :step="1"
                       :is-size="false"
                       :config="{
-                            max: start.wg.max,
-                            min: start.wg.min
+                          max: wgValues.max[un.size],
+                          min: wgValues.min[un.size]
                         }"
                       :is-custom-validate="lmValValidator"
                   />
@@ -256,10 +256,10 @@
             <v-row class="align-center">
 
               <v-col
-                cols="6"
-                sm="6"
-                md="3"
-                lg="3"
+                  cols="6"
+                  sm="6"
+                  md="3"
+                  lg="3"
               >
                 <select-field
                     v-model="rtVal"
@@ -271,10 +271,10 @@
               </v-col>
 
               <v-col
-                cols="6"
-                sm="6"
-                md="3"
-                lg="3"
+                  cols="6"
+                  sm="6"
+                  md="3"
+                  lg="3"
               >
                 <select-field
                     v-model="ovVal"
@@ -294,9 +294,9 @@
       <!-- BUTTONS -->
       <div class="d-flex alig-center mt-1">
         <v-btn
-          rounded
-          class="button grey--text text--darken-3 px-2 no-uppercase"
-          @click="back()"
+            rounded
+            class="button grey--text text--darken-3 px-2 no-uppercase"
+            @click="back()"
         >
           {{ t('common.cancel') }}
         </v-btn>
@@ -304,11 +304,11 @@
         <v-spacer></v-spacer>
 
         <v-btn
-          elevation="6"
-          color="primary"
-          rounded
-          class="px-2 no-uppercase"
-          @click="submit()"
+            elevation="6"
+            color="primary"
+            rounded
+            class="px-2 no-uppercase"
+            @click="submit()"
         >
           {{ t('common.save') }}
         </v-btn>
@@ -316,10 +316,10 @@
 
       <!-- PROMO -->
       <PromoDialog
-        ref="promoRef"
-        :head="t('message.cargo.add.head')"
-        :text="promo"
-        :call="t('message.cargo.add.call')"
+          ref="promoRef"
+          :head="t('message.cargo.add.head')"
+          :text="promo"
+          :call="t('message.cargo.add.call')"
       />
 
     </v-col>
@@ -329,21 +329,21 @@
 <script setup lang='ts'>
 import {computed, ref, reactive, onMounted, watch, Ref} from 'vue';
 import { decimal, maxValue, minValue } from '@vuelidate/validators';
-import { nm, ln, wd, hg, wg, cn, pg, st, lm, rt, ov } from '../../../configs/items.js';
-import { getRandomColor } from '../../../configs/getcolor.js';
-import { getWght, getSize } from '../../../configs/functions/getunits.js';
-import { setWght, setSize } from '../../../configs/functions/setunits.js';
-import { getCargoIcon } from '../../../configs/functions/geticon.js';
-import PromoDialog from '../../../components/dialogs/PromoDialog.vue';
-import {useCargoStore} from "../../../stores/cargo";
-import {useUserStore} from "../../../stores/user";
-import {useAppStore} from "../../../stores/app";
-import {useProjectStore} from "../../../stores/project";
+import { nm, ln, wd, hg, wg, cn, pg, st, lm, rt, ov } from '../../../../configs/items.js';
+import { getRandomColor } from '../../../../configs/getcolor.js';
+import { getWght, getSize } from '../../../../configs/functions/getunits.js';
+import { setWght, setSize } from '../../../../configs/functions/setunits.js';
+import { getCargoIcon } from '../../../../configs/functions/geticon.js';
+import PromoDialog from '../../../../components/dialogs/PromoDialog.vue';
+import {useCargoStore} from "../../../../stores/cargo";
+import {useUserStore} from "../../../../stores/user";
+import {useAppStore} from "../../../../stores/app";
+import {useProjectStore} from "../../../../stores/project";
 import {useI18n} from "vue-i18n";
 import {useRoute, useRouter} from "vue-router";
-import SelectField from "../../../components/forms/SelectField.vue";
-import icons from "../../../configs/constants/icons";
-import {unitSizeArray, unitWeightArray} from "../../../configs/units";
+import SelectField from "../../../../components/forms/SelectField.vue";
+import icons from "../../../../configs/constants/icons";
+import {unitSizeArray, unitWeightArray} from "../../../../configs/units";
 import {useVuelidate} from "@vuelidate/core";
 
 const {t} = useI18n();
@@ -416,9 +416,63 @@ const state = () => {
   lmVal.value = start.lm.val;
   rtVal.value = start.rt.val;
   ovVal.value = start.ov.val;
-  un.size = userStore.config.units.cargo.size;
-  un.wght = userStore.config.units.cargo.wght;
+  un.size = +userStore.config.units.cargo.size;
+  un.wght = +userStore.config.units.cargo.wght;
 };
+
+const lnValues = computed(() => ({
+  min: {
+    0: getSize(start.ln.min, '0'),
+    1: getSize(start.ln.min, '1'),
+    2: getSize(start.ln.min, '2')
+  },
+  max: {
+    0: getSize(start.ln.max, '0'),
+    1: getSize(start.ln.max, '1'),
+    2: getSize(start.ln.max, '2')
+  }
+}))
+
+const wdValues = computed(() => ({
+  min: {
+    0: getSize(start.wd.min, '0'),
+    1: getSize(start.wd.min, '1'),
+    2: getSize(start.wd.min, '2')
+  },
+  max: {
+    0: getSize(start.wd.max, '0'),
+    1: getSize(start.wd.max, '1'),
+    2: getSize(start.wd.max, '2')
+  }
+}))
+
+const hgValues = computed(() => {
+  return {
+    min: {
+      0: getSize(start.hg.min, '0'),
+      1: getSize(start.hg.min, '1'),
+      2: getSize(start.hg.min, '2')
+    },
+    max: {
+      0: getSize(start.hg.max, '0'),
+      1: getSize(start.hg.max, '1'),
+      2: getSize(start.hg.max, '2')
+    }
+  }
+})
+
+const wgValues = computed(() => {
+  return {
+    min: {
+      0: getWght(start.wg.min, '0'),
+      1: getWght(start.wg.min, '1')
+    },
+    max: {
+      0: getWght(start.wg.max, '0'),
+      1: getWght(start.wg.max, '1')
+    }
+  }
+})
 
 const rem = () => {
   cargoStore.removeItem(+rout.params.id)
@@ -430,8 +484,8 @@ const setData = (data) => {
   if (!data) return;
 
   if (data.un) {
-    un.size = data.un.size;
-    un.wght = data.un.wght;
+    un.size = +data.un.size;
+    un.wght = +data.un.wght;
   }
 
   if (data.nm) nmVal.value = data.nm;
@@ -469,7 +523,7 @@ const getData = () => {
       size: un.size,
       wght: un.wght
     },
-    point: Number(rout.params.clid ?? '')
+    point: Number(rout.params.clid)
   };
 };
 
@@ -550,7 +604,7 @@ watch(pgVal, (newVal) => {
 </script>
 
 <style>
-  .centered-input input {
-    text-align: center !important;
-  }
+.centered-input input {
+  text-align: center !important;
+}
 </style>

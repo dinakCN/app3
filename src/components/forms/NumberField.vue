@@ -13,10 +13,9 @@
       :append-inner-icon="withIcons ? icons.plusCircle : ''"
       :variant="'underlined'"
       type="number"
-      :counter-value="() => subFieldText"
+      :messages="subFieldText"
       :step="step"
       :error-messages="dataErrors"
-      :counter="config.max"
       :max-length="config.max"
       @click:append-inner="changeCount(+step)"
       @click:prepend-inner="changeCount(-step)"
@@ -88,9 +87,9 @@ const changeCount = (st: number) => {
   data.value = +data.value + st
 }
 
-const subFieldText: ComputedRef<number | string> = computed(() => {
+const subFieldText: ComputedRef<string> = computed(() => {
   if(!props.size) {
-    return 0 as number
+    return ''
   }
   const val = data.value ? data.value : 0
   const size = getSize(props.config.max, props.size)
@@ -101,8 +100,8 @@ const rules = {
   data: props.isCustomValidator ? props.isCustomValidator : {
     required,
     decimal,
-    minValue: props.isSize ? minValue(getSize(props.config.min, props.size)) : minValue(getWght(props.config.min, props.size)),
-    maxValue: props.isSize ? maxValue(getSize(props.config.max, props.size)) : maxValue(getWght(props.config.max, props.size))
+    minValue: props.isSize ? getSize(props.config.min, props.size) : getWght(props.config.min, props.size),
+    maxValue: props.isSize ? getSize(props.config.max, props.size) : getWght(props.config.max, props.size)
   }
 }
 
