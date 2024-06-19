@@ -37,7 +37,7 @@
                   height="70px"
                   width="70px"
                   :color="!isHovering ? 'grey darken-2' : 'black'"
-                  @click="show(i.link)"
+                  @click="show(i)"
               >
                 <v-icon size="90">{{ icons.play }}</v-icon>
               </v-btn>
@@ -58,13 +58,14 @@ import BriefDialog from '@/components/dialogs/BriefDialog.vue'
 import { useAppStore } from '../stores/app'
 import icons from '../configs/constants/icons'
 import { useI18n } from 'vue-i18n'
+import {VideoInterface} from "../interfaces/VideoInterfaces";
 
 const briefDialogRef = ref(null)
 const data = ref(v)
 const appStore = useAppStore()
 const { t } = useI18n()
-const show = (url: string) => {
-  briefDialogRef.value.show(url)
+const show = (item: VideoInterface) => {
+  briefDialogRef.value.show(item)
 }
 
 onMounted(() => {

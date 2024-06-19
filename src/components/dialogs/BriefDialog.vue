@@ -1,6 +1,6 @@
 <template>
   <v-dialog
-    :model-value="modelValue"
+    :model-value="isOpen"
     max-width="800px"
     max-height="623px"
     @click:outside="close()"
@@ -22,7 +22,7 @@
           class="ms-auto"
           variant="text"
           size="small"
-          :text="$t('common.close')"
+          :text="t('common.close')"
           @click="close()"
         ></v-btn>
       </template>
@@ -40,7 +40,7 @@
   lang="ts"
   setup
 >
-import { PropType } from 'vue'
+import { ref, Ref } from 'vue'
 import { useI18n } from "vue-i18n"
 import { YoutubeIframe } from '@vue-youtube/component'
 import { VideoInterface } from '../../interfaces/VideoInterfaces';
@@ -51,28 +51,32 @@ import { computed } from 'vue';
  */
 const { t } = useI18n()
 
-const props = defineProps({
-  modelValue: {
-    type: Boolean,
-    default: false
-  },
-  data: Object as PropType<VideoInterface>
-})
+const data: Ref<VideoInterface | null> = ref(null)
+
+const isOpen = ref(false)
 
 const title = computed(() => {
-  return props.data?.key ? t(props.data.key) : ''
+  return data.value.key ? t(data.value.key) : ''
 })
 
 const time = computed(() => {
-  return props.data?.time ? props.data.time : ''
+  return data.value.time ? data.value.time : ''
 })
 
 const id = computed(() => {
-  return props.data?.id ? props.data.id : ''
+  return data.value.id ? data.value.id : ''
 })
-
-const emit = defineEmits(['update:modelValue'])
 const close = () => {
-  emit('update:modelValue', false)
+  isOpen.value = false
 }
+
+const show = (el: VideoInterface) => {
+  if (!el) return
+      isOpen.value = true
+      data.value = el
+}
+
+defineExpose({
+  show, close
+})
 </script>

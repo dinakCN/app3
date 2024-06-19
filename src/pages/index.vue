@@ -238,6 +238,8 @@
       </v-col>
     </v-row>
 
+    <confirm-dialog ref="confirmDialog" />
+
     <ReNameDialog
       ref="dialogName"
       icon="bx bxs-check-circle"
@@ -280,6 +282,8 @@ import HelpButton from "../components/brief/HelpButton.vue"
 import PromoDialog from "../components/dialogs/PromoDialog.vue";
 import useMessages from "../hooks/useMessages";
 import icons from "../configs/constants/icons";
+import ConfirmDialog from "../components/dialogs/ConfirmDialog.vue";
+import {Logger} from "sass";
 
 /**
  * hooks
@@ -297,6 +301,7 @@ const vh = computed(() => mobile.value ? height.value - 405 : height.value - 410
  * Refs
  */
 const promoRef: Ref<typeof PromoDialog | null> = ref(null)
+const confirmDialog: Ref<typeof ConfirmDialog | null> = ref(null)
 
 /**
  * Router
@@ -408,18 +413,12 @@ const addError = (message: string) => {
 }
 
 const remove = async (id: number) => {
-  const isApply = confirm(t('common.delete') + '?')
+  const isApply = await confirmDialog.value.open('common.delete')
 
   if (isApply) {
-    const index = projects.value.findIndex((i) => String(i.id) === String(id))
-
-    if (index !== -1) {
-      projects.value.splice(index, 1)
-    }
-
     appProject.delProject(id)
       .then(() => {
-        getList()
+        //getList()
       })
   }
 }
@@ -631,11 +630,10 @@ const scrollIntoView = (id: number, smooth: boolean = false) => {
 const add = async (n: string) => {
   return appProject.addProject(n)
     .then((r) => {
-
       /**
        * Загрузить проекты
        */
-      getList()
+      //getList()
 
       /**
        * Metrics

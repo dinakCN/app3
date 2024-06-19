@@ -75,7 +75,7 @@ export const useUserStore = defineStore('user', () => {
       }
     },
     stats: {
-      counts: 0,
+      count: 0,
       login: 0,
       projects: 0,
       templates: 0,

@@ -12,7 +12,18 @@ export const useProjectsStore = defineStore('projects', () => {
     projects: [] as Array<ProjectInterface>
   })
 
-  function getProjectsList() {
+  const addProject = (pr: ProjectInterface) => {
+    store.projects.push(pr)
+  }
+
+  const removeProject = (id: number) => {
+    const index = store.projects.findIndex((i) => String(i.id) === String(id))
+    if (index !== -1) {
+      store.projects.splice(index, 1)
+    }
+  }
+
+  const getProjectsList = () => {
     return new Promise((resolve, reject) => {
 
       const storeUser = useUserStore()
@@ -47,6 +58,8 @@ export const useProjectsStore = defineStore('projects', () => {
 
   return {
     store,
-    getProjectsList
+    getProjectsList,
+    addProject,
+    removeProject
   }
 })

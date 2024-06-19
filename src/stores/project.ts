@@ -5,11 +5,14 @@ import { useUserStore } from './user'
 import { useAppStore } from './app'
 import axios from '../plugins/axios'
 import { ProjectInterface } from '../interfaces/ProjectInterface'
-import { AxiosObjectReturn, AxiosAddProject, AxiosAddProjectObject } from '../interfaces/AxiosInterface'
+import { AxiosAddProjectObject } from '../interfaces/AxiosInterface'
+import {useProjectsStore} from "./projects";
 
 export const useProjectStore = defineStore('project', () => {
 
   const userStore = useUserStore()
+  const appStore = useAppStore()
+  const projectsStore = useProjectsStore()
   /**
    * Project
    */
@@ -81,17 +84,13 @@ export const useProjectStore = defineStore('project', () => {
 
   const getProject = (id: number = 0) => {
     return new Promise<ProjectInterface>((resolve, reject) => {
-
-      const appUser = useUserStore()
-      const storeApp = useAppStore()
-
       /**
        * Индикатор загрузки
        */
-      storeApp.setLoading(true)
+      appStore.setLoading(true)
 
       const params = {
-        user: appUser.user.id,
+        user: userStore.user.id,
         id: id,
         status: 1
       }
@@ -107,7 +106,7 @@ export const useProjectStore = defineStore('project', () => {
             reject(null)
           }
         })
-        .finally(() => storeApp.setLoading(false))
+        .finally(() => appStore.setLoading(false))
     })
   }
 
@@ -125,42 +124,44 @@ export const useProjectStore = defineStore('project', () => {
 
   const addProject = (name: string) => {
     return new Promise<AxiosAddProjectObject | string>((resolve, reject) => {
-
-      const appUser = useUserStore()
-      const storeApp = useAppStore()
-
       /**
        * Индикатор загрузки
        */
-      storeApp.setLoading(true)
+      //storeApp.setLoading(true)
 
       const params = {
-        user: appUser.user,
+        user: userStore.user.id,
         name: name
       }
 
       axios.post('/project', params)
         .then((r) => {
-          console.log(r)
           if (r?.data.success) {
             // setProjectLastModified(r.data.object.last_modified)
+            projectsStore.addProject({
+              name,
+              user_id: userStore.user.id,
+              status: 1,
+              add_time: r.data.object.last_modified,
+              id: r.data.object.id,
+              json_data:"",
+              last_modified: r.data.object.last_modified,
+            })
             resolve(r.data.object)
           } else {
             reject(r?.data.message)
           }
         })
-        .finally(() => storeApp.setLoading(false))
+        // .finally(() => storeApp.setLoading(false))
     })
   }
 
   const copyProject = (id: number) => {
     return new Promise((resolve, reject) => {
 
-      const appUser = useUserStore()
-
       const param = {
         type: 'copy',
-        user: appUser.user.id,
+        user: userStore.user.id,
         id: id
       }
 
@@ -178,11 +179,9 @@ export const useProjectStore = defineStore('project', () => {
   const delProject = (id: number) => {
     return new Promise((resolve, reject) => {
 
-      const appUser = useUserStore()
-
       const param = {
         type: 'rem',
-        user: appUser.user,
+        user: userStore.user.id,
         id: id,
         status: 1
       }
@@ -191,9 +190,8 @@ export const useProjectStore = defineStore('project', () => {
         .then((r) => {
 
           if (r?.data.success) {
-
             if (String(id) === String(id)) clearProject()
-
+            projectsStore.removeProject(id)
             resolve(r)
           } else {
             reject(r)
@@ -205,14 +203,12 @@ export const useProjectStore = defineStore('project', () => {
   const putProject = (arr: {name?: string, id?: number, alias?: any}) => {
     return new Promise((resolve, reject) => {
 
-      const appUser = useUserStore()
-
       const param = {
         type: 'put',
         id: arr?.id ? arr.id : project.id,
         name: arr?.name ? arr.name : '',
         alias: arr?.alias ? arr.alias : '',
-        user: appUser.user.id,
+        user: userStore.user.id,
         status: 1
       }
 

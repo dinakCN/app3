@@ -99,11 +99,11 @@ interface ProjectInterface {
   name: string,
   json_data: string,
   last_modified: Date,
-  cargo: {
+  cargo?: {
     point: Array<PointInterface>,
     items: Array<ItemInterface>,
   },
-  loads: Array<LoadInterface>
+  loads?: Array<LoadInterface>
 }
 
 export {

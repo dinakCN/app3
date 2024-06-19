@@ -11,11 +11,11 @@
       </div>
 
       <v-card-text class="d-flex align-center py-0">
-        <radio-group v-model:value="cargo.size" :items="unitSizeArray" />
+        <radio-group v-model:value="cargo.size" :items="unitSizeArray" inline />
 
         <v-spacer></v-spacer>
 
-        <radio-group v-model:value="cargo.wght" :items="unitWeightArray" />
+        <radio-group v-model:value="cargo.wght" :items="unitWeightArray" inline />
       </v-card-text>
     </v-card>
 
@@ -30,11 +30,11 @@
       </div>
 
       <v-card-text class="d-flex align-center py-0">
-        <radio-group v-model:value="loads.size" :items="unitSizeArray" />
+        <radio-group v-model:value="loads.size" :items="unitSizeArray" inline />
 
         <v-spacer></v-spacer>
 
-        <radio-group v-model:value="loads.wght" :items="unitWeightArray" />
+        <radio-group v-model:value="loads.wght" :items="unitWeightArray" inline />
       </v-card-text>
     </v-card>
 
