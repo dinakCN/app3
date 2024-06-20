@@ -11,7 +11,7 @@
         <template v-if="!uploadedFiles.length">
           <div class="text-center dropzone py-2 mt-2">
             <v-icon :class="[dragover && 'mb-2']" size="60">
-              mdi-cloud-upload
+              {{ icons.cloud}}
             </v-icon>
             <div class="text-caption text-uppercase">
               {{ t('import.uploadfile.action') }}
@@ -32,21 +32,20 @@
       <v-scale-transition hide-on-leave>
         <v-list v-if="uploadedFiles.length > 0" rounded class="my-3 mb-4">
           <template v-for="item in uploadedFiles" :key="item.name">
-            <v-list-item class="primary lighten-4">
-              <v-list-item>
-                <v-list-item-title>
-                  {{ item.name }}
-                </v-list-item-title>
-                <v-list-item-subtitle>
-                  {{ t('import.uploadfile.fileready') }}
-                </v-list-item-subtitle>
-              </v-list-item>
-
-              <v-list-item-action class="justify-end">
-                <v-btn @click.stop="removeFile">
-                  <v-icon>{{ icons.close }}</v-icon>
-                </v-btn>
-              </v-list-item-action>
+            <v-list-item
+                color="blue-lighten-4"
+                rounded
+                lines="one"
+                :title="item.name"
+                :subtitle="t('import.uploadfile.fileready')"
+            >
+              <template v-slot:append>
+                <v-list-item-action>
+                  <v-btn @click.stop="removeFile">
+                    <v-icon>{{ icons.close }}</v-icon>
+                  </v-btn>
+                </v-list-item-action>
+              </template>
             </v-list-item>
           </template>
         </v-list>

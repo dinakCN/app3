@@ -7,7 +7,7 @@
       :disabled="disabled"
       :variant="variant"
       :item-title="itemTitle"
-      :label="t(label)"
+      :label="label ? t(label) : ''"
       :items="items"
   >
     <template v-if="icon" v-slot:prepend>
@@ -21,7 +21,7 @@ import {ref} from 'vue';
 import {useI18n} from "vue-i18n";
 
 withDefaults(defineProps<{
-  label: string,
+  label?: string,
   disabled?: boolean,
   itemTitle?: string,
   items: readonly any[],

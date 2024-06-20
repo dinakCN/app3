@@ -863,7 +863,21 @@ export default {
     'fileInput': {
       'counter': '{0} файлов',
       'counterSize': '{0} файлов (всего {1})'
-    }
+    },
+    stepper: {
+      next: 'Next page',
+      prev: 'Previous page'
+    },
+    pagination: {
+      ariaLabel: {
+        wrapper: 'Pagination Navigation',
+        next: 'Next page',
+        previous: 'Previous page',
+        page: 'Goto Page {0}',
+        currentPage: 'Current Page, Page {0}',
+        root: 'root'
+      },
+    },
   },
   "validations": {
     'email': 'Заполнено неверно',
@@ -875,5 +889,5 @@ export default {
     'numeric': 'Только числа',
     'maxLength': 'Количество символолов не должно превышать {max}',
     'alphaNum': 'Только буквы и цифры',
-  }
+  },
 }

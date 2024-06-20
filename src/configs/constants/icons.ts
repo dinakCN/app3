@@ -44,7 +44,9 @@ const icons = {
   helpCircleOutline: 'mdi:mdi-help-circle-outline',
   arrowLeftCircle: 'mdi:mdi-arrow-left-circle-outline',
   arrowRightCircle: 'mdi:mdi-arrow-right-circle-outline',
-  extension: 'mdi:mdi-puzzle'
+  extension: 'mdi:mdi-puzzle',
+  information: 'mdi:mdi-information',
+  cloud: 'mdi:mdi-cloud-upload'
 };
 
 type IIcons = {

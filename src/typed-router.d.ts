@@ -21,6 +21,7 @@ declare module 'vue-router/auto-routes' {
     'main': RouteRecordInfo<'main', '/', Record<never, never>, Record<never, never>>,
     '/brief': RouteRecordInfo<'/brief', '/brief', Record<never, never>, Record<never, never>>,
     '/cargo/': RouteRecordInfo<'/cargo/', '/cargo', Record<never, never>, Record<never, never>>,
+    '/cargo/imports/[clid]': RouteRecordInfo<'/cargo/imports/[clid]', '/cargo/imports/:clid', { clid: ParamValue<true> }, { clid: ParamValue<false> }>,
     '/cargo/item/[clid]/': RouteRecordInfo<'/cargo/item/[clid]/', '/cargo/item/:clid', { clid: ParamValue<true> }, { clid: ParamValue<false> }>,
     '/cargo/item/[clid]/[id]': RouteRecordInfo<'/cargo/item/[clid]/[id]', '/cargo/item/:clid/:id', { clid: ParamValue<true>, id: ParamValue<true> }, { clid: ParamValue<false>, id: ParamValue<false> }>,
     '/load/': RouteRecordInfo<'/load/', '/load', Record<never, never>, Record<never, never>>,

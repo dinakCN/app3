@@ -264,8 +264,13 @@ export default {
         next: 'Next page',
         previous: 'Previous page',
         page: 'Goto Page {0}',
-        currentPage: 'Current Page, Page {0}'
-      }
+        currentPage: 'Current Page, Page {0}',
+        root: 'root'
+      },
+    },
+    stepper: {
+      next: 'Next page',
+      prev: 'Previous page'
     }
   }
 }

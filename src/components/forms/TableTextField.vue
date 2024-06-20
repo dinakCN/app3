@@ -8,50 +8,40 @@
       :class="cls"
       :clear-icon="clearable ? icons.close : ''"
       dense
-      :clearable="clearable"
       :variant="variant"
       :error-messages="dataErrors"
-      :counter="config.max"
-      :max-length="config.max"
+      :max-length="max"
+      :min-length="min"
       @update:modelValue="update"
-      @click:clear="clear"
       @input="v$.$touch()"
       @blur="v$.$touch()"
       style="width:100%"
   >
-    <template #prepend>
-      <slot></slot>
-    </template>
   </v-text-field>
 </template>
 
 <script setup lang="ts">
 import { ref } from 'vue';
 import {useI18n} from "vue-i18n";
-import {computed, onMounted, onUnmounted} from "vue";
+import {onMounted, onUnmounted} from "vue";
 import {maxLength, required} from "../../plugins/vuelidate";
 import {useVuelidate} from "@vuelidate/core";
 import icons from "../../configs/constants/icons";
 
-interface IConfig {
-    max: number;
-}
-
 const props = withDefaults(defineProps<{
   label?: string;
   hint?: string;
-  isNeedValidate?: boolean;
   clearable?: boolean;
   variant?: "underlined" | "filled" | "outlined" | "plain" | "solo" | "solo-inverted" | "solo-filled",
-  config?: IConfig,
+  max?: number,
+  min?: number,
   color?: string,
   cls?: string,
 }>(), {
   clearable: false,
-  variant: 'underlined',
+  variant: 'plain',
   color: '#000000',
   cls: '',
-  isNeedValidate: true
 });
 
 onMounted(() => {
@@ -76,16 +66,14 @@ const fieldRef = ref(null)
 const rules = {
   data: {
     required,
-    maxLength: maxLength(props.config.max)
+    maxLength: maxLength(props.max)
   }
 }
 
 /**
  * Vuelidate
  */
-const v$ = useVuelidate(props.isNeedValidate ? rules : {}, { data })
-
-const isInvalid = computed(() => v$.value.$invalid)
+const v$ = useVuelidate(rules, { data })
 
 /**
  * Обработка ошибок
@@ -104,32 +92,15 @@ const dataErrors = computed(() => {
   return errors
 })
 
-/**
- * onUpdate
- */
 const update = () => {
 
-  /**
-   * Check lenght
-   */
   if (data.value === null) return
-  if (data.value.length > props.config.max) {
-    data.value = data.value.substring(0, props.config.max)
+  if (data.value.length > props.max) {
+    data.value = data.value.substring(0, props.max)
   }
 }
 
-/**
- * Очистка
- */
-const clear = () => {
-  data.value = ''
-}
-
-/**
- * Внещний доступ к методам
- */
 defineExpose({
   fieldRef,
-  isInvalid
 })
 </script>

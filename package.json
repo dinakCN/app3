@@ -18,6 +18,8 @@
     "boxicons": "^2.1.4",
     "core-js": "^3.34.0",
     "jspdf": "^2.5.1",
+    "papaparse": "^5.4.1",
+    "read-excel-file": "^5.8.2",
     "roboto-fontface": "*",
     "three": "^0.165.0",
     "troika-three-text": "^0.49.1",
