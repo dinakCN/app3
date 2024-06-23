@@ -1,5 +1,5 @@
 import {computed} from "vue";
-import {cn, hg, lm, ln, nm, ov, pg, rt, st, wd, wg} from "../configs/items";
+import {nm, ln, wd, hg, wg, cn, pg, st, lm, rt, ov, tt , pp, ex , tp , ax} from "../configs/items";
 import { getWght, getSize } from '@/configs/functions/getunits.js'
 import {useI18n} from "vue-i18n";
 
@@ -8,7 +8,7 @@ const useValidateFields = () => {
     const {t} = useI18n()
 
     const start = {
-        nm, ln, wd, hg, wg, cn, pg, st, lm, rt, ov
+        nm, ln, wd, hg, wg, cn, pg, st, lm, rt, ov, tt , pp , ex , tp , ax
     }
 
     const lnValues = {
@@ -72,58 +72,188 @@ const useValidateFields = () => {
         },
     }
 
-    const dataErrors = (data, min, max, unit = '', required = true) => {
-        const errors = []
-
-        if (!data.$dirty) return errors
-        if (required) !data.required && errors.push(t('common.validation.required'))
-        !data.decimal && errors.push(t('common.validation.decimal'))
-        !data.minValue && errors.push(t('common.validation.minValue') + ' ' + min + ' ' + unit)
-        !data.maxValue && errors.push(t('common.validation.maxValue') + ' ' + max + ' ' + unit)
-
-        return errors
+  const pn2Values = computed(() => {
+    return {
+      min: {
+        0: getWght(start.pp.n2.min, '0'),
+        1: getWght(start.pp.n2.min, '1')
+      },
+      max: {
+        0: getWght(start.pp.n2.max, '0'),
+        1: getWght(start.pp.n2.max, '1')
+      }
     }
+  })
 
-    const nameErrors = (data) => {
-        const errors = []
-        if (!data.$dirty) return errors
-        !data.maxLength && errors.push(t('common.validation.maxLength') + ' ' + start.nm.max)
-        !data.required && errors.push(t('common.validation.required'))
-
-        return errors
+  const pn2maxValues = computed(() => {
+    return {
+      min: {
+        0: getWght(start.pp.n2max.min, '0'),
+        1: getWght(start.pp.n2max.min, '1')
+      },
+      max: {
+        0: getWght(start.pp.n2max.max, '0'),
+        1: getWght(start.pp.n2max.max, '1')
+      }
     }
+  })
 
-    const countErrors = (data, min, max) => {
-        const errors = []
-
-        if (!data.$dirty) return errors
-        !data.required && errors.push(t('common.validation.required'))
-        !data.integer && errors.push(t('common.validation.integer'))
-        !data.minValue && errors.push(t('common.validation.minValue') + ' ' + min)
-        !data.maxValue && errors.push(t('common.validation.maxValue') + ' ' + max)
-
-        return errors
+  const pl3Values = computed(() => {
+    return {
+      min: {
+        0: getSize(start.pp.l3.min, '0'),
+        1: getSize(start.pp.l3.min, '1'),
+        2: getSize(start.pp.l3.min, '2')
+      },
+      max: {
+        0: getSize(start.pp.l3.max, '0'),
+        1: getSize(start.pp.l3.max, '1'),
+        2: getSize(start.pp.l3.max, '2')
+      }
     }
+  })
 
-    const selectErrors = (data) => {
-        const errors = []
-
-        if (!data.$dirty) return errors
-        !data.required && errors.push(t('common.validation.required'))
-
-        return errors
+  const pl2Values = computed(() => {
+    return {
+      min:{
+        0: getSize(start.pp.l2.min, '0'),
+        1: getSize(start.pp.l2.min, '1'),
+        2: getSize(start.pp.l2.min, '2')
+      },
+      max: {
+        0: getSize(start.pp.l2.max, '0'),
+        1: getSize(start.pp.l2.max, '1'),
+        2: getSize(start.pp.l2.max, '2')
+      }
     }
+  })
+
+  const pwgValues = computed(() => {
+    return {
+      min: {
+        0: getWght(start.pp.wg.min, '0'),
+        1: getWght(start.pp.wg.min, '1')
+      },
+      max: {
+        0: getWght(start.pp.wg.max, '0'),
+        1: getWght(start.pp.wg.max, '1')
+      }
+    }
+  })
+
+  const tn1maxValues = computed(() => {
+    return {
+      min: {
+        0: getWght(start.tt.n1max.min, '0'),
+        1: getWght(start.tt.n1max.min, '1')
+      },
+      max: {
+        0: getWght(start.tt.n1max.max, '0'),
+        1: getWght(start.tt.n1max.max, '1')
+      }
+    }
+  })
+
+  const tn1Values = computed(() => {
+    return {
+      min: {
+        0: getWght(start.tt.n1.min, '0'),
+        1: getWght(start.tt.n1.min, '1')
+      },
+      max: {
+        0: getWght(start.tt.n1.max, '0'),
+        1: getWght(start.tt.n1.max, '1')
+      }
+    }
+  })
+
+  const tn2maxValues = computed(() => {
+    return {
+      min: {
+        0: getWght(start.tt.n2max.min, '0'),
+        1: getWght(start.tt.n2max.min, '1')
+      },
+      max: {
+        0: getWght(start.tt.n2max.max, '0'),
+        1: getWght(start.tt.n2max.max, '1')
+      }
+    }
+  })
+
+  const tn2Values = computed(() => {
+    return {
+      min: {
+        0: getWght(start.tt.n2.min, '0'),
+        1: getWght(start.tt.n2.min, '1')
+      },
+      max: {
+        0: getWght(start.tt.n2.max, '0'),
+        1: getWght(start.tt.n2.max, '1')
+      }
+    }
+  })
+
+  const tlValues = computed(() => {
+    return {
+      min: {
+        0: getSize(start.tt.l.min, '0'),
+        1: getSize(start.tt.l.min, '1'),
+        2: getSize(start.tt.l.min, '2')
+      },
+      max: {
+        0: getSize(start.tt.l.max, '0'),
+        1: getSize(start.tt.l.max, '1'),
+        2: getSize(start.tt.l.max, '2')
+      }
+    }
+  })
+
+  const tl1Values = computed(() => {
+    return {
+      min: {
+        0: getSize(start.tt.l1.min, '0'),
+        1: getSize(start.tt.l1.min, '1'),
+        2: getSize(start.tt.l1.min, '2')
+      },
+      max: {
+        0: getSize(start.tt.l1.max, '0'),
+        1: getSize(start.tt.l1.max, '1'),
+        2: getSize(start.tt.l1.max, '2')
+      }
+    }
+  })
+
+  const twgValues = computed(() => {
+    return {
+      min: {
+        0: getWght(start.tt.wg.min, '0'),
+        1: getWght(start.tt.wg.min, '1')
+      },
+      max: {
+        0: getWght(start.tt.wg.max, '0'),
+        1: getWght(start.tt.wg.max, '1')
+      }
+    }
+  })
 
     return {
-        dataErrors,
-        selectErrors,
-        countErrors,
-        nameErrors,
         lnValues,
         lmValues,
         wgValues,
         hgValues,
         wdValues,
+        twgValues,
+        tl1Values,
+        tlValues,
+        tn2Values,
+        tn2maxValues,
+        tn1Values,
+        tn1maxValues,
+        pwgValues,
+        pl2Values,
+        pl3Values,
+        pn2maxValues,
+        pn2Values,
     }
 };
 

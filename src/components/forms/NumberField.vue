@@ -30,8 +30,7 @@
 </template>
 
 <script setup lang="ts">
-import {ComputedRef, ref} from 'vue';
-import { getWght, getSize } from '@/configs/functions/getunits.js';
+import {ComputedRef, ref, watchEffect} from 'vue';
 import {computed, onMounted, onUnmounted} from "vue";
 import {required} from "../../plugins/vuelidate";
 import {useVuelidate} from "@vuelidate/core";
@@ -92,23 +91,24 @@ const subFieldText: ComputedRef<string> = computed(() => {
     return ''
   }
   const val = data.value ? data.value : 0
-  const size = getSize(props.config.max, props.size)
-  return `${val}/${size}`
+  return `${val}/${props.config.max}`
 })
 
-const rules = {
-  data: props.isCustomValidator ? props.isCustomValidator : {
-    required,
-    decimal,
-    minValue: props.isSize ? getSize(props.config.min, props.size) : getWght(props.config.min, props.size),
-    maxValue: props.isSize ? getSize(props.config.max, props.size) : getWght(props.config.max, props.size)
+const rules = computed(()  => {
+  return {
+    data: props.isCustomValidator ? props.isCustomValidator : {
+      required,
+      decimal,
+      minValue: props.isSize ? minValue(props.config.min) : minValue(props.config.min),
+      maxValue: props.isSize ? maxValue(props.config.max) : maxValue(props.config.max)
+    }
   }
-}
+})
 
 /**
  * Vuelidate
  */
-const v$ = useVuelidate(props.isNeedValidate ? rules : {}, { data })
+const v$ = useVuelidate(rules, { data })
 
 const isInvalid = computed(() => v$.value.$invalid)
 
@@ -116,6 +116,8 @@ const isInvalid = computed(() => v$.value.$invalid)
  * Обработка ошибок
  */
 const dataErrors = computed(() => {
+  if(!props.isNeedValidate) return []
+
   const errors: any = []
 
   if (!v$.value.$dirty) return errors

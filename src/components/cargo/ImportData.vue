@@ -31,7 +31,7 @@
               <table-number-field :min="hgValues.min[un.size]" :max="hgValues.max[un.size]" v-model:value="item.hg" />
             </td>
             <td style="width: fit-content">
-              <table-number-field :min="wgValues.min[un.size]" :max="wgValues.max[un.size]" v-model:value="item.wg" />
+              <table-number-field :min="wgValues.min[un.wght]" :max="wgValues.max[un.wght]" v-model:value="item.wg" />
             </td>
             <td style="width: fit-content">
               <table-number-field :min="start.cn.min" :max="start.cn.max" v-model:value="item.cn" />
@@ -43,7 +43,7 @@
               <select-field :items="stuckList" v-model:value="item.st" variant="plain" />
             </td>
             <td style="width: fit-content">
-              <table-number-field :min="lmValues.min[un.size]" :max="lmValues.max[un.size]" v-model:value="item.lm" />
+              <table-number-field :min="lmValues.min[un.wght]" :max="lmValues.max[un.wght]" v-model:value="item.lm" />
             </td>
             <td class="text-right">
               <v-btn @click="deleteRow(item.id)">
@@ -123,6 +123,13 @@ const {
   hgValues,
   wdValues,
 } = useValidateFields()
+
+console.log(
+    lnValues,
+  lmValues,
+  wgValues,
+  hgValues,
+  wdValues,)
 
 const v$ = useVuelidate()
 

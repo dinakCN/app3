@@ -274,8 +274,6 @@ export const useCargoStore = defineStore('cargo', () => {
 
         const list = [...array]
 
-        list.unshift({ text: 'common.null', value: null })
-
         if (bool) return list.map((item) => { return { text: t(item.text), value: item.value }})
 
         return list.map((item) => item.value)

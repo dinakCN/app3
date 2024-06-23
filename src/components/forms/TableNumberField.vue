@@ -20,11 +20,11 @@
 
 <script setup lang="ts">
 import {ref} from 'vue';
-import { getWght, getSize } from '@/configs/functions/getunits.js';
 import {computed, onMounted, onUnmounted} from "vue";
 import {required} from "../../plugins/vuelidate";
 import {useVuelidate} from "@vuelidate/core";
-import {decimal} from "@vuelidate/validators";
+import {decimal, maxValue} from "@vuelidate/validators";
+import {minValue} from "@vuelidate/validators/dist/index";
 
 const props = withDefaults(defineProps<{
   isSize?: boolean,
@@ -55,18 +55,16 @@ const data = defineModel<Number>('value', { default: 0 })
 
 const fieldRef = ref(null)
 
-const changeCount = (st: number) => {
-  data.value = +data.value + st
-}
-
-const rules = {
-  data: props.isCustomValidator ? props.isCustomValidator : {
-    required,
-    decimal,
-    minValue: props.isSize ? getSize(props.min, props.size) : getWght(props.min, props.size),
-    maxValue: props.isSize ? getSize(props.max, props.size) : getWght(props.max, props.size)
-  }
-}
+const rules = computed(() => {
+  return {
+    data: {
+      required,
+      decimal,
+      minValue: props.isSize ? minValue(props.min) : minValue(props.min),
+      maxValue: props.isSize ? maxValue(props.max) : maxValue(props.max)
+    }
+    }
+  })
 
 /**
  * Vuelidate

@@ -345,6 +345,7 @@ import SelectField from "../../../../components/forms/SelectField.vue";
 import icons from "../../../../configs/constants/icons";
 import {unitSizeArray, unitWeightArray} from "../../../../configs/units";
 import {useVuelidate} from "@vuelidate/core";
+import useValidateFields from "../../../../hooks/useValidateFields";
 
 const {t} = useI18n();
 const router = useRouter();
@@ -360,26 +361,26 @@ const userStore = useUserStore();
 const appStore = useAppStore();
 const projectStore = useProjectStore();
 
-const nmVal = ref(nm.val);
-const lnVal = ref(ln.val);
-const wdVal = ref(wd.val);
-const hgVal = ref(hg.val);
-const wgVal = ref(wg.val);
-const cnVal = ref(cn.val);
-const pgVal = ref(pg.val);
-const stVal = ref(st.val);
-const lmVal = ref(lm.val);
-const rtVal = ref(rt.val);
-const ovVal = ref(ov.val);
+const start = reactive({
+  nm, ln, wd, hg, wg, cn, pg, st, lm, rt, ov
+});
+
+const nmVal = ref(start.nm.val);
+const lnVal = ref(start.ln.val);
+const wdVal = ref(start.wd.val);
+const hgVal = ref(start.hg.val);
+const wgVal = ref(start.wg.val);
+const cnVal = ref(start.cn.val);
+const pgVal = ref(start.pg.val);
+const stVal = ref(start.st.val);
+const lmVal = ref(start.lm.val);
+const rtVal = ref(start.rt.val);
+const ovVal = ref(start.ov.val);
 const color = ref(null);
 
 const colorMenu = ref(false);
 
 const promo = ref('');
-
-const start = {
-  nm, ln, wd, hg, wg, cn, pg, st, lm, rt, ov
-};
 
 const un = reactive({
   size: 0,
@@ -420,59 +421,12 @@ const state = () => {
   un.wght = +userStore.config.units.cargo.wght;
 };
 
-const lnValues = computed(() => ({
-  min: {
-    0: getSize(start.ln.min, '0'),
-    1: getSize(start.ln.min, '1'),
-    2: getSize(start.ln.min, '2')
-  },
-  max: {
-    0: getSize(start.ln.max, '0'),
-    1: getSize(start.ln.max, '1'),
-    2: getSize(start.ln.max, '2')
-  }
-}))
-
-const wdValues = computed(() => ({
-  min: {
-    0: getSize(start.wd.min, '0'),
-    1: getSize(start.wd.min, '1'),
-    2: getSize(start.wd.min, '2')
-  },
-  max: {
-    0: getSize(start.wd.max, '0'),
-    1: getSize(start.wd.max, '1'),
-    2: getSize(start.wd.max, '2')
-  }
-}))
-
-const hgValues = computed(() => {
-  return {
-    min: {
-      0: getSize(start.hg.min, '0'),
-      1: getSize(start.hg.min, '1'),
-      2: getSize(start.hg.min, '2')
-    },
-    max: {
-      0: getSize(start.hg.max, '0'),
-      1: getSize(start.hg.max, '1'),
-      2: getSize(start.hg.max, '2')
-    }
-  }
-})
-
-const wgValues = computed(() => {
-  return {
-    min: {
-      0: getWght(start.wg.min, '0'),
-      1: getWght(start.wg.min, '1')
-    },
-    max: {
-      0: getWght(start.wg.max, '0'),
-      1: getWght(start.wg.max, '1')
-    }
-  }
-})
+const {
+  lnValues,
+  wgValues,
+  hgValues,
+  wdValues,
+} = useValidateFields()
 
 const rem = () => {
   cargoStore.removeItem(+rout.params.id)

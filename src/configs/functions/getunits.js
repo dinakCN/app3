@@ -10,7 +10,7 @@ const getSize = (int, size) => {
     int = parseFloat(int / 10).toFixed(1)
     break
   case 2:
-    int = parseFloat(int / 1000).toFixed(3)
+    int = parseFloat(int / 1000).toFixed(4)
     break
   }
 

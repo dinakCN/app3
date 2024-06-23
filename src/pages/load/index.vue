@@ -39,7 +39,7 @@
                   <!-- Avatar -->
                   <v-col cols="auto" class="d-flex align-center">
                     <v-avatar class="mr-1" @click="router.push(`/load/area/${item.id}`)">
-                      <v-icon rounded color="primary">mdi:{{ item.icon }}</v-icon>
+                      <v-icon rounded color="primary">{{ item.icon }}</v-icon>
                     </v-avatar>
                   </v-col>
 
@@ -131,7 +131,7 @@
                     <!-- Avatar -->
                     <v-col cols="auto" class="d-flex align-center mr-2">
                       <v-avatar class="mx-0" @click.stop="getTemplate(item.data)">
-                        <v-icon color="primary" rounded>mdi:{{ item.icon }}</v-icon>
+                        <v-icon color="primary" rounded>{{ item.icon }}</v-icon>
                       </v-avatar>
                     </v-col>
                     <!-- Content -->

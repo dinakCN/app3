@@ -1,99 +1,100 @@
 <template>
-  <v-row justify="center" no-gutters>
-    <v-col
+  <v-container>
+    <v-row justify="center" no-gutters>
+      <v-col
         cols="12"
         lg="12"
         xl="10"
-    >
-      <v-card class="rounded-lg mb-1">
-        <!-- COMMAND -->
-        <v-card-actions class="d-flex align-start">
-          <div class="d-sm-flex align-self-start">
-            <div class="text-button font-weight-bold ml-1">
-              {{ t('import.header') }}
-            </div>
-            <div v-if="step" class="text-button mx-1 d-flex">
-              <div :class="[subItemsTotal.row >= maxRow ? 'red--text text--lighten-2' : '']">
-                {{ subItemsTotal.row }} / {{ maxRow }} <span class="text-lowercase font-weight-light">{{ t('cargo.row') }}</span>,
+      >
+        <v-card class="rounded-lg mb-1">
+          <!-- COMMAND -->
+          <v-card-actions class="d-flex align-start">
+            <div class="d-sm-flex align-self-start">
+              <div class="text-button font-weight-bold ml-1">
+                {{ t('import.header') }}
               </div>
-              <div class="pl-1" :class="[subItemsTotal.cn >= maxItems ? 'red--text text--lighten-2' : '']">
-                {{ subItemsTotal.cn }} / {{ maxItems }} <span class="text-lowercase font-weight-light">{{ t('cargo.items') }}</span>
-              </div>
-            </div>
-          </div>
-          <v-spacer></v-spacer>
-          <div class="text-center ml-1">
-            <!-- HELP -->
-            <HelpButton />
-          </div>
-        </v-card-actions>
-      </v-card>
-      <v-stepper v-model="step" rounded="lg" :items="['', '']" >
-        <template v-slot:item.1>
-          <v-stepper-window :value="1" class="pt-1">
-            <v-tabs v-model="tabs" centered>
-              <v-tab v-for="(n, index) in 2" :key="index">
-                <div class="text-button font-weight-bold ml-1">
-                  {{ t('import.subheader-' + n) }}
+              <div v-if="step" class="text-button mx-1 d-flex">
+                <div :class="[subItemsTotal.row >= maxRow ? 'red--text text--lighten-2' : '']">
+                  {{ subItemsTotal.row }} / {{ maxRow }} <span class="text-lowercase font-weight-light">{{ t('cargo.row') }}</span>,
                 </div>
-              </v-tab>
-            </v-tabs>
-
-            <v-tabs-window v-model="tabs" style="background-color:transparent">
-              <v-tabs-window-item>
-                <!-- FILE -->
-                <v-form class="mt-3 mx-auto" @submit.prevent="submitFile">
-                  <div class="d-flex align-center">
-                    <div>
-                      <v-icon size="large" color="primary">{{ icons.information}}</v-icon>
-                    </div>
-                    <div class="body-2 black--text text-left ml-2">
-                      <div>
-                        {{ t('import.file.faq.1') }}
-                        <a class="success--text" :href="`${publicPath}files/example.csv`">{{ t('import.file.example') }}.csv</a>
-                        {{ t('common.or') }}
-                        <a class="red--text" :href="`${publicPath}files/example.xlsx`">{{ t('import.file.example') }}.xlsx</a>
-                      </div>
-                      <div>
-                        {{ t('import.file.faq.2') }}
-                      </div>
-                    </div>
+                <div class="pl-1" :class="[subItemsTotal.cn >= maxItems ? 'red--text text--lighten-2' : '']">
+                  {{ subItemsTotal.cn }} / {{ maxItems }} <span class="text-lowercase font-weight-light">{{ t('cargo.items') }}</span>
+                </div>
+              </div>
+            </div>
+            <v-spacer></v-spacer>
+            <div class="text-center ml-1">
+              <!-- HELP -->
+              <HelpButton />
+            </div>
+          </v-card-actions>
+        </v-card>
+        <v-stepper v-model="step" rounded="lg" :items="['', '']" >
+          <template v-slot:item.1>
+            <v-stepper-window :value="1" class="pt-1">
+              <v-tabs v-model="tabs" centered>
+                <v-tab v-for="(n, index) in 2" :key="index">
+                  <div class="text-button font-weight-bold ml-1">
+                    {{ t('import.subheader-' + n) }}
                   </div>
-                  <upload-files
+                </v-tab>
+              </v-tabs>
+
+              <v-tabs-window v-model="tabs" style="background-color:transparent">
+                <v-tabs-window-item>
+                  <!-- FILE -->
+                  <v-form class="mt-3 mx-auto" @submit.prevent="submitFile">
+                    <div class="d-flex align-center">
+                      <div>
+                        <v-icon size="large" color="primary">{{ icons.information}}</v-icon>
+                      </div>
+                      <div class="body-2 black--text text-left ml-2">
+                        <div>
+                          {{ t('import.file.faq.1') }}
+                          <a class="success--text" :href="`${publicPath}files/example.csv`">{{ t('import.file.example') }}.csv</a>
+                          {{ t('common.or') }}
+                          <a class="red--text" :href="`${publicPath}files/example.xlsx`">{{ t('import.file.example') }}.xlsx</a>
+                        </div>
+                        <div>
+                          {{ t('import.file.faq.2') }}
+                        </div>
+                      </div>
+                    </div>
+                    <upload-files
                       :multiply="false"
                       class="mx-auto mt-3"
                       @filesUploaded="processUpload"
                       @filesClean="setDefault"
-                  />
-                  <div class="d-flex align-center mt-3">
-                    <v-btn rounded variant="text" @click="router.go(-1)">
-                      {{ t('common.cancel') }}
-                    </v-btn>
-                    <v-spacer></v-spacer>
-                    <v-btn color="primary" type="submit" rounded>
-                      {{ t('common.add') }}
-                    </v-btn>
-                  </div>
-                </v-form>
-              </v-tabs-window-item>
+                    />
+                    <div class="d-flex align-center mt-3">
+                      <v-btn rounded variant="text" @click="router.go(-1)">
+                        {{ t('common.cancel') }}
+                      </v-btn>
+                      <v-spacer></v-spacer>
+                      <v-btn color="primary" type="submit" rounded>
+                        {{ t('common.add') }}
+                      </v-btn>
+                    </div>
+                  </v-form>
+                </v-tabs-window-item>
 
-              <v-tabs-window-item>
-                <!-- TEXT -->
-                <v-form class="mt-3 mx-auto" @submit.prevent="submitText">
-                  <div class="d-flex align-center">
-                    <div>
-                      <v-icon size="large" color="primary">{{ icons.information }}</v-icon>
-                    </div>
-                    <div class="body-2 black--text text-left ml-2">
+                <v-tabs-window-item>
+                  <!-- TEXT -->
+                  <v-form class="mt-3 mx-auto" @submit.prevent="submitText">
+                    <div class="d-flex align-center">
                       <div>
-                        {{ t('import.text.faq.1') }}: <span class="primary--text">{{ t('import.text.faq.2') }}</span>
+                        <v-icon size="large" color="primary">{{ icons.information }}</v-icon>
                       </div>
-                      <div>
-                        {{ t('import.text.faq.3') }}
+                      <div class="body-2 black--text text-left ml-2">
+                        <div>
+                          {{ t('import.text.faq.1') }}: <span class="primary--text">{{ t('import.text.faq.2') }}</span>
+                        </div>
+                        <div>
+                          {{ t('import.text.faq.3') }}
+                        </div>
                       </div>
                     </div>
-                  </div>
-                  <v-textarea
+                    <v-textarea
                       v-model="text"
                       class="mt-3"
                       :label="t('import.text.textarea.label')"
@@ -103,44 +104,45 @@
                       :clear-icon="icons.close"
                       required
                       rows="4"
-                  ></v-textarea>
-                  <div class="d-flex align-center mt-3">
-                    <v-btn rounded variant="text" @click="router.go(-1)">
-                      {{ t('common.cancel') }}
-                    </v-btn>
-                    <v-spacer></v-spacer>
-                    <v-btn color="primary" type="submit" rounded>
-                      {{ t('common.add') }}
-                    </v-btn>
-                  </div>
-                </v-form>
-              </v-tabs-window-item>
-            </v-tabs-window>
-          </v-stepper-window>
-        </template>
-        <template v-slot:item.2>
-          <v-stepper-window :value="2" class="pt-1">
-            <import-data
+                    ></v-textarea>
+                    <div class="d-flex align-center mt-3">
+                      <v-btn rounded variant="text" @click="router.go(-1)">
+                        {{ t('common.cancel') }}
+                      </v-btn>
+                      <v-spacer></v-spacer>
+                      <v-btn color="primary" type="submit" rounded>
+                        {{ t('common.add') }}
+                      </v-btn>
+                    </div>
+                  </v-form>
+                </v-tabs-window-item>
+              </v-tabs-window>
+            </v-stepper-window>
+          </template>
+          <template v-slot:item.2>
+            <v-stepper-window :value="2" class="pt-1">
+              <import-data
                 v-if="step === 2"
                 :items="items"
                 @submit="submitDataTable"
                 @back="backStep"
-            />
-          </v-stepper-window>
-        </template>
-        <template v-slot:next></template>
-        <template v-slot:prev></template>
-      </v-stepper>
-    </v-col>
+              />
+            </v-stepper-window>
+          </template>
+          <template v-slot:next></template>
+          <template v-slot:prev></template>
+        </v-stepper>
+      </v-col>
 
-    <!-- PROMO -->
-    <PromoDialog
+      <!-- PROMO -->
+      <PromoDialog
         ref="promoRef"
         :head="t('message.cargo.add.head')"
         :text="promo"
         :call="t('message.cargo.add.call')"
-    />
-  </v-row>
+      />
+    </v-row>
+  </v-container>
 </template>
 
 <script setup lang="ts">
