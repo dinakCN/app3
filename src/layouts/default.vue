@@ -31,6 +31,10 @@
           <span class="font-weight-medium">Jet</span>
           <span class="font-weight-light">Loader</span>
         </span>
+        <div v-show="project.name && route.name !== 'share' && !mobile" class="text-caption pl-2 pt-1">
+          <span class="grey--text text--darken-3 pr-1">{{ t('project.current') }}:</span>
+          <router-link to="/"><span class="primary--text">{{ project.name }}</span></router-link>
+        </div>
       </div>
     </v-app-bar-title>
 
@@ -66,9 +70,19 @@
 import { ref, computed } from "vue"
 import { menu } from '../configs/navigation.js'
 import { useAppStore } from '../stores/app'
+import {useI18n} from "vue-i18n";
+import {useProjectStore} from "../stores/project";
+import {useRoute} from "vue-router";
+import {useDisplay} from "vuetify";
 
 const drawer = ref(false)
 const appStore = useAppStore()
+const projectStore = useProjectStore()
 const loading = computed(() => Boolean(appStore.loading))
+const {t} = useI18n()
+const route = useRoute()
+const {mobile} = useDisplay()
+
+const project = computed(() => projectStore.project)
 
 </script>

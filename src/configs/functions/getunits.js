@@ -1,7 +1,7 @@
 const getSize = (int, size) => {
 
   if (!int) return 0
-  
+
   switch (Number(size)) {
   case 0:
     int = parseFloat(int).toFixed(0)
@@ -17,12 +17,12 @@ const getSize = (int, size) => {
   int = parseFloat(int)
 
   if (Number.isInteger(int)) int = int.toFixed()
-  
+
   return Number(int)
 }
 
 const translate = (int, type, unit) => {
-  
+
   if (type === 'size') {
 
     switch (Number(unit)) {
@@ -37,10 +37,10 @@ const translate = (int, type, unit) => {
       break
     case 3:
       int = parseFloat(int).toFixed(4)
-      break 
+      break
     case 4:
       int = parseFloat(int).toFixed(5)
-      break  
+      break
     }
 
   }
@@ -48,8 +48,8 @@ const translate = (int, type, unit) => {
   int = parseFloat(int)
 
   if (Number.isInteger(int)) int = int.toFixed()
-  
-  return Number(int)  
+
+  return Number(int)
 }
 
 const getWght = (int, wght) => {

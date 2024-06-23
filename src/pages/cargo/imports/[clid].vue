@@ -182,7 +182,7 @@ const text = ref(`${t('common.name')}, 120, 80, 160, 650, 1`)
 const items = ref([])
 const read = ref(600)
 const promo = ref('')
-const publicPath = Object.freeze(process.env.BASE_URL)
+const publicPath = computed(() => import.meta.env.VITE_BASE_URL)
 
 const maxRow = computed(() => Number(userStore.config.limit.irows) - Number(cargoStore.getItemsRowCount))
 const maxItems = computed(() => Number(userStore.config.limit.items) - Number(cargoStore.getItemsCount))
