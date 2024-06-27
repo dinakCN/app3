@@ -7,7 +7,6 @@ export {}
 
 declare module 'vue' {
   export interface GlobalComponents {
-    AppFooter: typeof import('./components/navigation/AppFooter.vue')['default']
     BriefDialog: typeof import('./components/dialogs/BriefDialog.vue')['default']
     CargoList: typeof import('./components/cargo/CargoList.vue')['default']
     CargoTemplates: typeof import('./components/templates/CargoTemplates.vue')['default']
@@ -19,7 +18,6 @@ declare module 'vue' {
     ErrorMessage: typeof import('./components/error/ErrorMessage.vue')['default']
     ExportToFile: typeof import('./components/cargo/ExportToFile.vue')['default']
     FooterNavigation: typeof import('./components/navigation/FooterNavigation.vue')['default']
-    HelloWorld: typeof import('./components/HelloWorld.vue')['default']
     HelpButton: typeof import('./components/brief/HelpButton.vue')['default']
     ImportData: typeof import('./components/cargo/ImportData.vue')['default']
     InvoiceMake: typeof import('./components/pdf/InvoiceMake.vue')['default']
@@ -33,7 +31,6 @@ declare module 'vue' {
     PasswordField: typeof import('./components/forms/PasswordField.vue')['default']
     PromoDialog: typeof import('./components/dialogs/PromoDialog.vue')['default']
     RadioGroup: typeof import('./components/forms/RadioGroup.vue')['default']
-    ReName: typeof import('./components/common/ReName.vue')['default']
     ReNameDialog: typeof import('./components/dialogs/ReNameDialog.vue')['default']
     RouterLink: typeof import('vue-router')['RouterLink']
     RouterView: typeof import('vue-router')['RouterView']
@@ -51,11 +48,9 @@ declare module 'vue' {
     TextField: typeof import('./components/forms/TextField.vue')['default']
     ToolbarLanguage: typeof import('./components/toolbar/ToolbarLanguage.vue')['default']
     ToolbarLicense: typeof import('./components/toolbar/ToolbarLicense.vue')['default']
-    ToolbarNotifications: typeof import('./components/toolbar/ToolbarNotifications.vue')['default']
     ToolbarSetting: typeof import('./components/toolbar/ToolbarSetting.vue')['default']
     ToolbarSupport: typeof import('./components/toolbar/ToolbarSupport.vue')['default']
     ToolbarUser: typeof import('./components/toolbar/ToolbarUser.vue')['default']
-    ToolbarUseVmenu: typeof import('./components/toolbar/ToolbarUseVmenu.vue')['default']
     UnSafeWarningDialog: typeof import('./components/common/UnSafeWarningDialog.vue')['default']
     UpdateSnack: typeof import('./components/update/UpdateSnack.vue')['default']
     UploadFiles: typeof import('./components/cargo/UploadFiles.vue')['default']
